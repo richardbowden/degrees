@@ -1,0 +1,9 @@
+.envrc
+build
+.idea
+.DS_Store
+cmd/__debug_bin
+cmd/cmd
+.vscode
+.idea
+.DS_Store
