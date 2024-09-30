@@ -8,10 +8,6 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (a *server) logout(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
 const (
 	JSON_CONTENT_TYPE = "application/json; charset=utf-8"
 )

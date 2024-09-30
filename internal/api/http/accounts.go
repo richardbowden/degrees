@@ -29,9 +29,12 @@ func NewAccountHandler(accountServuce *services.AccountService) *AccountHandler 
 }
 
 type signUpParams struct {
-	FirstName, Middlename, Surname string
-	Password1, Password2           string
-	Email                          string
+	FirstName  string
+	Middlename string
+	Surname    string
+	Password1  string
+	Password2  string
+	Email      string
 }
 
 func NewSignUpParams(email, firstName, middlename, surname, pass1, pass2 string) (signUpParams, error) {
