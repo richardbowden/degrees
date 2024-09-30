@@ -1,0 +1,7 @@
+export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
+export P402_DB_USER="opcounter"
+export P402_DB_PASS="letmein"
+
+export P402_HUMAN_LOGS=true
+export P402_DEV_OVERRIDE_ENABLE=0
+export P402_DEV_SKIP_USER_CONFIRM_EMAIL=1
