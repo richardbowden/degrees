@@ -5,8 +5,8 @@ sql:
     schema: "./sql/schema"
     gen:
       go:
-        package: "db"
-        out: "internal/db_base"
+        package: "dbpg"
+        out: "internal/dbpg"
         sql_package: "pgx/v5"
         emit_prepared_queries: true
         emit_interface: true

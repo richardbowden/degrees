@@ -18,7 +18,6 @@ import (
 	"github.com/rs/zerolog/log"
 	apihttp "github.com/typewriterco/p402/internal/api/http"
 	"github.com/typewriterco/p402/internal/datastore"
-	db "github.com/typewriterco/p402/internal/db_base"
 	migrator "github.com/typewriterco/p402/internal/migrations"
 	"github.com/typewriterco/p402/internal/services"
 	"github.com/typewriterco/p402/sql/schema"
@@ -83,7 +82,7 @@ func (s *server) init(config config) error {
 	defer m.Close()
 	//##############################################################
 
-	dbStore, err := db.NewStoreCreateCon(s.config.db.ConnectionString())
+	dbStore, err := datastore.NewStoreCreateCon(s.config.db.ConnectionString())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Unable to create a new store")
 	}
