@@ -45,6 +45,7 @@ create table if not exists email_verification_code (
     email_verification_code_id      bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     code                            varchar not null,
     account_id  bigint not null,
+    expires_at  timestamptz,
 
     FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );

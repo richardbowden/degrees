@@ -12,7 +12,7 @@ SELECT exists(select 1 from accounts where email = $1);
 
 
 -- name: AddAccountEmailValidationToken :exec
-INSERT INTO user_validation_tokens (user_id, token, expires_at) VALUES ($1, $2, $3);
+INSERT INTO email_verification_code (account_id, code, expires_at) VALUES ($1, $2, $3);
 --
 -- -- name: DeleteUserValidationToken :exec
 -- DELETE FROM user_validation_tokens where token = $1 and user_id = $2;
