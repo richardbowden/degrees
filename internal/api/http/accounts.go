@@ -1,8 +1,6 @@
 package apihttp
 
 import (
-	"crypto/subtle"
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/httplog"
@@ -28,43 +26,7 @@ func NewAccountHandler(accountServuce *services.AccountService) *AccountHandler 
 	return ah
 }
 
-type signUpParams struct {
-	FirstName  string
-	Middlename string
-	Surname    string
-	Password1  string
-	Password2  string
-	Email      string
-}
-
-func NewSignUpParams(email, firstName, middlename, surname, pass1, pass2 string) (signUpParams, error) {
-	f := signUpParams{
-		Email:      email,
-		FirstName:  firstName,
-		Middlename: middlename,
-		Surname:    surname,
-		Password1:  pass1,
-		Password2:  pass2,
-	}
-
-	if f.FirstName == "" {
-		return f, fmt.Errorf("first name needs to be ser")
-	}
-
-	if f.Middlename != "" && f.Surname == "" {
-		return f, fmt.Errorf(
-			"middlename is set, but surname is not. If you do not have a middle name, please populate the surname field",
-		)
-	}
-
-	if res := subtle.ConstantTimeCompare([]byte(f.Password1), []byte(f.Password2)); res == 0 {
-		return f, fmt.Errorf("passwords do not match")
-	}
-
-	return f, nil
-}
-
-func (a *AccountHandler) SignUp(w http.ResponseWriter, r *http.Request) {
+func (a *AccountHandler) NewAccount(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := httplog.LogEntry(ctx)
 
@@ -85,14 +47,14 @@ func (a *AccountHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p, err := NewSignUpParams(req.Email, req.FirstName, req.MiddleName, req.Surname, req.Password1, req.Password2)
+	p, err := services.NewSignUpParams(req.Email, req.FirstName, req.MiddleName, req.Surname, req.Password1, req.Password2)
 
 	if err != nil {
 		errs.HTTPErrorResponse(w, log, err)
 		return
 	}
 
-	err = a.accSvc.NewAccount(ctx)
+	err = a.accSvc.NewAccount(ctx, p)
 
 	if err != nil {
 		errs.HTTPErrorResponse(w, log, err)

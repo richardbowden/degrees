@@ -32,15 +32,15 @@ func (a *server) Endpoints() http.Handler {
 	r := chi.NewRouter()
 	// r.Get("/register", e.RegisterUserWithPassword)
 
-	r.Post("/user/login", a.accountHandler.Login)
+	r.Post("/account/login", a.accountHandler.Login)
 
 	r.Group(func(r chi.Router) {
-		r.Post("/user/sign-up", a.accountHandler.SignUp)
+		r.Post("/account/new", a.accountHandler.NewAccount)
 	})
 
 	r.Group(func(r chi.Router) {
 		r.Use(a.LogInMiddleware())
-		r.Post("/user/logout", a.accountHandler.Logout)
+		r.Post("/account/logout", a.accountHandler.Logout)
 	})
 	r.Get("/debug", a.debugHandler.Debug)
 	// r.Get("/user/sign-up/checkusername", a.CheckUsernameAvailability)
