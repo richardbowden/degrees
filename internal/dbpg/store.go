@@ -1,4 +1,4 @@
-package datastore
+package dbpg
 
 import (
 	"context"
@@ -9,11 +9,10 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/typewriterco/p402/internal/dbpg"
 )
 
 type TXStore struct {
-	*dbpg.Queries
+	*Queries
 	tx pgx.Tx
 }
 
@@ -33,19 +32,19 @@ func (s *TXStore) Rollback(ctx context.Context) error {
 }
 
 type Storer interface {
-	dbpg.Querier
+	Querier
 	GetTX(ctx context.Context) (*TXStore, error)
 }
 
 type Store struct {
-	*dbpg.Queries
+	*Queries
 	dbpg    *pgxpool.Pool
 	SQLPool *pgxpool.Pool
 }
 
 func NewStore(db *pgxpool.Pool) *Store {
 	return &Store{
-		dbpg.New(db),
+		New(db),
 		db,
 		db,
 	}
@@ -116,7 +115,7 @@ func (s *Store) GetTX(ctx context.Context) (*TXStore, error) {
 		return nil, fmt.Errorf("failed to create a tx %w", err)
 	}
 
-	q := dbpg.New(tx)
+	q := New(tx)
 
 	return &TXStore{
 		q,

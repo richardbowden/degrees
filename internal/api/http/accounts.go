@@ -4,17 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-chi/httplog"
-	"github.com/go-playground/validator/v10"
 	"github.com/typewriterco/p402/internal/errs"
 	"github.com/typewriterco/p402/internal/services"
 )
-
-// this is prob slow...
-var val *validator.Validate
-
-func init() {
-	val = validator.New(validator.WithRequiredStructEnabled())
-}
 
 type AccountHandler struct {
 	accSvc *services.AccountService
@@ -77,7 +69,6 @@ func (a *AccountHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	errs.HTTPErrorResponse(w, log, errs.E(errs.Invalid, "Login has not been done yet!!!!!!!"))
-
 }
 
 func (a *AccountHandler) Logout(w http.ResponseWriter, r *http.Request) {

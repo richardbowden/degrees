@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/go-chi/httplog"
-	"github.com/typewriterco/p402/internal/datastore"
 	"github.com/typewriterco/p402/internal/dbpg"
 	"github.com/typewriterco/p402/internal/errs"
 )
@@ -52,7 +51,7 @@ func NewSignUpParams(email, firstName, middlename, surname, pass1, pass2 string)
 }
 
 type AccountService struct {
-	ds datastore.DataStorer
+	ds dbpg.DataStorer
 }
 
 func (ac *AccountService) NewAccount(ctx context.Context, params SignUpParams) error {
@@ -98,7 +97,7 @@ func (ac *AccountService) DoesAccountAlreadyExist(ctx context.Context, email str
 	return true, nil
 }
 
-func NewAccountService(ds datastore.DataStorer) (*AccountService, error) {
+func NewAccountService(ds dbpg.DataStorer) (*AccountService, error) {
 
 	ac := &AccountService{ds: ds}
 

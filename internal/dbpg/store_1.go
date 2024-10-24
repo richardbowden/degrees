@@ -1,4 +1,4 @@
-package datastore
+package dbpg
 
 type DataStorer interface {
 	Storer

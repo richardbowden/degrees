@@ -17,7 +17,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
 	apihttp "github.com/typewriterco/p402/internal/api/http"
-	"github.com/typewriterco/p402/internal/datastore"
+	"github.com/typewriterco/p402/internal/dbpg"
 	migrator "github.com/typewriterco/p402/internal/migrations"
 	"github.com/typewriterco/p402/internal/services"
 	"github.com/typewriterco/p402/sql/schema"
@@ -82,7 +82,7 @@ func (s *server) init(config config) error {
 	defer m.Close()
 	//##############################################################
 
-	dbStore, err := datastore.NewStoreCreateCon(s.config.db.ConnectionString())
+	dbStore, err := dbpg.NewStoreCreateCon(s.config.db.ConnectionString())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Unable to create a new store")
 	}
@@ -91,7 +91,7 @@ func (s *server) init(config config) error {
 
 	dbStore.CheckDB(context.Background())
 
-	ds := datastore.NewDataStore(dbStore)
+	ds := dbpg.NewDataStore(dbStore)
 
 	// Set dev overrides to help run things locally
 	// services.DevSkipUserVerification = s.config.devOverrideConfig.SkipUserConfirm
