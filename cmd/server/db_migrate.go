@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	migrator "github.com/typewriterco/p402/internal/migrations"
 	"github.com/typewriterco/p402/sql/schema"
 	"github.com/urfave/cli/v2"
@@ -32,6 +34,9 @@ func db_current_version(ctx *cli.Context) error {
 		return err
 	}
 
-	_, _, err = mm.Version()
+	version, dirty, err := mm.Version()
+
+	fmt.Printf("db_migration_version:%d, dirty: %v\n", version, dirty)
+
 	return err
 }
