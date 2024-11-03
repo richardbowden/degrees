@@ -76,8 +76,7 @@ func main() {
 						Name: "migration",
 						Subcommands: []*cli.Command{
 							{
-								Name: "up",
-								// Action: db_migrate,
+								Name:   "up",
 								Action: db_migrate,
 							},
 							{
