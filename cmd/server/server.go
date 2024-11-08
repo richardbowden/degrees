@@ -122,7 +122,7 @@ func (s *server) init(config config) error {
 	)
 
 	s.router.Group(func(r chi.Router) {
-		r.Use(s.IsAuthed())
+		r.Use(apihttp.IsAuthed())
 		r.Get("/profile", profile)
 	})
 

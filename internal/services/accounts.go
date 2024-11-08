@@ -44,7 +44,7 @@ func NewSignUpParams(email, firstName, middlename, surname, pass1, pass2 string)
 	}
 
 	if res := subtle.ConstantTimeCompare([]byte(f.Password1), []byte(f.Password2)); res == 0 {
-		return f, fmt.Errorf("passwords do not match")
+		return f, errs.E(errs.Validation, "Passwords do not match", fmt.Errorf("User supplied passwords do not match"))
 	}
 
 	return f, nil

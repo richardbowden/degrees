@@ -6,6 +6,7 @@ import (
 
 	"gitea.com/go-chi/binding"
 	"github.com/go-chi/chi/v5"
+	apihttp "github.com/typewriterco/p402/internal/api/http"
 )
 
 const (
@@ -39,7 +40,7 @@ func (a *server) Endpoints() http.Handler {
 	})
 
 	r.Group(func(r chi.Router) {
-		r.Use(a.LogInMiddleware())
+		r.Use(apihttp.LogInMiddleware())
 		r.Post("/account/logout", a.accountHandler.Logout)
 	})
 	r.Get("/debug", a.debugHandler.Debug)

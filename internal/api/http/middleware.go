@@ -1,4 +1,4 @@
-package main
+package apihttp
 
 import (
 	"net/http"
@@ -10,7 +10,7 @@ const (
 	CTX_user_id = "user_id"
 )
 
-func (svr *server) IsAuthed() func(next http.Handler) http.Handler {
+func IsAuthed() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
@@ -30,7 +30,7 @@ func (svr *server) IsAuthed() func(next http.Handler) http.Handler {
 	}
 }
 
-func (svr *server) LogInMiddleware() func(next http.Handler) http.Handler {
+func LogInMiddleware() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
