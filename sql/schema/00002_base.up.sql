@@ -12,11 +12,11 @@ create table if not exists accounts
 
     email                           varchar not null,
 
-    acc_type			    account_type not null,
+    acc_type			            account_type not null,
 
     sign_up_stage                   int default 0,
 
-    password_hash		    varchar not null,
+    password_hash		            varchar not null,
 
     enabled                         bool        not null         default true,
 
@@ -32,8 +32,8 @@ create table if not exists email_addresses
 (
       email             varchar not null PRIMARY KEY,
       account_id        bigint  not null,
-      verified		bool	not null default false,
-      verified_on	timestamptz,
+      verified		    bool	not null default false,
+      verified_on	    timestamptz,
       updated_at        timestamptz,
       FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
