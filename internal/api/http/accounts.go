@@ -12,8 +12,8 @@ type AccountHandler struct {
 	accSvc *services.AccountService
 }
 
-func NewAccountHandler(accountServuce *services.AccountService) *AccountHandler {
-	ah := &AccountHandler{accSvc: accountServuce}
+func NewAccountHandler(accountService *services.AccountService) *AccountHandler {
+	ah := &AccountHandler{accSvc: accountService}
 
 	return ah
 }
