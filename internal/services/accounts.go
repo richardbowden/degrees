@@ -10,6 +10,18 @@ import (
 	"github.com/typewriterco/p402/internal/errs"
 )
 
+type Account struct {
+	ID         int
+	FirstName  string
+	MiddleName string
+	Surname    string
+	EMail      string
+}
+
+type AccountRepository interface {
+	Create(ctx context.Context, params SignUpParams) (Account, error)
+}
+
 type SignUpParams struct {
 	FirstName  string
 	Middlename string
@@ -52,6 +64,7 @@ func NewSignUpParams(email, firstName, middlename, surname, pass1, pass2 string)
 
 type AccountService struct {
 	ds dbpg.DataStorer
+	ar AccountRepository
 }
 
 func (ac *AccountService) NewAccount(ctx context.Context, params SignUpParams) error {
