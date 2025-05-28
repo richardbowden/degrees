@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/go-chi/httplog"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/typewriterco/p402/internal/dbpg"
 	"github.com/typewriterco/p402/internal/services"
 )
@@ -17,18 +18,32 @@ func NewAccountsRepo(store dbpg.Storer) *Accounts {
 		store: store}
 }
 
-func (a *Accounts) Create(ctx context.Context, params services.SignUpParams) (services.Account, error) {
+func (a *Accounts) Create(ctx context.Context, params services.PreparedSignupParams) (services.Account, error) {
 	log := httplog.LogEntry(ctx)
 	log.Info().Msg("from the account create repo layer")
-	return services.Account{}, nil
+
+	tx, err := a.store.GetTX(ctx)
+
+	if err != nil {
+		return services.Account{}, err
+	}
+
+	cap := dbpg.CreateAccountParams{
+		FirstName:    params.FirstName,
+		MiddleName:   pgtype.Text{String: params.MiddleName, Valid: true},
+		Surname:      pgtype.Text{String: params.Surname, Valid: true},
+		Email:        params.EMail,
+		PasswordHash: params.HashedPassword,
+		AccType:      dbpg.AccountTypeUser,
+	}
+
+	ac, err := tx.CreateAccount(ctx, cap)
+
+	tx.Commit(ctx)
+	_ = ac
+	return services.Account{}, err
 }
 
 func (a *Accounts) DoesAccountAlreadyExist(ctx context.Context, email string) (bool, error) {
-
-	log := httplog.LogEntry(ctx)
-
-	log.Info().Msg("this is from does account exist already")
-
-	return true, nil
-
+	return a.store.CheckAccountActiveEmailExists(ctx, dbpg.CheckAccountActiveEmailExistsParams{Email: email})
 }
