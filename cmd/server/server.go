@@ -19,6 +19,7 @@ import (
 	apihttp "github.com/typewriterco/p402/internal/api/http"
 	"github.com/typewriterco/p402/internal/dbpg"
 	migrator "github.com/typewriterco/p402/internal/migrations"
+	"github.com/typewriterco/p402/internal/repos"
 	"github.com/typewriterco/p402/internal/services"
 	"github.com/typewriterco/p402/sql/schema"
 )
@@ -96,8 +97,10 @@ func (s *server) init(config config) error {
 	// Set dev overrides to help run things locally
 	// services.DevSkipUserVerification = s.config.devOverrideConfig.SkipUserConfirm
 
+	dr := repos.NewAccountsRepo(ds)
+
 	//TODO(rich): services creation needs looking at.
-	accountsSvc, err := services.NewAccountService(ds)
+	accountsSvc, err := services.NewAccountService(ds, dr)
 
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create AccountService")

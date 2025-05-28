@@ -20,6 +20,7 @@ type Account struct {
 
 type AccountRepository interface {
 	Create(ctx context.Context, params SignUpParams) (Account, error)
+	DoesAccountAlreadyExist(ctx context.Context, email string) (bool, error)
 }
 
 type SignUpParams struct {
@@ -110,9 +111,9 @@ func (ac *AccountService) DoesAccountAlreadyExist(ctx context.Context, email str
 	return true, nil
 }
 
-func NewAccountService(ds dbpg.DataStorer) (*AccountService, error) {
+func NewAccountService(ds dbpg.DataStorer, ar AccountRepository) (*AccountService, error) {
 
-	ac := &AccountService{ds: ds}
+	ac := &AccountService{ds: ds, ar: ar}
 
 	return ac, nil
 }
