@@ -12,8 +12,8 @@ type AccountHandler struct {
 	accSvc *services.AccountService
 }
 
-func NewAccountHandler(accountServuce *services.AccountService) *AccountHandler {
-	ah := &AccountHandler{accSvc: accountServuce}
+func NewAccountHandler(accountService *services.AccountService) *AccountHandler {
+	ah := &AccountHandler{accSvc: accountService}
 
 	return ah
 }
@@ -27,8 +27,8 @@ func (a *AccountHandler) NewAccount(w http.ResponseWriter, r *http.Request) {
 		FirstName  string `json:"first_name"`
 		MiddleName string `json:"middle_name"`
 		Surname    string `json:"surname"`
-		Password1  string `json:"password1"`
-		Password2  string `json:"password2"`
+		Password1  string `json:"pwd1"`
+		Password2  string `json:"pwd2"`
 	}
 
 	req := new(request)
