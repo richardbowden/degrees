@@ -12,12 +12,16 @@ package errs
 import (
 	"errors"
 	"fmt"
+
 	"github.com/rs/zerolog"
+	"net/http"
 	"runtime"
 	"sort"
 
 	pkgerrors "github.com/pkg/errors"
 )
+
+type Realm string
 
 // Error is the type that implements the error interface.
 // It contains a number of fields, each of different type.
@@ -25,20 +29,35 @@ import (
 type Error struct {
 	// Op is the operation being performed, usually the name of the method
 	// being invoked.
-	Op Op
+	Op Op `json:"op,omitempty"`
 	// User is the name of the user attempting the operation.
-	User UserName
+	User UserName `json:"user,omitempty"`
 	// Kind is the class of error, such as permission failure,
 	// or "Other" if its class is unknown or irrelevant.
-	Kind Kind
+	Kind Kind `json:"kind,omitempty"`
 	// Param represents the parameter related to the error.
-	Param Parameter
+	Param Parameter `json:"param,omitempty"`
 	// Code is a human-readable, short representation of the error
-	Code Code
-	// Realm is a description of a protected area, used in the WWW-Authenticate header.
-	Realm Realm
-	// The underlying error that triggered this one, if any.
-	Err error
+	Code Code `json:"code,omitempty"`
+
+	Realm Realm `json:"realm,omitempty"`
+
+	Status int `json:"status"`
+
+	Title string `json:"title,omitempty"`
+	Err   error  `json:"-"`
+
+	status  int
+	Details []ErrorDetail `json:"details,omitempty"`
+}
+
+type ErrorDetail struct {
+	Message string `json:"message"`
+	Value   string `json:"value"`
+}
+
+func (e *Error) AddDetail(message, value string) {
+	e.Details = append(e.Details, ErrorDetail{Message: message, Value: value})
 }
 
 func (e *Error) isZero() bool {
@@ -121,7 +140,6 @@ type Code string
 // Realm is a description of a protected area, used in the WWW-Authenticate header.
 // Realm should be set when error Kind is Unauthenticated. If left unset, Realm
 // will be set to the default set by the Default method
-type Realm string
 
 // Kinds of errors.
 //
@@ -189,6 +207,79 @@ func (k Kind) String() string {
 	return "unknown error kind"
 }
 
+func (e *Error) GetTitle() string {
+	if e.Code != "" {
+		return string(e.Code)
+	}
+	return e.Kind.String()
+}
+
+func (e *Error) GetDetail() string {
+	if e.Err != nil {
+		return e.Err.Error()
+	}
+	return e.Kind.String()
+}
+
+func (e *Error) GetType() string {
+	return fmt.Sprintf("urn:error:%s", e.Kind.String())
+}
+
+func (e *Error) GetInstance() string {
+	if e.Op != "" {
+		return string(e.Op)
+	}
+	return ""
+}
+
+func (e *Error) GetHeaders() map[string]string {
+	headers := make(map[string]string)
+	if e.Kind == Unauthenticated && e.Realm != "" {
+		headers["WWW-Authenticate"] = fmt.Sprintf("Bearer realm=%q", string(e.Realm))
+	}
+	return headers
+}
+
+func (e *Error) GetExtensions() map[string]interface{} {
+	extensions := make(map[string]interface{})
+	if e.User != "" {
+		extensions["user"] = string(e.User)
+	}
+	if e.Param != "" {
+		extensions["parameter"] = string(e.Param)
+	}
+	if e.Op != "" {
+		extensions["operation"] = string(e.Op)
+	}
+	return extensions
+}
+
+func (e *Error) GetStatus() int {
+	return e.Status
+}
+
+func NewHumaError(status int, title, detail string, args ...interface{}) error {
+	var kind Kind
+	switch status {
+	case http.StatusBadRequest:
+		kind = InvalidRequest
+	case http.StatusUnauthorized:
+		kind = Unauthenticated
+	case http.StatusForbidden:
+		kind = Unauthorized
+	case http.StatusNotFound:
+		kind = NotExist
+	case http.StatusConflict:
+		kind = Exist
+	case http.StatusInternalServerError:
+		kind = Internal
+	default:
+		kind = Other
+	}
+
+	return E(append([]interface{}{kind, detail}, args...)...)
+}
+
 // E builds an error value from its arguments.
 // There must be at least one argument or E panics.
 // The type of each argument determines its meaning.
@@ -212,6 +303,26 @@ func (k Kind) String() string {
 //
 // If Kind is not specified or Other, we set it to the Kind of
 // the underlying error.
+
+func httpStatus(k Kind) int {
+	switch k {
+	case Unauthenticated:
+		return http.StatusUnauthorized
+	case Unauthorized:
+		return http.StatusForbidden
+	case NotExist:
+		return http.StatusNotFound
+	case Exist:
+		return http.StatusConflict
+	case Validation, InvalidRequest:
+		return http.StatusBadRequest
+	case Internal, Database, Unanticipated:
+		return http.StatusInternalServerError
+	default:
+		return http.StatusInternalServerError
+	}
+}
+
 func E(args ...interface{}) error {
 	type stackTracer interface {
 		StackTrace() pkgerrors.StackTrace
@@ -229,6 +340,8 @@ func E(args ...interface{}) error {
 			e.User = arg
 		case Kind:
 			e.Kind = arg
+			e.Status = httpStatus(arg)
+			e.Title = e.Kind.String()
 		case string:
 			if zerolog.ErrorStackMarshaler != nil {
 				e.Err = pkgerrors.New(arg)

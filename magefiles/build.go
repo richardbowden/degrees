@@ -1,5 +1,3 @@
-//go:build mage
-
 package main
 
 import (
@@ -38,10 +36,25 @@ func init() {
 	buildReleaseBinPath = filepath.Join(buildReleaseDir, releaseBinName)
 }
 
-func Debug() error {
-	fmt.Printf("\nbuild-mode: debug\n")
+func Gen() error {
+	return sqlGen()
+}
 
+func sqlGen() error {
 	start := time.Now()
+	fmt.Printf("\nrunning sql gen\n")
+	err := sh.RunV("sqlc", "generate")
+	elapsed := time.Since(start)
+
+	fmt.Printf("took %s\n\n", elapsed)
+
+	return err
+}
+
+func Debug() error {
+	mg.Deps(sqlGen)
+	start := time.Now()
+	fmt.Printf("\nbuild-mode: debug\n")
 
 	err := sh.RunV("go", "build", "-race", "-v", "-gcflags=all=-N", "-o", buildDebugBinPath, "./cmd/server")
 	elapsed := time.Since(start)
@@ -52,9 +65,13 @@ func Debug() error {
 }
 
 func Release() error {
+	fmt.Printf("\nbuild-mode: release\n")
+	fmt.Printf("-------------------\n")
+
+	mg.Deps(sqlGen, Test)
 	err := sh.RunV("go", "build", "-v", "-o", buildReleaseBinPath, "./cmd/server")
-	fmt.Printf("build-mode: release\n")
-	fmt.Printf("path: %s\n", buildReleaseBinPath)
+
+	fmt.Printf("\npath: %s\n", buildReleaseBinPath)
 	return err
 }
 
@@ -72,4 +89,9 @@ func Run() error {
 	// }
 
 	return sh.RunV(buildDebugBinPath, "--human-logs", "server", "run")
+}
+
+func Test() error {
+	err := sh.RunV("go", "test", "./...")
+	return err
 }

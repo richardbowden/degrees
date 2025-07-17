@@ -1,0 +1,59 @@
+-- First create the email, then create the user in separate operations
+-- name: CreateUserEmail :one
+INSERT INTO user_emails (
+    user_id,
+    email,
+    enabled,
+    is_verified
+    ) VALUES ($1, $2, $3, $4)
+    RETURNING *;
+
+-- name: CreateUser :one
+INSERT INTO users (
+    first_name,
+    middle_name,
+    surname,
+    username,
+    login_email,
+    primary_email_id,
+    password_hash
+) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *;
+
+-- name: UserExists :one
+SELECT
+    EXISTS(SELECT 1 FROM users WHERE users.login_email = $1) AS email_exists,
+    EXISTS(SELECT 1 FROM users WHERE users.username = $2) AS username_exists;
+
+-- name: GetUserById :one
+SELECT * FROM users WHERE id = $1;
+
+-- name: GetUserByEmail :one
+SELECT * FROM users WHERE login_email = $1;
+
+-- name: GetUserByUsername :one
+SELECT * FROM users WHERE username = $1;
+
+-- name: UpdateUser :one
+UPDATE users
+SET
+    first_name = $2,
+    middle_name = $3,
+    surname = $4,
+    updated_at = NOW()
+WHERE id = $1
+    RETURNING *;
+
+-- name: UpdateUserEnabled :one
+UPDATE users
+SET enabled = $2,
+    updated_at = NOW()
+WHERE id = $1
+    RETURNING *;
+
+-- name: UpdateUserSignUpStage :one
+UPDATE users
+SET sign_up_stage = $2,
+    updated_at = NOW()
+WHERE id = $1
+    RETURNING *;

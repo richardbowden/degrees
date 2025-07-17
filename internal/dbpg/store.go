@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/jackc/pgx/v5/pgtype"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -36,17 +37,35 @@ type Storer interface {
 	GetTX(ctx context.Context) (*TXStore, error)
 }
 
+type SchemaMigration struct {
+	Version int64 `json:"version"`
+	Dirty   bool  `json:"dirty"`
+}
+
 type Store struct {
 	*Queries
-	dbpg    *pgxpool.Pool
-	SQLPool *pgxpool.Pool
+	dbpg *pgxpool.Pool
+	SchemaMigration
 }
 
 func NewStore(db *pgxpool.Pool) *Store {
+	//todo(rich): tidy up getting db version in newstore
+
+	query := `SELECT version, dirty FROM schema_migrations ORDER BY version DESC LIMIT 1`
+
+	var migration SchemaMigration
+	ctx := context.Background()
+	err := db.QueryRow(ctx, query).Scan(&migration.Version, &migration.Dirty)
+	if err != nil {
+		panic("cannot get db version, we should not get here")
+	}
+	//if err != nil {
+	//	return nil, fmt.Errorf("failed to query schema_migrations: %w", err)
+	//}
 	return &Store{
 		New(db),
 		db,
-		db,
+		migration,
 	}
 }
 
@@ -97,8 +116,8 @@ func IsErrNoRows(err error) bool {
 	return false
 }
 
-func StringToSQLString(str string) sql.NullString {
-	s := sql.NullString{}
+func StringToPGString(str string) pgtype.Text {
+	s := pgtype.Text{}
 	if str == "" {
 		return s
 	}

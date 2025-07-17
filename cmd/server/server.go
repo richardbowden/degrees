@@ -4,6 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/danielgtaylor/huma/v2"
+	"github.com/danielgtaylor/huma/v2/adapters/humachi"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httplog"
+	"github.com/jpillora/backoff"
+	"github.com/typewriterco/p402/internal/problems"
+
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,32 +19,19 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/httplog"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
 	apihttp "github.com/typewriterco/p402/internal/api/http"
 	"github.com/typewriterco/p402/internal/dbpg"
-	migrator "github.com/typewriterco/p402/internal/migrations"
 	"github.com/typewriterco/p402/internal/repos"
 	"github.com/typewriterco/p402/internal/services"
-	"github.com/typewriterco/p402/sql/schema"
 )
 
 type server struct {
-	config         config
-	wg             sync.WaitGroup
-	httpServer     *http.Server
-	router         *chi.Mux
-	accountService *services.AccountService
-	accountHandler *apihttp.AccountHandler
-
-	debugHandler *apihttp.DebugHandler
+	config     config
+	wg         sync.WaitGroup
+	httpServer *http.Server
 
 	start_time time.Time
-
-	pg *pgxpool.Pool //TODO(rich): this is temp, the db package should expose db stats
 }
 
 const (
@@ -57,38 +52,26 @@ func NewServer(c config) (*server, error) {
 func (s *server) init(config config) error {
 	s.config = config
 	log.Info().Str("opserver", "server init").Msg("")
-
-	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	//This is tempoary.... need to add a better db version check on start up.
-	//In a read only mode. We do not want to migrate as part of server startup
-	//due to there will be more than one copy of the server running or starting up.
-	//
-	//maybe compare the embded sql files against the version of the DB
-	m, err := migrator.NewMigrator(schema.SQLMigrationFiles, s.config.db.ConnectionString())
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to create a Migrator")
+	var dbStore *dbpg.Store
+	var err error
+	b := &backoff.Backoff{
+		Max: 5 * time.Minute,
 	}
 
-	version, dirty, err := m.Version()
-
-	if err != nil {
-		log.Fatal().Err(err).Msg("")
+	//todo(rich): does this need to be here or else where, also look at database retry
+	for {
+		dbStore, err = dbpg.NewStoreCreateCon(s.config.db.ConnectionString())
+		if err == nil {
+			break
+		}
+		d := b.Duration()
+		fmt.Printf("%s, reconnecting in %s\n", err, d)
+		time.Sleep(d)
+		continue
 	}
-	log.Info().Uint("db_schema_version", version).Bool("dirty", dirty).Msg("Current DB Version")
+	b.Reset()
 
-	if dirty {
-		log.Fatal().Bool("dirty", dirty).Msg("database is dirty, server unable to start until database schema is fixed")
-	}
-
-	defer m.Close()
-	//##############################################################
-
-	dbStore, err := dbpg.NewStoreCreateCon(s.config.db.ConnectionString())
-	if err != nil {
-		log.Fatal().Err(err).Msg("Unable to create a new store")
-	}
-
-	s.pg = dbStore.SQLPool
+	log.Info().Int64("db_schema_version", dbStore.Version).Bool("dirty", dbStore.Dirty).Msg("Current DB Version")
 
 	dbStore.CheckDB(context.Background())
 
@@ -100,41 +83,54 @@ func (s *server) init(config config) error {
 	dr := repos.NewAccountsRepo(ds)
 
 	//TODO(rich): services creation needs looking at.
-	accountsSvc, err := services.NewAccountService(ds, dr)
+	userSvc, err := services.NewUserService(dr)
 
 	if err != nil {
-		log.Fatal().Err(err).Msg("failed to create AccountService")
+		log.Fatal().Err(err).Msg("failed to create UserService")
 	}
 
-	s.accountService = accountsSvc
-
 	//TODO(rich): handler creation needs looking at.
-	ah := apihttp.NewAccountHandler(accountsSvc)
+	uh := apihttp.NewUserHandler(userSvc)
 
-	s.accountHandler = ah
+	//*** Setup HTTP Server
+	mux := chi.NewMux()
 
-	s.debugHandler = &apihttp.DebugHandler{}
+	mux.Use(middleware.RequestID)
+	mux.Use(httplog.RequestLogger(log.Logger))
+	mux.Use(middleware.AllowContentType("application/json"))
+	api := humachi.New(mux, huma.DefaultConfig("p402", "0.0.0"))
 
-	s.router = chi.NewRouter()
-	s.router.Use(middleware.RequestID)
-	s.router.Use(httplog.RequestLogger(log.Logger))
-	s.router.Use(middleware.AllowContentType("application/json"))
+	//huma.NewError = func(status int, message string, errs ...error) huma.StatusError {
+	//	details := make([]string, len(errs))
+	//
+	//	for i, err := range errs {
+	//		details[i] = err.Error()
+	//	}
+	//	return &problems.OOO{Status: status, Detail: message, Details: details}
+	//}
 
-	s.router.Mount(
-		"/", s.Endpoints(),
-	)
+	huma.NewError = func(status int, msg string, errs ...error) huma.StatusError {
+		p := problems.Problem{
+			Status: status,
+			Detail: msg,
+		}
+		for _, e := range errs {
+			p.AddDetail(e)
+		}
+		return p
+	}
 
-	s.router.Group(func(r chi.Router) {
-		r.Use(apihttp.IsAuthed())
-		r.Get("/profile", profile)
-	})
+	huma.AutoRegister(api, uh)
 
+	apihttp.PrintRoutes(api)
+
+	// HTTP Server Setup
 	addr := fmt.Sprintf(":%s", s.config.httpPort)
 	log.Info().Str("address", addr).Msg("Server listening On")
 
 	s.httpServer = &http.Server{
 		Addr:         addr,
-		Handler:      s.router,
+		Handler:      mux,
 		IdleTimeout:  defaultIdleTimeout,
 		ReadTimeout:  defaultReadTimeout,
 		WriteTimeout: defaultWriteTimeout,
@@ -161,8 +157,6 @@ func (s *server) serveHttp() error {
 	}()
 
 	log.Info().Msgf("start up took %v to reach running state", time.Since(s.start_time))
-
-	s.walkRoutes()
 
 	err := s.httpServer.ListenAndServe()
 	if !errors.Is(err, http.ErrServerClosed) {
