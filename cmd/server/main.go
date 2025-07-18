@@ -36,7 +36,6 @@ func (e EnumFlag) String() string {
 }
 
 func main() {
-
 	app := &cli.App{
 		Name:    "p402 server",
 		Version: "v0.0.1+alpha",
@@ -50,6 +49,15 @@ func main() {
 			&cli.StringFlag{Name: DBNameFlag, Value: "p402", EnvVars: []string{"P402_DB_NAME"}},
 		},
 		Commands: []*cli.Command{
+			{
+				Name:   "build_info",
+				Action: buildInfo,
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name: "extended", Value: false,
+					},
+				},
+			},
 			{
 				Name: "server",
 				Flags: []cli.Flag{

@@ -57,10 +57,10 @@ func (s *server) init(config config) error {
 	b := &backoff.Backoff{
 		Max: 5 * time.Minute,
 	}
-
+	version := "p402 0.0.1-alpha"
 	//todo(rich): does this need to be here or else where, also look at database retry
 	for {
-		dbStore, err = dbpg.NewStoreCreateCon(s.config.db.ConnectionString())
+		dbStore, err = dbpg.NewStoreCreateCon(s.config.db.ConnectionString(), version)
 		if err == nil {
 			break
 		}

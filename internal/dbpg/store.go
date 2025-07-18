@@ -95,9 +95,9 @@ func NewConnection(conStr string, conName string) (*pgxpool.Pool, error) {
 	return con, nil
 }
 
-func NewStoreCreateCon(conStr string) (*Store, error) {
+func NewStoreCreateCon(conStr string, conID string) (*Store, error) {
 	//TODO(rich): name needs to come from main at some point
-	con, err := NewConnection(conStr, "p402 0.0.1-alpha")
+	con, err := NewConnection(conStr, conID)
 
 	if err != nil {
 		return nil, err
