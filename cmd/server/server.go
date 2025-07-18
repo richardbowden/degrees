@@ -43,7 +43,7 @@ const (
 	appName = "p402-backend"
 )
 
-func NewServer(c config) (*server, error) {
+func newServer(c config) (*server, error) {
 	s := server{start_time: time.Now().UTC()}
 	err := s.init(c)
 	return &s, err
@@ -173,9 +173,4 @@ func (s *server) serveHttp() error {
 	s.wg.Wait()
 
 	return nil
-}
-
-func profile(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("this is a test response"))
 }

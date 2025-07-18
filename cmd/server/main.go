@@ -50,7 +50,7 @@ func main() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:   "build_info",
+				Name:   "build-info",
 				Action: buildInfo,
 				Flags: []cli.Flag{
 					&cli.BoolFlag{
@@ -108,7 +108,7 @@ func run(ctx *cli.Context) error {
 
 	setBaseLogger(ctx)
 
-	srv, err := NewServer(cfg)
+	srv, err := newServer(cfg)
 
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create server")
