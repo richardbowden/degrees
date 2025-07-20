@@ -36,6 +36,10 @@ func (e EnumFlag) String() string {
 }
 
 func main() {
+	run(os.Args)
+}
+
+func run(args []string) {
 	app := &cli.App{
 		Name:    "p402 server",
 		Version: "v0.0.1+alpha",
@@ -71,7 +75,7 @@ func main() {
 				Subcommands: []*cli.Command{
 					{
 						Name:   "run",
-						Action: run,
+						Action: serverRun,
 						Flags: []cli.Flag{
 							&cli.IntFlag{Name: HTTPPortFlag, Value: 3030, Usage: "port number for http", EnvVars: []string{"P402_HTTP_PORT"}},
 							&cli.StringFlag{Name: HTTPHostFlag, Value: "localhost", Usage: "host or ip address to listen on, set to ':' to bind to all ip available ip addresses", EnvVars: []string{"P402_HTTP_HOST"}},
@@ -104,7 +108,7 @@ func main() {
 	}
 }
 
-func run(ctx *cli.Context) error {
+func serverRun(ctx *cli.Context) error {
 	cfg := loadConfigFromCLI(ctx)
 
 	setBaseLogger(ctx)
