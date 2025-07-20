@@ -4,112 +4,75 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/typewriterco/p402/internal/config"
 	"github.com/urfave/cli/v2"
 )
 
 const (
-	DBHostFlag     = "db-host"
-	DBPortFlag     = "db-port"
-	DBUserFlag     = "db-user"
-	DBNameFlag     = "db-name"
-	DBPasswordFlag = "db-pass"
-	DBSSLModeFlag  = "db-sslmode"
-
-	HTTPPortFlag     = "http-port"
-	HumanLogsFlag    = "human-logs"
-	LoggingLevelFlag = "logging-level"
-
-	GoogleClientIDFlag  = "google-client-id"
-	GoogleClientSecFlag = "google-secret-key"
-
-	HostedDomainName = "hosted-domain-name"
-	CookieLifeTime   = "cookie-lifetime"
-
-	SMTPHostFlag     = "smtp-host"
-	SMTPPortFlag     = "smtp-port"
-	SMTPUsernameFlag = "smtp-username"
-	SMTPPasswordFlag = "smtp-password"
+	DBHostFlag          = "db-host"
+	DBPortFlag          = "db-port"
+	DBUserFlag          = "db-user"
+	DBNameFlag          = "db-name"
+	DBPasswordFlag      = "db-pass"
+	DBSSLModeFlag       = "db-sslmode"
+	HTTPPortFlag        = "http-port"
+	HTTPHostFlag        = "http-host"
+	HumanLogsFlag       = "human-logs"
+	LoggingLevelFlag    = "logging-level"
+	GoogleClientIDFlag  = "google-client-id"  //TODO(rich): prob not needed here, will be moved into run time config
+	GoogleClientSecFlag = "google-secret-key" //TODO(rich): prob not needed here, will be moved into run time config
+	HostedDomainName    = "hosted-domain-name"
+	CookieLifeTime      = "cookie-lifetime"
+	SMTPHostFlag        = "smtp-host"
+	SMTPPortFlag        = "smtp-port"
+	SMTPUsernameFlag    = "smtp-username"
+	SMTPPasswordFlag    = "smtp-password"
 )
 
-type config struct {
-	db               DBConfig
-	googleClientID   string
-	googleSecKey     string
-	httpPort         string
-	hostedDomainName string
-	cookieLifeTime   int
-
-	devOverrideConfig DevOverrideConfig
-
-	smtp SMTP
-}
-
-type SMTP struct {
-	Host     string
-	Port     string
-	Username string
-	Password string
-}
-
-type DBConfig struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
-	DBName   string
-	SSLMode  bool
-}
-
-func (d *DBConfig) ConnectionString() string {
-	var c string
-
-	creds := d.User
-
-	if d.Password != "" {
-		creds = fmt.Sprintf("%s:%s", creds, d.Password)
+func loadDBConfigFromCLI(ctx *cli.Context) config.DatabaseConfig {
+	return config.DatabaseConfig{
+		Host:     ctx.String(DBHostFlag),
+		Port:     ctx.String(DBPortFlag),
+		User:     ctx.String(DBUserFlag),
+		DBName:   ctx.String(DBNameFlag),
+		SSLMode:  ctx.Bool(DBSSLModeFlag),
+		Password: ctx.String(DBPasswordFlag),
 	}
-
-	c = fmt.Sprintf("postgres://%s@%s:%s/%s", creds, d.Host, d.Port, d.DBName)
-
-	sslMode := "disable"
-
-	if d.SSLMode {
-		sslMode = "verify-full"
-	}
-
-	c = fmt.Sprintf("%s?&sslmode=%s", c, sslMode)
-
-	return c
 }
 
-func DBConfigFromCTX(c *cli.Context) DBConfig {
-	dbConfig := DBConfig{
-		Host:     c.String(DBHostFlag),
-		Port:     c.String(DBPortFlag),
-		User:     c.String(DBUserFlag),
-		DBName:   c.String(DBNameFlag),
-		SSLMode:  c.Bool(DBSSLModeFlag),
-		Password: c.String(DBPasswordFlag),
+func loadAuthConfigFromCLI(ctx *cli.Context) config.AuthConfig {
+	return config.AuthConfig{
+		GoogleClientID:  ctx.String(GoogleClientIDFlag),
+		GoogleSecretKey: ctx.String(GoogleClientSecFlag),
+		HostedDomain:    ctx.String(HostedDomainName),
+		CookieLifetime:  ctx.Int(CookieLifeTime),
 	}
-
-	if dbConfig.DBName == "" {
-		fmt.Printf("DB Namm needs to be set %s\n", DBNameFlag)
-		os.Exit(1)
-	}
-
-	return dbConfig
 }
 
-type DevOverrideConfig struct {
-	SkipUserConfirm bool
+func loadConfigFromCLI(ctx *cli.Context) *config.Config {
+	return &config.Config{
+		HTTP: config.HTTPConfig{
+			Port: ctx.Int(HTTPPortFlag),
+			Host: ctx.String(HTTPHostFlag),
+		},
+		Database: loadDBConfigFromCLI(ctx),
+		Auth:     loadAuthConfigFromCLI(ctx),
+		SMTP: config.SMTPConfig{
+			Host:     ctx.String(SMTPHostFlag),
+			Port:     ctx.String(SMTPPortFlag),
+			Username: ctx.String(SMTPUsernameFlag),
+			Password: ctx.String(SMTPPasswordFlag),
+		},
+		DevOverrides: loadDevOverrides(),
+	}
 }
 
-func check_for_dev_overrides() DevOverrideConfig {
+func loadDevOverrides() config.DevOverrideConfig {
 
 	dev_overrides_enabled, exists := os.LookupEnv("OP_DEV_OVERRIDE_ENABLE")
 
 	if (exists && dev_overrides_enabled == "0") || !exists {
-		return DevOverrideConfig{}
+		return config.DevOverrideConfig{}
 	}
 
 	fmt.Println("***********************************************************************************")
@@ -119,7 +82,7 @@ func check_for_dev_overrides() DevOverrideConfig {
 	fmt.Println("***********************************************************************************")
 	fmt.Println("")
 
-	orc := DevOverrideConfig{}
+	orc := config.DevOverrideConfig{}
 
 	skipUserConfirm, exists := os.LookupEnv("OP_DEV_SKIP_USER_CONFIRM_EMAIL")
 
@@ -131,31 +94,4 @@ func check_for_dev_overrides() DevOverrideConfig {
 	fmt.Println("***********************************************************************************")
 	fmt.Println("")
 	return orc
-}
-
-func GetSMTPConfig(ctx *cli.Context) SMTP {
-	s := SMTP{
-		Host:     ctx.String(SMTPHostFlag),
-		Port:     ctx.String(SMTPPortFlag),
-		Username: ctx.String(SMTPUsernameFlag),
-		Password: ctx.String(SMTPPasswordFlag),
-	}
-
-	return s
-}
-
-func GetConfig(ctx *cli.Context) config {
-	con := config{
-		db:               DBConfigFromCTX(ctx),
-		googleClientID:   ctx.String(GoogleClientIDFlag),
-		googleSecKey:     ctx.String(GoogleClientSecFlag),
-		httpPort:         ctx.String(HTTPPortFlag),
-		hostedDomainName: ctx.String(HostedDomainName),
-		cookieLifeTime:   ctx.Int(CookieLifeTime),
-		smtp:             GetSMTPConfig(ctx),
-	}
-
-	con.devOverrideConfig = check_for_dev_overrides()
-
-	return con
 }

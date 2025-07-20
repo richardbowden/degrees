@@ -4,12 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humachi"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httplog"
 	"github.com/jpillora/backoff"
+	"github.com/typewriterco/p402/internal/config"
 	"github.com/typewriterco/p402/internal/problems"
 
 	"net/http"
@@ -27,7 +29,7 @@ import (
 )
 
 type server struct {
-	config     config
+	config     config.Config
 	wg         sync.WaitGroup
 	httpServer *http.Server
 
@@ -43,13 +45,13 @@ const (
 	appName = "p402-backend"
 )
 
-func newServer(c config) (*server, error) {
+func newServer(c config.Config) (*server, error) {
 	s := server{start_time: time.Now().UTC()}
 	err := s.init(c)
 	return &s, err
 }
 
-func (s *server) init(config config) error {
+func (s *server) init(config config.Config) error {
 	s.config = config
 	log.Info().Str("opserver", "server init").Msg("")
 	var dbStore *dbpg.Store
@@ -60,7 +62,7 @@ func (s *server) init(config config) error {
 	version := "p402 0.0.1-alpha"
 	//todo(rich): does this need to be here or else where, also look at database retry
 	for {
-		dbStore, err = dbpg.NewStoreCreateCon(s.config.db.ConnectionString(), version)
+		dbStore, err = dbpg.NewStoreCreateCon(s.config.Database.ConnectionString(), version)
 		if err == nil {
 			break
 		}
@@ -125,7 +127,7 @@ func (s *server) init(config config) error {
 	apihttp.PrintRoutes(api)
 
 	// HTTP Server Setup
-	addr := fmt.Sprintf(":%s", s.config.httpPort)
+	addr := fmt.Sprintf(":%d", s.config.HTTP.Port)
 	log.Info().Str("address", addr).Msg("Server listening On")
 
 	s.httpServer = &http.Server{

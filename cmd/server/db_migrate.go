@@ -9,7 +9,7 @@ import (
 )
 
 func db_migrate(ctx *cli.Context) error {
-	db_con := DBConfigFromCTX(ctx)
+	db_con := loadDBConfigFromCLI(ctx)
 	mm, err := migrator.NewMigrator(schema.SQLMigrationFiles, db_con.ConnectionString())
 
 	if err != nil {
@@ -27,7 +27,7 @@ func db_migrate(ctx *cli.Context) error {
 
 func db_current_version(ctx *cli.Context) error {
 
-	db_con := DBConfigFromCTX(ctx)
+	db_con := loadDBConfigFromCLI(ctx)
 	mm, err := migrator.NewMigrator(schema.SQLMigrationFiles, db_con.ConnectionString())
 
 	if err != nil {
