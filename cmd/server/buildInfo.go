@@ -8,10 +8,9 @@ import (
 )
 
 func buildInfo(ctx *cli.Context) error {
-
 	bi, ok := debug.ReadBuildInfo()
 	if !ok {
-		panic("not ok")
+		return fmt.Errorf("failed to get build info")
 	}
 	fmt.Printf("%+v", bi)
 	return nil
