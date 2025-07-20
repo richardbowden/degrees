@@ -33,7 +33,7 @@ type server struct {
 	wg         sync.WaitGroup
 	httpServer *http.Server
 
-	start_time time.Time
+	startTime time.Time
 }
 
 const (
@@ -46,7 +46,7 @@ const (
 )
 
 func newServer(c config.Config) (*server, error) {
-	s := server{start_time: time.Now().UTC()}
+	s := server{startTime: time.Now().UTC()}
 	err := s.init(c)
 	return &s, err
 }
@@ -143,7 +143,7 @@ func (s *server) init(config config.Config) error {
 func (s *server) serveHttp() error {
 
 	defer func() {
-		log.Info().Msgf("server ran for %v", time.Since(s.start_time))
+		log.Info().Msgf("server ran for %v", time.Since(s.startTime))
 	}()
 
 	shutdownErrorChan := make(chan error)
@@ -158,7 +158,7 @@ func (s *server) serveHttp() error {
 		shutdownErrorChan <- s.httpServer.Shutdown(ctx)
 	}()
 
-	log.Info().Msgf("start up took %v to reach running state", time.Since(s.start_time))
+	log.Info().Msgf("start up took %v to reach running state", time.Since(s.startTime))
 
 	err := s.httpServer.ListenAndServe()
 	if !errors.Is(err, http.ErrServerClosed) {
