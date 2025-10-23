@@ -60,6 +60,7 @@ type DevOverrideConfig struct {
 }
 
 type Config struct {
+	Version          string
 	HTTP             HTTPConfig
 	Database         DatabaseConfig
 	GoogleClientID   string

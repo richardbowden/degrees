@@ -37,7 +37,11 @@ func init() {
 }
 
 func Gen() error {
-	return sqlGen()
+	err := sqlGen()
+	if err != nil {
+		return err
+	}
+	return goGen()
 }
 
 func sqlGen() error {
@@ -51,8 +55,19 @@ func sqlGen() error {
 	return err
 }
 
+func goGen() error {
+	start := time.Now()
+	fmt.Println("running go generate")
+	err := sh.RunV("go", "generate", "./...")
+	elapsed := time.Since(start)
+
+	fmt.Printf("took %s\n\n", elapsed)
+
+	return err
+}
+
 func Debug() error {
-	mg.Deps(sqlGen)
+	mg.Deps(sqlGen, goGen)
 	start := time.Now()
 	fmt.Printf("\nbuild-mode: debug\n")
 
@@ -68,7 +83,7 @@ func Release() error {
 	fmt.Printf("\nbuild-mode: release\n")
 	fmt.Printf("-------------------\n")
 
-	mg.Deps(sqlGen, Test)
+	mg.Deps(sqlGen, goGen, Test)
 	err := sh.RunV("go", "build", "-v", "-o", buildReleaseBinPath, "./cmd/server")
 
 	fmt.Printf("\npath: %s\n", buildReleaseBinPath)

@@ -3,6 +3,8 @@ package problems
 // very close to RFC 7807 Error handling
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -127,11 +129,16 @@ func (d Detail) Error() string {
 
 func New(kind Kind, msg string, errs ...error) Problem {
 	status := httpErrorStatusCode(kind)
+
 	p := Problem{
 		Status: status,
 		Title:  Title(http.StatusText(status)),
 		Kind:   kind,
 		Detail: msg,
+	}
+
+	if len(errs) == 0 {
+		return p
 	}
 
 	for _, e := range errs {
@@ -147,4 +154,25 @@ func (p Problem) Error() string {
 
 func (p Problem) GetStatus() int {
 	return p.Status
+}
+
+func WriteHTTPError(w http.ResponseWriter, p Problem) {
+	w.Header().Set("Content-Type", "application/problem+json")
+	w.WriteHeader(p.Status)
+
+	if err := json.NewEncoder(w).Encode(p); err != nil {
+		// Fallback if JSON encoding fails
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+
+func WriteHTTPErrorWithErr(w http.ResponseWriter, err error) {
+	var p Problem
+
+	if errors.As(err, &p) {
+		WriteHTTPError(w, p)
+		return
+	}
+
+	WriteHTTPError(w, New(Internal, "", err))
 }

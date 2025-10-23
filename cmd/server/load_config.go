@@ -69,9 +69,9 @@ func loadConfigFromCLI(ctx *cli.Context) *config.Config {
 
 func loadDevOverrides() config.DevOverrideConfig {
 
-	dev_overrides_enabled, exists := os.LookupEnv("OP_DEV_OVERRIDE_ENABLE")
+	devOverridesEnabled, exists := os.LookupEnv("OP_DEV_OVERRIDE_ENABLE")
 
-	if (exists && dev_overrides_enabled == "0") || !exists {
+	if (exists && devOverridesEnabled == "0") || !exists {
 		return config.DevOverrideConfig{}
 	}
 

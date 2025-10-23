@@ -17,10 +17,6 @@ func NewAccountsRepo(store dbpg.Storer) *Users {
 		store: store}
 }
 
-func (a *Users) PPP(ctx context.Context, email string, username string) error {
-	return services.ErrNoRecord
-}
-
 func (a *Users) Create(ctx context.Context, params services.NewAccount) (services.Account, error) {
 	log := httplog.LogEntry(ctx)
 	log.Info().Msg("from the account create repo layer")

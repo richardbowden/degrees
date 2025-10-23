@@ -25,6 +25,10 @@ SELECT
     EXISTS(SELECT 1 FROM users WHERE users.login_email = $1) AS email_exists,
     EXISTS(SELECT 1 FROM users WHERE users.username = $2) AS username_exists;
 
+-- name: EmailExists :one
+SELECT
+    EXISTS(select 1 from users where users.login_email = $1);
+
 -- name: GetUserById :one
 SELECT * FROM users WHERE id = $1;
 

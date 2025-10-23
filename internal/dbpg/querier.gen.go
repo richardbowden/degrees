@@ -12,6 +12,7 @@ type Querier interface {
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	// First create the email, then create the user in separate operations
 	CreateUserEmail(ctx context.Context, arg CreateUserEmailParams) (UserEmail, error)
+	EmailExists(ctx context.Context, arg EmailExistsParams) (bool, error)
 	GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) (User, error)
 	GetUserById(ctx context.Context, arg GetUserByIdParams) (User, error)
 	GetUserByUsername(ctx context.Context, arg GetUserByUsernameParams) (User, error)

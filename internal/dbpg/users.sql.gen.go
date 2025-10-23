@@ -101,6 +101,22 @@ func (q *Queries) CreateUserEmail(ctx context.Context, arg CreateUserEmailParams
 	return i, err
 }
 
+const emailExists = `-- name: EmailExists :one
+SELECT
+    EXISTS(select 1 from users where users.login_email = $1)
+`
+
+type EmailExistsParams struct {
+	LoginEmail string
+}
+
+func (q *Queries) EmailExists(ctx context.Context, arg EmailExistsParams) (bool, error) {
+	row := q.db.QueryRow(ctx, emailExists, arg.LoginEmail)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
+}
+
 const getUserByEmail = `-- name: GetUserByEmail :one
 SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at FROM users WHERE login_email = $1
 `

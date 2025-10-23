@@ -90,11 +90,11 @@ func run(args []string) {
 						Subcommands: []*cli.Command{
 							{
 								Name:   "up",
-								Action: db_migrate,
+								Action: dbMigrate,
 							},
 							{
 								Name:   "version",
-								Action: db_current_version,
+								Action: dbCurrentVersion,
 							},
 						},
 					},
@@ -106,18 +106,4 @@ func run(args []string) {
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal().Err(err).Msg("failed to start app")
 	}
-}
-
-func serverRun(ctx *cli.Context) error {
-	cfg := loadConfigFromCLI(ctx)
-
-	setBaseLogger(ctx)
-
-	srv, err := newServer(*cfg)
-
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to create server")
-	}
-
-	return srv.serveHttp()
 }
