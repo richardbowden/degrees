@@ -66,7 +66,7 @@ func (s *Server) Serve() error {
 
 func (s *Server) setupRoutes() chi.Router {
 	r := chi.NewMux()
-	rlog := log.With().Str("subsystem", "roter-setup").Logger()
+	rlog := log.With().Str("subsystem", "router-setup").Logger()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
@@ -83,33 +83,36 @@ func (s *Server) setupRoutes() chi.Router {
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Route("/auth", func(r chi.Router) {
 			r.Group(func(r chi.Router) {
-				r.Post("/verify", s.handlers.Users.VerifyEmail)
-				r.Post("/login", s.handlers.Users.Login)
+				r.Post("/register", s.handlers.Auth.Register)
+				r.Post("/verify-email", s.handlers.Auth.VerifyEmail)
+
+				r.Post("/login", s.handlers.Auth.Login)
 				r.Post("/reset-password", s.handlers.Users.ResetPassword)
 			})
 
 			r.Group(func(r chi.Router) {
-				r.Post("/logout", s.handlers.Users.Logout)
+				r.Post("/logout", s.handlers.Auth.Logout)
 			})
 		})
 
-		r.Route("/users", func(r chi.Router) {
-			r.Group(func(r chi.Router) {
-				r.Post("/", s.handlers.Users.NewUser)
-			})
+		r.Route("/user", func(r chi.Router) {
+			r.Post("/change-password", s.handlers.Auth.ChangePassword)
+			// r.Group(func(r chi.Router) {
+			// 	r.Post("/", s.handlers.Users.NewUser)
+			// })
 
-			r.Route("/{id}", func(r chi.Router) {
-				r.Post("/enable", s.handlers.Users.ResetPassword)
-				r.Post("/disable", s.handlers.Users.ResetPassword)
-				r.Post("/reset-password", s.handlers.Users.ResetPassword)
-			})
+			// r.Route("/{id}", func(r chi.Router) {
+			// 	r.Post("/enable", s.handlers.Users.ResetPassword)
+			// 	r.Post("/disable", s.handlers.Users.ResetPassword)
+			// 	r.Post("/reset-password", s.handlers.Users.ResetPassword)
+			// })
 		})
 
-		r.Route("/admin", func(r chi.Router) {
-			r.Route("/users", func(r chi.Router) {
-				r.Get("/", s.handlers.Users.ListAllUsers)
-			})
-		})
+		// r.Route("/admin", func(r chi.Router) {
+		// 	r.Route("/users", func(r chi.Router) {
+		// 		r.Get("/", s.handlers.Users.ListAllUsers)
+		// 	})
+		// })
 
 	})
 

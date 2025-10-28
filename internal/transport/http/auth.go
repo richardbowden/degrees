@@ -1,7 +1,126 @@
 package thttp
 
+import (
+	"errors"
+	"net/http"
+
+	"github.com/go-chi/httplog"
+	"github.com/typewriterco/p402/internal/problems"
+	"github.com/typewriterco/p402/internal/services"
+	"github.com/typewriterco/p402/internal/valgen"
+)
+
+type Auth struct {
+	svc *services.Auth
+}
+
+func NewAuth(authSvc *services.Auth) *Auth {
+	return &Auth{svc: authSvc}
+
+}
+
+func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	log := httplog.LogEntry(ctx)
+
+	user, err := DecodeJSONBody[services.NewUserRequest](r)
+
+	if err != nil {
+		log.Error().Err(err).Msg("problem parsing the json body")
+		p := problems.New(problems.InvalidRequest, "problem parsing the json body", err)
+		problems.WriteHTTPError(w, p)
+		return
+	}
+
+	err = user.Validate()
+
+	var vErr *valgen.ValidationError
+	if errors.As(err, &vErr) {
+		p := problems.New(problems.InvalidRequest, "validation errors")
+
+		for _, e := range vErr.Errors {
+			p.AddDetail(e)
+		}
+		problems.WriteHTTPError(w, p)
+		return
+	}
+
+	err = h.svc.Register(ctx, user)
+
+	if err != nil {
+		log.Error().Err(err).Msg("")
+		problems.WriteHTTPErrorWithErr(w, err)
+		return
+	}
+	//
+	//log.Info().Str("email", p.Email).Msg("")
+	//w.WriteHeader(http.StatusOK)
+}
+func (h *Auth) VerifyEmail(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	log := httplog.LogEntry(ctx)
+
+	user, err := DecodeJSONBody[services.LoginRequest](r)
+
+	if err != nil {
+		log.Error().Err(err).Msg("problem parsing the json body")
+		p := problems.New(problems.InvalidRequest, "problem parsing the json body", err)
+		problems.WriteHTTPError(w, p)
+		return
+	}
+	err = user.Validate()
+
+	var vErr *valgen.ValidationError
+	if errors.As(err, &vErr) {
+		p := problems.New(problems.InvalidRequest, "validation errors")
+
+		for _, e := range vErr.Errors {
+			p.AddDetail(e)
+		}
+		problems.WriteHTTPError(w, p)
+		return
+	}
+	h.svc.Login(ctx)
+	// ctx := r.Context()
+	// log := httplog.LogEntry(ctx)
+	//
+	// err := a.accSvc.Login(ctx)
+	//
+	// if err != nil {
+	// 	//handle error here
+	// }
+	//
+	// errs.HTTPErrorResponse(w, log, errs.E(errs.Invalid, "Login has not been done yet!!!!!!!"))
+	// w.Write([]byte("login email"))
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+func (h *Auth) Logout(w http.ResponseWriter, r *http.Request) {
+
+	w.Write([]byte("logout email"))
+
+	// ctx := r.Context()
+	// log := httplog.LogEntry(ctx)
+	//
+	// err := a.accSvc.Logout(ctx)
+	//
+	// if err != nil {
+	// 	//handle error here
+	// }
+	//
+	// errs.HTTPErrorResponse(w, log, errs.E(errs.Invalid, "Logout has not been done yet!!!!!!!"))
+}
+
+func (h *Auth) ChangePassword(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
 //
-//package services
 //
 //import (
 //"context"
