@@ -79,9 +79,8 @@ func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
 	if errors.As(err, &vErr) {
 		p := problems.New(problems.InvalidRequest, "validation errors")
 
-		for _, e := range vErr.Errors {
-			p.AddDetail(e)
-		}
+		p.AddDetails(vErr.Errors)
+
 		problems.WriteHTTPError(w, p)
 		return
 	}

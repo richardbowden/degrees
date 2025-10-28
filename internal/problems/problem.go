@@ -106,6 +106,12 @@ type Problem struct {
 	OrigErr error `json:"-"`
 }
 
+func (p *Problem) AddDetails(errs ...error) {
+	for _, e := range errs {
+		p.AddDetail(e)
+	}
+}
+
 func (p *Problem) AddDetail(err error) {
 	if converted, ok := err.(Detail); ok {
 		p.Errors = append(p.Errors, converted)
