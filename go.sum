@@ -552,6 +552,8 @@ github.com/richardbowden/passwordHash v1.0.0 h1:U7xRRQl5K2kmBfeF0tvj8hBsEbPBQpJn
 github.com/richardbowden/passwordHash v1.0.0/go.mod h1:ltAH7aeh42odALdVZKZGPKoX/TGQ+Ia6a3MO6EtuaIw=
 github.com/richardbowden/valforge v0.0.1 h1:ZO7ChVVdAbdZ+taQcOM+uW1YwkQ9cgdaNiWiZv5B+OE=
 github.com/richardbowden/valforge v0.0.1/go.mod h1:nELTEsPY3IAw9dzoc/KsXUv4hn9EDQ7JsKnw0ADs6Q8=
+github.com/richardbowden/valforge v0.0.2 h1:Qn4o60tPjrQOvXZsU9GVhy3hQlTIzjAnpAQI1EDsEog=
+github.com/richardbowden/valforge v0.0.2/go.mod h1:nELTEsPY3IAw9dzoc/KsXUv4hn9EDQ7JsKnw0ADs6Q8=
 github.com/riza-io/grpc-go v0.2.0 h1:2HxQKFVE7VuYstcJ8zqpN84VnAoJ4dCL6YFhJewNcHQ=
 github.com/riza-io/grpc-go v0.2.0/go.mod h1:2bDvR9KkKC3KhtlSHfR3dAXjUMT86kg4UfWFyVGWqi8=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
