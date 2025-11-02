@@ -106,7 +106,7 @@ type Problem struct {
 	OrigErr error `json:"-"`
 }
 
-func (p *Problem) AddDetails(errs ...error) {
+func (p *Problem) AddDetails(errs []error) {
 	for _, e := range errs {
 		p.AddDetail(e)
 	}
