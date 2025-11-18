@@ -1,0 +1,21 @@
+model
+  schema 1.1
+
+type user
+
+type system
+    relations
+        define super_admin: [user]
+
+type organization
+    relations
+        define system: [system]
+        define admin: [user] or super_admin from system
+        define owner: [user]
+        define member: [user] or owner
+
+type project
+    relations
+        define system: [system]
+        define owner: [organization#member]
+        define member: [organization#member]

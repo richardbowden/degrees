@@ -1,0 +1,34 @@
+model_file: ./models.fga
+
+tuples:
+  # Full access users
+  - user: user:alice
+    relation: full
+    object: sysop:system1
+  
+
+tests:
+  # Test full access
+  - name: Alice has full access to system1
+    check:
+      - user: user:alice
+        object: sysop:system1
+        assertions:
+          full: true
+  
+  
+  # Test no access scenarios
+  - name: Charlie has no full access to system1
+    check:
+      - user: user:charlie
+        object: sysop:system1
+        assertions:
+          full: false
+  
+  # Test user with no permissions
+  - name: Eve has no access to any system
+    check:
+      - user: user:eve
+        object: sysop:system1
+        assertions:
+          full: false

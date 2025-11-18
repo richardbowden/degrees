@@ -50,10 +50,8 @@ func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 		problems.WriteHTTPErrorWithErr(w, err)
 		return
 	}
-	//
-	//log.Info().Str("email", p.Email).Msg("")
-	//w.WriteHeader(http.StatusOK)
 }
+
 func (h *Auth) VerifyEmail(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
@@ -62,7 +60,7 @@ func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := httplog.LogEntry(ctx)
 
-	user, err := DecodeJSONBody[services.LoginRequest](r)
+	loginReq, err := DecodeJSONBody[services.LoginRequest](r)
 
 	if err != nil {
 		log.Error().Err(err).Msg("problem parsing the json body")
@@ -70,14 +68,13 @@ func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
 		problems.WriteHTTPError(w, p)
 		return
 	}
-	err = user.Validate()
+
+	err = loginReq.Validate()
 
 	var vErr *valgen.ValidationError
 	if errors.As(err, &vErr) {
 		p := problems.New(problems.InvalidRequest, "validation errors")
-
 		p.AddDetails(vErr.Errors)
-
 		problems.WriteHTTPError(w, p)
 		return
 	}
