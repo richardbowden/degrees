@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -51,6 +52,11 @@ func serverRun(ctx *cli.Context) error {
 
 	zapLogger := zap.New(zerozap.New(log.Logger))
 	fgaClient, err := fga.New(context.Background(), dbCon, zapLogger)
+
+	if err != nil {
+		log.Error().Err(err).Msg("cannot")
+		os.Exit(1)
+	}
 
 	fgaClient.ListFiles()
 
