@@ -3,14 +3,12 @@ module github.com/typewriterco/p402
 go 1.25
 
 require (
-	github.com/gilcrest/diygoapi v0.53.0
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-chi/httplog v0.3.2
 	github.com/golang-migrate/migrate/v4 v4.19.0
 	github.com/jackc/pgx/v5 v5.7.6
 	github.com/jpillora/backoff v1.0.0
 	github.com/magefile/mage v1.15.0
-	github.com/pkg/errors v0.9.1
 	github.com/richardbowden/passwordHash v1.0.0
 	github.com/rs/zerolog v1.34.0
 	github.com/urfave/cli/v2 v2.27.7
@@ -18,7 +16,7 @@ require (
 
 require (
 	github.com/IBM/pgxpoolprometheus v1.1.2 // indirect
-	go.mau.fi/zerozap v0.1.2 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 )
 
 require (
@@ -126,7 +124,6 @@ require (
 	github.com/jackc/pgproto3/v2 v2.3.3 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgtype v1.14.3 // indirect
-	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/jackc/pgx/v4 v4.18.3 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -160,9 +157,9 @@ require (
 	github.com/neo4j/neo4j-go-driver v1.8.1-0.20200803113522-b626aa943eba // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
 	github.com/oklog/ulid/v2 v2.1.1 // indirect
-	github.com/openfga/api/proto v0.0.0-20250909172242-b4b2a12f5c67 // indirect
+	github.com/openfga/api/proto v0.0.0-20250909172242-b4b2a12f5c67
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251027165255-0f8f255e5f6c // indirect
-	github.com/openfga/openfga v1.11.0 // indirect
+	github.com/openfga/openfga v1.11.0
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pganalyze/pg_query_go/v6 v6.1.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
@@ -227,7 +224,7 @@ require (
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/mock v0.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	go.uber.org/zap v1.27.0 // indirect
+	go.uber.org/zap v1.27.0
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	golang.org/x/crypto v0.43.0 // indirect
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect

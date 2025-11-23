@@ -27,6 +27,10 @@ type DatabaseConfig struct {
 }
 
 func (d *DatabaseConfig) ConnectionString() string {
+	return d.ConnectionStringWithSchema("public")
+}
+
+func (d *DatabaseConfig) ConnectionStringWithSchema(schema string) string {
 	var c string
 
 	creds := d.User
@@ -44,6 +48,8 @@ func (d *DatabaseConfig) ConnectionString() string {
 	}
 
 	c = fmt.Sprintf("%s?&sslmode=%s", c, sslMode)
+
+	c = fmt.Sprintf("%s&search_path=%s", c, schema)
 
 	return c
 }

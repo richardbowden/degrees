@@ -13,10 +13,13 @@ import (
 	"github.com/typewriterco/p402/internal/fga"
 	"github.com/typewriterco/p402/internal/repos"
 	"github.com/typewriterco/p402/internal/services"
+	"github.com/typewriterco/p402/internal/settings"
 	thttp "github.com/typewriterco/p402/internal/transport/http"
 	"github.com/urfave/cli/v2"
-	"go.mau.fi/zerozap"
-	"go.uber.org/zap"
+)
+
+const (
+	FGA_DB_SCHEMA_NAME = "fga"
 )
 
 var version = "p402 0.0.1-alpha"
@@ -50,8 +53,17 @@ func serverRun(ctx *cli.Context) error {
 
 	ds := dbpg.NewDataStore(dbStore)
 
-	zapLogger := zap.New(zerozap.New(log.Logger))
-	fgaClient, err := fga.New(context.Background(), dbCon, zapLogger)
+	fgaDBCon, err := dbpg.NewConnection(config.Database.ConnectionStringWithSchema(FGA_DB_SCHEMA_NAME), FGA_DB_SCHEMA_NAME)
+	defer fgaDBCon.Close()
+
+	if err != nil {
+		log.Error().Err(err).Msg("failed to create a fga db client")
+		return err
+	}
+
+	settings := settings.New(dbStore)
+
+	fgaClient, err := fga.New(context.Background(), fgaDBCon, log.Logger, settings)
 
 	if err != nil {
 		log.Error().Err(err).Msg("cannot")

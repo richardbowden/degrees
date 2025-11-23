@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	CreateSetting(ctx context.Context, arg CreateSettingParams) error
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	// First create the email, then create the user in separate operations
 	CreateUserEmail(ctx context.Context, arg CreateUserEmailParams) (UserEmail, error)

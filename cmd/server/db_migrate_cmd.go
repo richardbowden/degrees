@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"strings"
+
+	openFGAMigrate "github.com/openfga/openfga/pkg/storage/migrate"
 
 	migrator "github.com/typewriterco/p402/internal/migrations"
 	"github.com/typewriterco/p402/sql/schema"
@@ -17,9 +20,22 @@ func dbMigrate(ctx *cli.Context) error {
 	}
 
 	err = mm.Migrate()
+	if err != nil {
+		if !strings.Contains(err.Error(), "no change") {
+			return err
+		}
+	}
+
+	fgaConfig := openFGAMigrate.MigrationConfig{
+		Engine:  "postgres",
+		URI:     dbCon.ConnectionStringWithSchema(FGA_DB_SCHEMA_NAME),
+		Verbose: false,
+	}
+
+	err = openFGAMigrate.RunMigrations(fgaConfig)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to migrate fga %w", err)
 	}
 
 	return nil

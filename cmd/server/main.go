@@ -79,6 +79,7 @@ func run(args []string) {
 						Flags: []cli.Flag{
 							&cli.IntFlag{Name: HTTPPortFlag, Value: 3030, Usage: "port number for http", EnvVars: []string{"P402_HTTP_PORT"}},
 							&cli.StringFlag{Name: HTTPHostFlag, Value: "localhost", Usage: "host or ip address to listen on, set to ':' to bind to all ip available ip addresses", EnvVars: []string{"P402_HTTP_HOST"}},
+							&cli.StringFlag{Name: FGAStoreIDFlag, EnvVars: []string{"P402_FGA_STORE_ID"}},
 						},
 					},
 				},

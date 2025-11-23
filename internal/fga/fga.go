@@ -8,31 +8,45 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	openfgav1 "github.com/openfga/api/proto/openfga/v1"
+	"github.com/openfga/language/pkg/go/transformer"
 	"github.com/openfga/openfga/pkg/server"
 	"github.com/openfga/openfga/pkg/storage/postgres"
 	"github.com/openfga/openfga/pkg/storage/sqlcommon"
+	"github.com/rs/zerolog"
 	log "github.com/rs/zerolog/log"
 
 	fgafs "github.com/typewriterco/p402/fga"
-	"go.uber.org/zap"
+	"github.com/typewriterco/p402/internal/settings"
+)
+
+const (
+	FGA_STORE_NAME = "p402"
 )
 
 type FGA struct {
 	server *server.Server
 	fs     embed.FS
+	kv     settings.Settings
+
+	storeID string
+	authID  string
 }
 
-func New(ctx context.Context, pool *pgxpool.Pool, zapLogger *zap.Logger) (*FGA, error) {
+func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv settings.Settings) (*FGA, error) {
 
 	datastore, err := postgres.NewWithDB(pool, pool, &sqlcommon.Config{
-		MaxOpenConns:    25,
-		MaxIdleConns:    5,
-		ConnMaxIdleTime: 0,
-		ConnMaxLifetime: 0,
+		MaxOpenConns:          25,
+		MaxIdleConns:          5,
+		ConnMaxIdleTime:       0,
+		ConnMaxLifetime:       0,
+		MaxTypesPerModelField: 100,
 	})
 
-	// Create logging adapter
-	logger := NewZerologAdapter(log.Logger)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create fga datastore %w", err)
+	}
+
+	logger := NewZerologAdapter(zerologger)
 
 	fgaServer, err := server.NewServerWithOpts(
 		server.WithDatastore(datastore),
@@ -46,31 +60,84 @@ func New(ctx context.Context, pool *pgxpool.Pool, zapLogger *zap.Logger) (*FGA, 
 	f := &FGA{
 		fs:     fgafs.FGSModels,
 		server: fgaServer,
+		kv:     kv,
 	}
 
-	_, _, err = f.InitializeAuthModel(ctx)
-
+	storeID, err := f.kv.Get(ctx, "fga_store_id")
 	if err != nil {
 		return &FGA{}, err
 	}
+
+	authID, err := f.kv.Get(ctx, "fga_store_id")
+	if err != nil {
+		return &FGA{}, err
+	}
+
+	if storeID == "" {
+		storeID, authID, err = f.InitializeAuthModel(ctx)
+		if err != nil {
+			return &FGA{}, err
+		}
+	}
+
+	log.Info().Msg("Creating OpenFGA store...")
+
+	f.storeID = storeID
+	f.authID = authID
 
 	return f, nil
 
 }
 
 func (f *FGA) InitializeAuthModel(ctx context.Context) (string, string, error) {
-	// Create store
-	log.Info().Msg("Creating OpenFGA store...")
+
 	storeResp, err := f.server.CreateStore(ctx, &openfgav1.CreateStoreRequest{
-		Name: "todo-app",
+		Name: FGA_STORE_NAME,
 	})
 	if err != nil {
 		return "", "", fmt.Errorf("create store: %w", err)
 	}
 	storeID := storeResp.Id
+
+	err = f.kv.Set(ctx, "fga_store_id", storeID)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to stroe fga_store_id %w", err)
+	}
+
 	log.Printf("Store created: %s", storeID)
 
-	return "", "", nil
+	modelBytes, err := embed.FS.ReadFile(f.fs, "models.fga")
+	// fmt.Printf("$s\n", string(modelBytes))
+	if err != nil {
+		return "", "", fmt.Errorf("failed to read models.fga file from embdedd %w", err)
+	}
+
+	model, err := transformer.TransformDSLToProto(string(modelBytes))
+
+	if err != nil {
+		return "", "", fmt.Errorf("parse model: %w", err)
+	}
+
+	modelReq := &openfgav1.WriteAuthorizationModelRequest{
+		SchemaVersion:   model.SchemaVersion,
+		TypeDefinitions: model.TypeDefinitions,
+		Conditions:      model.Conditions,
+		StoreId:         storeID,
+	}
+
+	modelResp, err := f.server.WriteAuthorizationModel(ctx, modelReq)
+
+	if err != nil {
+		return "", "", fmt.Errorf("failed to write auth model %w", err)
+	}
+
+	err = f.kv.Set(ctx, "fga_mdoel_id", modelResp.AuthorizationModelId)
+
+	if err != nil {
+		return "", "", fmt.Errorf("failed to stroe fga_model_id %w", err)
+	}
+
+	return storeID, modelResp.AuthorizationModelId, nil
 
 }
 

@@ -27,6 +27,7 @@ const (
 	SMTPPortFlag        = "smtp-port"
 	SMTPUsernameFlag    = "smtp-username"
 	SMTPPasswordFlag    = "smtp-password"
+	FGAStoreIDFlag      = "fga-store-id"
 )
 
 func loadDBConfigFromCLI(ctx *cli.Context) config.DatabaseConfig {
