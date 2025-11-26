@@ -2,8 +2,10 @@ package fga
 
 import (
 	"context"
+	"crypto/sha256"
 	"embed"
 	"fmt"
+	"io"
 	"io/fs"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -68,13 +70,13 @@ func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv 
 		return &FGA{}, err
 	}
 
-	authID, err := f.kv.Get(ctx, "fga_store_id")
+	authID, err := f.kv.Get(ctx, "fga_auth_id")
 	if err != nil {
 		return &FGA{}, err
 	}
 
 	if storeID == "" {
-		storeID, authID, err = f.InitializeAuthModel(ctx)
+		storeID, authID, err = f.InitializeFGAModels(ctx)
 		if err != nil {
 			return &FGA{}, err
 		}
@@ -89,55 +91,81 @@ func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv 
 
 }
 
-func (f *FGA) InitializeAuthModel(ctx context.Context) (string, string, error) {
+func (f *FGA) InitializeFGAModels(ctx context.Context) (string, string, error) {
 
-	storeResp, err := f.server.CreateStore(ctx, &openfgav1.CreateStoreRequest{
-		Name: FGA_STORE_NAME,
-	})
+	storeID, err := f.kv.Get(ctx, "fga_store_id")
 	if err != nil {
-		return "", "", fmt.Errorf("create store: %w", err)
-	}
-	storeID := storeResp.Id
-
-	err = f.kv.Set(ctx, "fga_store_id", storeID)
-	if err != nil {
-		return "", "", fmt.Errorf("failed to stroe fga_store_id %w", err)
+		return "", "", err
 	}
 
+	if storeID == "" {
+		storeResp, err := f.server.CreateStore(ctx, &openfgav1.CreateStoreRequest{
+			Name: FGA_STORE_NAME,
+		})
+		if err != nil {
+			return "", "", fmt.Errorf("failed to create store: %w", err)
+		}
+		f.storeID = storeResp.Id
+	}
 	log.Printf("Store created: %s", storeID)
 
-	modelBytes, err := embed.FS.ReadFile(f.fs, "models.fga")
-	// fmt.Printf("$s\n", string(modelBytes))
+	r, _ := embed.FS.Open(f.fs, "models.fga")
+
+	h := sha256.New()
+	if _, err := io.Copy(h, r); err != nil {
+		log.Error().Err(err).Msg("failed to hash fga model file")
+		return "", "", fmt.Errorf("failed to hash fga model file: %w", err)
+	}
+
+	modelHash, err := f.kv.Get(ctx, "fga_model_file_hash")
 	if err != nil {
-		return "", "", fmt.Errorf("failed to read models.fga file from embdedd %w", err)
+		return "", "", fmt.Errorf("failed to fga model hash: %w", err)
 	}
 
-	model, err := transformer.TransformDSLToProto(string(modelBytes))
+	fff := func() (string, error) {
 
-	if err != nil {
-		return "", "", fmt.Errorf("parse model: %w", err)
+		modelBytes, err := embed.FS.ReadFile(f.fs, "models.fga")
+		if err != nil {
+			return "", fmt.Errorf("failed to read models.fga file from embdedd %w", err)
+		}
+
+		model, err := transformer.TransformDSLToProto(string(modelBytes))
+
+		if err != nil {
+			return "", fmt.Errorf("parse model: %w", err)
+		}
+
+		modelReq := &openfgav1.WriteAuthorizationModelRequest{
+			SchemaVersion:   model.SchemaVersion,
+			TypeDefinitions: model.TypeDefinitions,
+			Conditions:      model.Conditions,
+			StoreId:         storeID,
+		}
+
+		modelResp, err := f.server.WriteAuthorizationModel(ctx, modelReq)
+
+		if err != nil {
+			return "", fmt.Errorf("failed to write auth model %w", err)
+		}
+		return modelResp.GetAuthorizationModelId(), nil
+	}
+	writeModel := false
+	if modelHash == "" {
+		writeModel = true
 	}
 
-	modelReq := &openfgav1.WriteAuthorizationModelRequest{
-		SchemaVersion:   model.SchemaVersion,
-		TypeDefinitions: model.TypeDefinitions,
-		Conditions:      model.Conditions,
-		StoreId:         storeID,
+	if modelHash != string(h.Sum(nil)) {
+		writeModel = true
 	}
+	if writeModel {
+		f.authID, err = fff()
+		if err != nil {
+			return "", "", fmt.Errorf("failed auth model stuff: %w", err)
+		}
+		f.kv.Set(ctx, "fga_model_file_hash", string(h.Sum(nil)))
 
-	modelResp, err := f.server.WriteAuthorizationModel(ctx, modelReq)
-
-	if err != nil {
-		return "", "", fmt.Errorf("failed to write auth model %w", err)
 	}
-
-	err = f.kv.Set(ctx, "fga_mdoel_id", modelResp.AuthorizationModelId)
-
-	if err != nil {
-		return "", "", fmt.Errorf("failed to stroe fga_model_id %w", err)
-	}
-
-	return storeID, modelResp.AuthorizationModelId, nil
+	return storeID, f.authID, nil
 
 }
 

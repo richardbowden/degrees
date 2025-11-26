@@ -70,8 +70,6 @@ func serverRun(ctx *cli.Context) error {
 		os.Exit(1)
 	}
 
-	fgaClient.ListFiles()
-
 	// Set dev overrides to help run things locally
 	// services.DevSkipUserVerification = s.config.devOverrideConfig.SkipUserConfirm
 
