@@ -26,7 +26,7 @@ const (
 )
 
 type FGA struct {
-	server *server.Server
+	Server *server.Server
 	fs     embed.FS
 	kv     settings.Settings
 
@@ -61,51 +61,36 @@ func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv 
 	logger.Info("OpenFGA server created (in-process, shared DB config")
 	f := &FGA{
 		fs:     fgafs.FGSModels,
-		server: fgaServer,
+		Server: fgaServer,
 		kv:     kv,
-	}
-
-	storeID, err := f.kv.Get(ctx, "fga_store_id")
-	if err != nil {
-		return &FGA{}, err
-	}
-
-	authID, err := f.kv.Get(ctx, "fga_auth_id")
-	if err != nil {
-		return &FGA{}, err
-	}
-
-	if storeID == "" {
-		storeID, authID, err = f.InitializeFGAModels(ctx)
-		if err != nil {
-			return &FGA{}, err
-		}
 	}
 
 	log.Info().Msg("Creating OpenFGA store...")
 
-	f.storeID = storeID
-	f.authID = authID
+	err = f.InitializeFGAModels(ctx)
+	if err != nil {
+		return &FGA{}, err
+	}
 
 	return f, nil
-
 }
 
-func (f *FGA) InitializeFGAModels(ctx context.Context) (string, string, error) {
+func (f *FGA) InitializeFGAModels(ctx context.Context) error {
 
 	storeID, err := f.kv.Get(ctx, "fga_store_id")
 	if err != nil {
-		return "", "", err
+		return err
 	}
 
 	if storeID == "" {
-		storeResp, err := f.server.CreateStore(ctx, &openfgav1.CreateStoreRequest{
+		storeResp, err := f.Server.CreateStore(ctx, &openfgav1.CreateStoreRequest{
 			Name: FGA_STORE_NAME,
 		})
 		if err != nil {
-			return "", "", fmt.Errorf("failed to create store: %w", err)
+			return fmt.Errorf("failed to create store: %w", err)
 		}
 		f.storeID = storeResp.Id
+		f.kv.Set(ctx, "fga_store_id", f.storeID)
 	}
 	log.Printf("Store created: %s", storeID)
 
@@ -114,12 +99,14 @@ func (f *FGA) InitializeFGAModels(ctx context.Context) (string, string, error) {
 	h := sha256.New()
 	if _, err := io.Copy(h, r); err != nil {
 		log.Error().Err(err).Msg("failed to hash fga model file")
-		return "", "", fmt.Errorf("failed to hash fga model file: %w", err)
+		return fmt.Errorf("failed to hash fga model file: %w", err)
 	}
 
-	modelHash, err := f.kv.Get(ctx, "fga_model_file_hash")
+	embdedModelFileHash := fmt.Sprintf("%x", h.Sum(nil))
+
+	currentModelFileHash, err := f.kv.Get(ctx, "fga_model_file_hash")
 	if err != nil {
-		return "", "", fmt.Errorf("failed to fga model hash: %w", err)
+		return fmt.Errorf("failed to fga model hash: %w", err)
 	}
 
 	fff := func() (string, error) {
@@ -129,44 +116,61 @@ func (f *FGA) InitializeFGAModels(ctx context.Context) (string, string, error) {
 			return "", fmt.Errorf("failed to read models.fga file from embdedd %w", err)
 		}
 
-		model, err := transformer.TransformDSLToProto(string(modelBytes))
+		authxModel, err := transformer.TransformDSLToProto(string(modelBytes))
 
 		if err != nil {
 			return "", fmt.Errorf("parse model: %w", err)
 		}
 
-		modelReq := &openfgav1.WriteAuthorizationModelRequest{
-			SchemaVersion:   model.SchemaVersion,
-			TypeDefinitions: model.TypeDefinitions,
-			Conditions:      model.Conditions,
-			StoreId:         storeID,
+		authxModelReq := &openfgav1.WriteAuthorizationModelRequest{
+			SchemaVersion:   authxModel.SchemaVersion,
+			TypeDefinitions: authxModel.TypeDefinitions,
+			Conditions:      authxModel.Conditions,
+			StoreId:         f.storeID,
 		}
 
-		modelResp, err := f.server.WriteAuthorizationModel(ctx, modelReq)
+		authzModelResp, err := f.Server.WriteAuthorizationModel(ctx, authxModelReq)
 
 		if err != nil {
 			return "", fmt.Errorf("failed to write auth model %w", err)
 		}
-		return modelResp.GetAuthorizationModelId(), nil
+		return authzModelResp.GetAuthorizationModelId(), nil
 	}
+
 	writeModel := false
-	if modelHash == "" {
+	if currentModelFileHash == "" {
 		writeModel = true
 	}
 
-	if modelHash != string(h.Sum(nil)) {
+	//New version of the model
+	if currentModelFileHash != embdedModelFileHash {
 		writeModel = true
 	}
+
 	if writeModel {
 		f.authID, err = fff()
 		if err != nil {
-			return "", "", fmt.Errorf("failed auth model stuff: %w", err)
+			return fmt.Errorf("failed auth model stuff: %w", err)
 		}
-		f.kv.Set(ctx, "fga_model_file_hash", string(h.Sum(nil)))
 
+		err = f.kv.Set(ctx, "fga_model_file_hash", embdedModelFileHash)
+		if err != nil {
+			panic(err)
+		}
+		f.kv.Set(ctx, "fga_auth_id", f.authID)
+		if err != nil {
+			panic(err)
+		}
+
+	} else {
+		authID, err := f.kv.Get(ctx, "fga_auth_id")
+		if err != nil {
+			return fmt.Errorf("failed to get auth model id from kv store: %w", err)
+		}
+		f.authID = authID
 	}
-	return storeID, f.authID, nil
 
+	return nil
 }
 
 func (f *FGA) ListFiles() {
