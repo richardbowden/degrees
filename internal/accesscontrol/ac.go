@@ -25,7 +25,7 @@ const (
 	FGA_STORE_NAME = "p402"
 )
 
-type FGA struct {
+type AC struct {
 	Server *server.Server
 	fs     embed.FS
 	kv     settings.Settings
@@ -34,7 +34,7 @@ type FGA struct {
 	authID  string
 }
 
-func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv settings.Settings) (*FGA, error) {
+func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv settings.Settings) (*AC, error) {
 
 	datastore, err := postgres.NewWithDB(pool, pool, &sqlcommon.Config{
 		MaxOpenConns:          25,
@@ -59,7 +59,7 @@ func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv 
 	}
 
 	logger.Info("OpenFGA server created (in-process, shared DB config")
-	f := &FGA{
+	f := &AC{
 		fs:     fgafs.FGSModels,
 		Server: fgaServer,
 		kv:     kv,
@@ -69,13 +69,13 @@ func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv 
 
 	err = f.InitializeFGAModels(ctx)
 	if err != nil {
-		return &FGA{}, err
+		return &AC{}, err
 	}
 
 	return f, nil
 }
 
-func (f *FGA) InitializeFGAModels(ctx context.Context) error {
+func (f *AC) InitializeFGAModels(ctx context.Context) error {
 
 	storeID, err := f.kv.Get(ctx, "fga_store_id")
 	if err != nil {
@@ -173,7 +173,7 @@ func (f *FGA) InitializeFGAModels(ctx context.Context) error {
 	return nil
 }
 
-func (f *FGA) ListFiles() {
+func (f *AC) ListFiles() {
 
 	entries, err := fs.ReadDir(f.fs, ".")
 	if err != nil {
