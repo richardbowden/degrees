@@ -10,16 +10,16 @@ import (
 	"github.com/typewriterco/p402/internal/valgen"
 )
 
-type Auth struct {
-	svc *services.Auth
+type UserMgmt struct {
+	svc *services.UserMgmt
 }
 
-func NewAuth(authSvc *services.Auth) *Auth {
-	return &Auth{svc: authSvc}
+func NewUserMgmt(authSvc *services.UserMgmt) *UserMgmt {
+	return &UserMgmt{svc: authSvc}
 
 }
 
-func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
+func (h *UserMgmt) Register(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 	log := httplog.LogEntry(ctx)
@@ -52,11 +52,11 @@ func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Auth) VerifyEmail(w http.ResponseWriter, r *http.Request) {
+func (h *UserMgmt) VerifyEmail(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
+func (h *UserMgmt) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := httplog.LogEntry(ctx)
 
@@ -93,7 +93,7 @@ func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-func (h *Auth) Logout(w http.ResponseWriter, r *http.Request) {
+func (h *UserMgmt) Logout(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte("logout email"))
 
@@ -109,7 +109,7 @@ func (h *Auth) Logout(w http.ResponseWriter, r *http.Request) {
 	// errs.HTTPErrorResponse(w, log, errs.E(errs.Invalid, "Logout has not been done yet!!!!!!!"))
 }
 
-func (h *Auth) ChangePassword(w http.ResponseWriter, r *http.Request) {
+func (h *UserMgmt) ChangePassword(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 

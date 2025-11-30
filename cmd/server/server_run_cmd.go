@@ -64,6 +64,7 @@ func serverRun(ctx *cli.Context) error {
 	settings := settings.New(dbStore)
 
 	acClient, err := ac.New(context.Background(), fgaDBCon, log.Logger, settings)
+	_ = acClient
 
 	if err != nil {
 		log.Error().Err(err).Msg("cannot")
@@ -76,10 +77,10 @@ func serverRun(ctx *cli.Context) error {
 	dr := repos.NewAccountsRepo(ds)
 
 	userSvc, err := services.NewUserService(dr)
-	userHandlers := thttp.NewUserHandler(userSvc, acClient)
+	userHandlers := thttp.NewUserHandler(userSvc)
 
-	authSvc := services.NewAuth(dr)
-	authHandlers := thttp.NewAuth(authSvc)
+	userMgmtService := services.NewUserMgmt(dr)
+	authHandlers := thttp.NewUserMgmt(userMgmtService)
 
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create UserService")

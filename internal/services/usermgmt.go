@@ -9,12 +9,12 @@ import (
 	"github.com/typewriterco/p402/internal/problems"
 )
 
-type Auth struct {
+type UserMgmt struct {
 	userRepo UserRepository
 }
 
-func NewAuth(userRepo UserRepository) *Auth {
-	return &Auth{
+func NewUserMgmt(userRepo UserRepository) *UserMgmt {
+	return &UserMgmt{
 		userRepo: userRepo,
 	}
 }
@@ -25,7 +25,7 @@ type LoginRequest struct {
 	RememberMe bool   `json:"remember_me"`
 }
 
-func (s *Auth) Login(ctx context.Context) error {
+func (s *UserMgmt) Login(ctx context.Context) error {
 
 	l := httplog.LogEntry(ctx)
 
@@ -34,7 +34,7 @@ func (s *Auth) Login(ctx context.Context) error {
 	return nil
 }
 
-func (us *Auth) Logout(ctx context.Context) error {
+func (us *UserMgmt) Logout(ctx context.Context) error {
 
 	l := httplog.LogEntry(ctx)
 
@@ -43,7 +43,7 @@ func (us *Auth) Logout(ctx context.Context) error {
 	return nil
 }
 
-func (s *Auth) DoesUserExist(ctx context.Context, email, username string) (bool, bool, error) {
+func (s *UserMgmt) DoesUserExist(ctx context.Context, email, username string) (bool, bool, error) {
 	l := httplog.LogEntry(ctx)
 	l.Debug().Str("subsystem", "accounts").Str("func", "DoesAccountAlreadyExist").Str("email", email).Msg("")
 
@@ -55,7 +55,7 @@ func (s *Auth) DoesUserExist(ctx context.Context, email, username string) (bool,
 	return e, u, nil
 }
 
-func (s *Auth) Register(ctx context.Context, params *NewUserRequest) error {
+func (s *UserMgmt) Register(ctx context.Context, params *NewUserRequest) error {
 
 	e, _, err := s.userRepo.DoesUserExist(ctx, params.Email, params.Username)
 
