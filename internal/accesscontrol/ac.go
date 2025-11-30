@@ -1,4 +1,4 @@
-package fga
+package accesscontrol
 
 import (
 	"context"

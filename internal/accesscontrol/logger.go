@@ -1,13 +1,14 @@
-package fga
+package accesscontrol
 
 import (
 	"context"
+
+	"time"
 
 	"github.com/openfga/openfga/pkg/logger"
 	"github.com/rs/zerolog"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"time"
 )
 
 type zerologAdapter struct {

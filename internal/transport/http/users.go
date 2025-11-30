@@ -3,15 +3,17 @@ package thttp
 import (
 	"net/http"
 
+	"github.com/typewriterco/p402/internal/accesscontrol"
 	"github.com/typewriterco/p402/internal/services"
 )
 
 type UserHandler struct {
 	userSvc *services.UserService
+	ac      *accesscontrol.FGA
 }
 
-func NewUserHandler(userService *services.UserService) *UserHandler {
-	return &UserHandler{userSvc: userService}
+func NewUserHandler(userService *services.UserService, ac *accesscontrol.FGA) *UserHandler {
+	return &UserHandler{userSvc: userService, ac: ac}
 }
 
 // func (uh *UserHandler) RegisterPublicRoutes(r chi.Router) {

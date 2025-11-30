@@ -9,8 +9,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jpillora/backoff"
 	"github.com/rs/zerolog/log"
+	ac "github.com/typewriterco/p402/internal/accesscontrol"
 	"github.com/typewriterco/p402/internal/dbpg"
-	"github.com/typewriterco/p402/internal/fga"
 	"github.com/typewriterco/p402/internal/repos"
 	"github.com/typewriterco/p402/internal/services"
 	"github.com/typewriterco/p402/internal/settings"
@@ -63,7 +63,7 @@ func serverRun(ctx *cli.Context) error {
 
 	settings := settings.New(dbStore)
 
-	fgaClient, err := fga.New(context.Background(), fgaDBCon, log.Logger, settings)
+	acClient, err := ac.New(context.Background(), fgaDBCon, log.Logger, settings)
 
 	if err != nil {
 		log.Error().Err(err).Msg("cannot")
@@ -76,7 +76,7 @@ func serverRun(ctx *cli.Context) error {
 	dr := repos.NewAccountsRepo(ds)
 
 	userSvc, err := services.NewUserService(dr)
-	userHandlers := thttp.NewUserHandler(userSvc)
+	userHandlers := thttp.NewUserHandler(userSvc, acClient)
 
 	authSvc := services.NewAuth(dr)
 	authHandlers := thttp.NewAuth(authSvc)
