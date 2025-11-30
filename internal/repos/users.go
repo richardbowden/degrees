@@ -12,7 +12,7 @@ type Users struct {
 	store dbpg.Storer
 }
 
-func NewAccountsRepo(store dbpg.Storer) *Users {
+func NewUserRepo(store dbpg.Storer) *Users {
 	return &Users{
 		store: store}
 }

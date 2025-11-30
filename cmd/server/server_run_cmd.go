@@ -64,7 +64,8 @@ func serverRun(ctx *cli.Context) error {
 	settings := settings.New(dbStore)
 
 	acClient, err := ac.New(context.Background(), fgaDBCon, log.Logger, settings)
-	_ = acClient
+
+	authzClient := services.NewAuthz(*acClient)
 
 	if err != nil {
 		log.Error().Err(err).Msg("cannot")
@@ -74,13 +75,13 @@ func serverRun(ctx *cli.Context) error {
 	// Set dev overrides to help run things locally
 	// services.DevSkipUserVerification = s.config.devOverrideConfig.SkipUserConfirm
 
-	dr := repos.NewAccountsRepo(ds)
+	dr := repos.NewUserRepo(ds)
 
-	userSvc, err := services.NewUserService(dr)
+	userSvc, err := services.NewUserService(dr, authzClient)
 	userHandlers := thttp.NewUserHandler(userSvc)
 
-	userMgmtService := services.NewUserMgmt(dr)
-	authHandlers := thttp.NewUserMgmt(userMgmtService)
+	authNService := services.NewAuthN(dr)
+	authHandlers := thttp.NewAuthN(authNService)
 
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create UserService")

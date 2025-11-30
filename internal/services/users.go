@@ -66,10 +66,11 @@ type NewUserRequest struct {
 
 type UserService struct {
 	repo UserRepository
+	ac   *Authz
 }
 
-func NewUserService(repo UserRepository) (*UserService, error) {
-	us := &UserService{repo: repo}
+func NewUserService(repo UserRepository, authz *Authz) (*UserService, error) {
+	us := &UserService{repo: repo, ac: authz}
 	return us, nil
 }
 
