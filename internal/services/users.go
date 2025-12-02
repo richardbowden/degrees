@@ -7,27 +7,36 @@ import (
 	"time"
 )
 
-type SignUpRequest struct {
-	FirstName  string
-	MiddleName string
-	Surname    string
-	Username   string
-	Password1  string
-	Password2  string
-	Email      string
-}
+type UserState string
 
-type NewAccount struct {
+const (
+	UserStateInitial                  = "Initial"
+	UserStateEmailPendingVerification = "EmailPendingVerification"
+	UserStateEmailVerified            = "EmailVerified"
+	UserStateSignUpComplete           = "SignUpComplete"
+	UserStateRejected                 = "SignupRejected"
+)
+
+type UserEvent string
+
+const (
+	UserEventSubmitSignUp          = "SubmitSignup"
+	UserEventClickVerificationLink = "ClickVerificationLink"
+	UserEventSignupFailed          = "SignUpFailed"
+	UserEventCompleteProfile       = "CompleteProfile"
+)
+
+type NewUser struct {
 	FirstName      string `json:"first_name" validate:"required,minlen=2"`
 	MiddleName     string
 	Surname        string
 	Username       string
 	EMail          string
-	SignUpStage    int
+	State          UserState
 	HashedPassword string
 }
 
-type Account struct {
+type User struct {
 	ID          int64
 	FirstName   string
 	MiddleName  string
@@ -50,7 +59,7 @@ type EmailAddress struct {
 type EmailAddresses []EmailAddress
 
 type UserRepository interface {
-	Create(ctx context.Context, params NewAccount) (Account, error)
+	Create(ctx context.Context, params NewUser) (User, error)
 	DoesUserExist(ctx context.Context, email string, username string) (bool, bool, error)
 }
 
@@ -74,7 +83,7 @@ func NewUserService(repo UserRepository, authz *Authz) (*UserService, error) {
 	return us, nil
 }
 
-func (us *UserService) GetAccount(ctx context.Context, params string) error {
+func (us *UserService) GetUser(ctx context.Context, params string) error {
 	//err := problems.O(problems.Database, "error from db call in userService")
 	// log := httplog.LogEntry(ctx)
 	//

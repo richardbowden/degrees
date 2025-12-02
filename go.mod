@@ -277,4 +277,5 @@ tool (
 	github.com/golang-migrate/migrate/v4/cmd/migrate
 	github.com/richardbowden/valforge
 	github.com/sqlc-dev/sqlc/cmd/sqlc
+	golang.org/x/tools/cmd/deadcode
 )

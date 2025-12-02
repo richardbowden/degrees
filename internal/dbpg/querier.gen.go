@@ -16,6 +16,7 @@ type Querier interface {
 	CreateVerificationToken(ctx context.Context, arg CreateVerificationTokenParams) error
 	DeleteToken(ctx context.Context, arg DeleteTokenParams) error
 	EmailExists(ctx context.Context, arg EmailExistsParams) (bool, error)
+	GetSetting(ctx context.Context, arg GetSettingParams) (string, error)
 	GetToken(ctx context.Context, arg GetTokenParams) (Verification, error)
 	GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) (User, error)
 	GetUserById(ctx context.Context, arg GetUserByIdParams) (User, error)

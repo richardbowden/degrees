@@ -9,8 +9,8 @@ import (
     valgen "github.com/typewriterco/p402/internal/valgen"
 )
 
-func (v NewAccount) Validate() error {
-    verr := valgen.NewValidationError("NewAccount")
+func (v NewUser) Validate() error {
+    verr := valgen.NewValidationError("NewUser")
 
     if v.FirstName == "" {
         verr.AddFieldError("first_name", "first_name is required", v.FirstName)

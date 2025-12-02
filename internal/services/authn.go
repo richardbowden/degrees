@@ -45,7 +45,7 @@ func (us *AuthN) Logout(ctx context.Context) error {
 
 func (s *AuthN) DoesUserExist(ctx context.Context, email, username string) (bool, bool, error) {
 	l := httplog.LogEntry(ctx)
-	l.Debug().Str("subsystem", "accounts").Str("func", "DoesAccountAlreadyExist").Str("email", email).Msg("")
+	l.Debug().Str("subsystem", "accounts").Str("func", "DoesUser").Str("email", email).Msg("")
 
 	e, u, err := s.DoesUserExist(ctx, email, "")
 
@@ -74,13 +74,14 @@ func (s *AuthN) Register(ctx context.Context, params *NewUserRequest) error {
 		return problems.New(problems.Internal, "failed to hash password", err)
 	}
 
-	na := NewAccount{
+	na := NewUser{
 		FirstName:      params.FirstName,
 		MiddleName:     params.MiddleName,
 		Surname:        params.Surname,
 		Username:       params.Username,
 		EMail:          params.Email,
 		HashedPassword: hashedPassword,
+		State:          UserStateInitial,
 	}
 
 	account, err := s.userRepo.Create(ctx, na)

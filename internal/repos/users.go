@@ -17,14 +17,14 @@ func NewUserRepo(store dbpg.Storer) *Users {
 		store: store}
 }
 
-func (a *Users) Create(ctx context.Context, params services.NewAccount) (services.Account, error) {
+func (a *Users) Create(ctx context.Context, params services.NewUser) (services.User, error) {
 	log := httplog.LogEntry(ctx)
 	log.Info().Msg("from the account create repo layer")
 
 	tx, err := a.store.GetTX(ctx)
 
 	if err != nil {
-		return services.Account{}, err
+		return services.User{}, err
 	}
 	cap := dbpg.CreateUserParams{
 		FirstName:    params.FirstName,
@@ -47,7 +47,7 @@ func (a *Users) Create(ctx context.Context, params services.NewAccount) (service
 
 	err = tx.Commit(ctx)
 
-	return services.Account{}, err
+	return services.User{}, err
 }
 
 func (a *Users) DoesUserExist(ctx context.Context, email string, username string) (emailExists, usernameExists bool, err error) {
