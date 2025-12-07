@@ -75,12 +75,26 @@ type NewUserRequest struct {
 
 type UserService struct {
 	repo UserRepository
-	ac   *Authz
+	ac   *AuthzSvc
 }
 
-func NewUserService(repo UserRepository, authz *Authz) (*UserService, error) {
+func NewUserService(repo UserRepository, authz *AuthzSvc) (*UserService, error) {
 	us := &UserService{repo: repo, ac: authz}
 	return us, nil
+}
+
+func (us *UserService) EmailExists(ctx context.Context, email string) (bool, error) {
+
+	eExists, _, err := us.repo.DoesUserExist(ctx, email, "")
+
+	return eExists, err
+}
+
+func (us *UserService) CreateUser(ctx context.Context, nu NewUser) (User, error) {
+
+	user, err := us.repo.Create(ctx, nu)
+	return user, err
+
 }
 
 func (us *UserService) GetUser(ctx context.Context, params string) error {

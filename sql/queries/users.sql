@@ -61,3 +61,8 @@ SET sign_up_stage = $2,
     updated_at = NOW()
 WHERE id = $1
     RETURNING *;
+
+-- name: UpdateUserPassword :exec
+UPDATE users
+set password_hash = $2
+where id = $1;

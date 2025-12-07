@@ -80,16 +80,20 @@ func serverRun(ctx *cli.Context) error {
 	userSvc, err := services.NewUserService(dr, authzClient)
 	userHandlers := thttp.NewUserHandler(userSvc)
 
-	authNService := services.NewAuthN(dr)
+	authNService := services.NewAuthN(ds)
 	authHandlers := thttp.NewAuthN(authNService)
 
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create UserService")
 	}
 
+	signUpSvc := services.NewSignUp(userSvc, authNService, authzClient)
+	signUpHandlers := thttp.NewSignUp(*signUpSvc)
+
 	handlers := thttp.NewHandlers()
 	handlers.Users = userHandlers
-	handlers.Auth = authHandlers
+	handlers.AuthN = authHandlers
+	handlers.SignUp = signUpHandlers
 
 	server := thttp.NewServer(config, handlers)
 	err = server.Serve()

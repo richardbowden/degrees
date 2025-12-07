@@ -282,6 +282,22 @@ func (q *Queries) UpdateUserEnabled(ctx context.Context, arg UpdateUserEnabledPa
 	return i, err
 }
 
+const updateUserPassword = `-- name: UpdateUserPassword :exec
+UPDATE users
+set password_hash = $2
+where id = $1
+`
+
+type UpdateUserPasswordParams struct {
+	ID           int64
+	PasswordHash string
+}
+
+func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
+	_, err := q.db.Exec(ctx, updateUserPassword, arg.ID, arg.PasswordHash)
+	return err
+}
+
 const updateUserSignUpStage = `-- name: UpdateUserSignUpStage :one
 UPDATE users
 SET sign_up_stage = $2,

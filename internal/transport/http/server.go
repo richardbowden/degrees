@@ -83,20 +83,20 @@ func (s *Server) setupRoutes() chi.Router {
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Route("/auth", func(r chi.Router) {
 			r.Group(func(r chi.Router) {
-				r.Post("/register", s.handlers.Auth.Register)
-				r.Post("/verify-email", s.handlers.Auth.VerifyEmail)
+				r.Post("/register", s.handlers.SignUp.Register)
+				// r.Post("/verify-email", s.handlers.Auth.VerifyEmail)
 
-				r.Post("/login", s.handlers.Auth.Login)
+				r.Post("/login", s.handlers.AuthN.Login)
 				r.Post("/reset-password", s.handlers.Users.ResetPassword)
 			})
 
 			r.Group(func(r chi.Router) {
-				r.Post("/logout", s.handlers.Auth.Logout)
+				r.Post("/logout", s.handlers.AuthN.Logout)
 			})
 		})
 
 		r.Route("/user", func(r chi.Router) {
-			r.Post("/change-password", s.handlers.Auth.ChangePassword)
+			r.Post("/change-password", s.handlers.AuthN.ChangePassword)
 			// r.Group(func(r chi.Router) {
 			// 	r.Post("/", s.handlers.Users.NewUser)
 			// })

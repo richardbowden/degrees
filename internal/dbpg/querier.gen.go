@@ -23,6 +23,7 @@ type Querier interface {
 	GetUserByUsername(ctx context.Context, arg GetUserByUsernameParams) (User, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserEnabled(ctx context.Context, arg UpdateUserEnabledParams) (User, error)
+	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
 	UpdateUserSignUpStage(ctx context.Context, arg UpdateUserSignUpStageParams) (User, error)
 	UserExists(ctx context.Context, arg UserExistsParams) (UserExistsRow, error)
 }

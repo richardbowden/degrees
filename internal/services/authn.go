@@ -6,16 +6,17 @@ import (
 
 	"github.com/go-chi/httplog"
 	"github.com/richardbowden/passwordHash"
+	"github.com/typewriterco/p402/internal/dbpg"
 	"github.com/typewriterco/p402/internal/problems"
 )
 
 type AuthN struct {
-	userRepo UserRepository
+	db dbpg.Storer
 }
 
-func NewAuthN(userRepo UserRepository) *AuthN {
+func NewAuthN(db dbpg.Storer) *AuthN {
 	return &AuthN{
-		userRepo: userRepo,
+		db: db,
 	}
 }
 
@@ -25,7 +26,7 @@ type LoginRequest struct {
 	RememberMe bool   `json:"remember_me"`
 }
 
-func (s *AuthN) Login(ctx context.Context) error {
+func (a *AuthN) Login(ctx context.Context) error {
 
 	l := httplog.LogEntry(ctx)
 
@@ -34,7 +35,7 @@ func (s *AuthN) Login(ctx context.Context) error {
 	return nil
 }
 
-func (us *AuthN) Logout(ctx context.Context) error {
+func (a *AuthN) Logout(ctx context.Context) error {
 
 	l := httplog.LogEntry(ctx)
 
@@ -43,54 +44,17 @@ func (us *AuthN) Logout(ctx context.Context) error {
 	return nil
 }
 
-func (s *AuthN) DoesUserExist(ctx context.Context, email, username string) (bool, bool, error) {
-	l := httplog.LogEntry(ctx)
-	l.Debug().Str("subsystem", "accounts").Str("func", "DoesUser").Str("email", email).Msg("")
-
-	e, u, err := s.DoesUserExist(ctx, email, "")
-
-	if err != nil {
-		return false, false, err
-	}
-	return e, u, nil
+func (a *AuthN) HashPassword(pwd1, pwd2 string) (string, error) {
+	hashedPassword, err := passwordHash.HashWithDefaults(pwd1, pwd2)
+	return hashedPassword, err
 }
 
-func (s *AuthN) Register(ctx context.Context, params *NewUserRequest) error {
-
-	e, _, err := s.userRepo.DoesUserExist(ctx, params.Email, params.Username)
-
-	if err != nil {
-		return problems.New(problems.Database, "failed to check if account exists", err)
-	}
-
-	if e {
-		p := problems.New(problems.InvalidRequest, "email already exists")
-		return p
-	}
-
-	hashedPassword, err := passwordHash.HashWithDefaults(params.Password1, params.Password2)
-
-	if err != nil {
-		return problems.New(problems.Internal, "failed to hash password", err)
-	}
-
-	na := NewUser{
-		FirstName:      params.FirstName,
-		MiddleName:     params.MiddleName,
-		Surname:        params.Surname,
-		Username:       params.Username,
-		EMail:          params.Email,
-		HashedPassword: hashedPassword,
-		State:          UserStateInitial,
-	}
-
-	account, err := s.userRepo.Create(ctx, na)
-
-	_ = account
-
+func (a *AuthN) SetOrUpdatePassword(ctx context.Context, userID int, pwd1, pwd2 string) error {
+	hashedPassword, err := a.HashPassword(pwd1, pwd2)
 	if err != nil {
 		return err
 	}
+	_ = hashedPassword
+	return problems.New(problems.Other, "setorupdate not done yet")
 
-	return nil
 }

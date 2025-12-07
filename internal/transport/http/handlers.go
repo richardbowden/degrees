@@ -1,8 +1,9 @@
 package thttp
 
 type Handlers struct {
-	Users *UserHandler
-	Auth  *AuthN
+	Users  *UserHandler
+	AuthN  *AuthN
+	SignUp *SignUp
 }
 
 func NewHandlers() *Handlers {

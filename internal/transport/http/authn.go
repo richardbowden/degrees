@@ -19,38 +19,38 @@ func NewAuthN(authSvc *services.AuthN) *AuthN {
 
 }
 
-func (h *AuthN) Register(w http.ResponseWriter, r *http.Request) {
-
-	ctx := r.Context()
-	log := httplog.LogEntry(ctx)
-
-	user, err := DecodeJSONBody[services.NewUserRequest](r)
-
-	if err != nil {
-		log.Error().Err(err).Msg("problem parsing the json body")
-		p := problems.New(problems.InvalidRequest, "problem parsing the json body", err)
-		problems.WriteHTTPError(w, p)
-		return
-	}
-
-	err = user.Validate()
-
-	var vErr *valgen.ValidationError
-	if errors.As(err, &vErr) {
-		p := problems.New(problems.InvalidRequest, "validation errors")
-		p.AddDetails(vErr.Errors)
-		problems.WriteHTTPError(w, p)
-		return
-	}
-
-	err = h.svc.Register(ctx, user)
-
-	if err != nil {
-		log.Error().Err(err).Msg("")
-		problems.WriteHTTPErrorWithErr(w, err)
-		return
-	}
-}
+// func (h *AuthN) Register(w http.ResponseWriter, r *http.Request) {
+//
+// 	ctx := r.Context()
+// 	log := httplog.LogEntry(ctx)
+//
+// 	user, err := DecodeJSONBody[services.NewUserRequest](r)
+//
+// 	if err != nil {
+// 		log.Error().Err(err).Msg("problem parsing the json body")
+// 		p := problems.New(problems.InvalidRequest, "problem parsing the json body", err)
+// 		problems.WriteHTTPError(w, p)
+// 		return
+// 	}
+//
+// 	err = user.Validate()
+//
+// 	var vErr *valgen.ValidationError
+// 	if errors.As(err, &vErr) {
+// 		p := problems.New(problems.InvalidRequest, "validation errors")
+// 		p.AddDetails(vErr.Errors)
+// 		problems.WriteHTTPError(w, p)
+// 		return
+// 	}
+//
+// 	err = h.svc.Register(ctx, user)
+//
+// 	if err != nil {
+// 		log.Error().Err(err).Msg("")
+// 		problems.WriteHTTPErrorWithErr(w, err)
+// 		return
+// 	}
+// }
 
 func (h *AuthN) VerifyEmail(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
