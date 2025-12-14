@@ -47,7 +47,7 @@ func Gen() error {
 func sqlGen() error {
 	start := time.Now()
 	fmt.Printf("\nrunning sql gen\n")
-	err := sh.RunV("sqlc", "generate")
+	err := sh.RunV("go", "tool", "sqlc", "generate")
 	elapsed := time.Since(start)
 
 	fmt.Printf("took %s\n\n", elapsed)
