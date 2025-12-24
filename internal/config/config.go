@@ -49,7 +49,7 @@ func (d *DatabaseConfig) ConnectionStringWithSchema(schema string) string {
 
 	c = fmt.Sprintf("%s?&sslmode=%s", c, sslMode)
 
-	c = fmt.Sprintf("%s&search_path=%s", c, schema)
+	c = fmt.Sprintf("%s&search_path=%s,public", c, schema)
 
 	return c
 }

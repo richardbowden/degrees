@@ -19,7 +19,9 @@ import (
 )
 
 const (
-	FGA_DB_SCHEMA_NAME = "fga"
+	SERVER_DB_SCHEMA_NAME = "p402"
+	RIVER_DB_SCHEMA_NAME  = "river"
+	FGA_DB_SCHEMA_NAME    = "fga"
 )
 
 var version = "p402 0.0.1-alpha"
@@ -35,7 +37,7 @@ func serverRun(ctx *cli.Context) error {
 	var dbCon *pgxpool.Pool
 	b := &backoff.Backoff{Max: 5 * time.Minute}
 	for {
-		dbCon, err = dbpg.NewConnection(config.Database.ConnectionString(), ctx.App.Version)
+		dbCon, err = dbpg.NewConnection(config.Database.ConnectionStringWithSchema(SERVER_DB_SCHEMA_NAME), ctx.App.Version)
 		if err == nil {
 			break
 		}

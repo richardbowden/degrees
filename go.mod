@@ -10,6 +10,8 @@ require (
 	github.com/jpillora/backoff v1.0.0
 	github.com/magefile/mage v1.15.0
 	github.com/richardbowden/passwordHash v1.0.0
+	github.com/riverqueue/river v0.28.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.28.0
 	github.com/rs/zerolog v1.34.0
 	github.com/urfave/cli/v2 v2.27.7
 )
@@ -23,9 +25,7 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.53.0 // indirect
 	github.com/IBM/pgxpoolprometheus v1.1.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/riverqueue/river v0.28.0 // indirect
 	github.com/riverqueue/river/riverdriver v0.28.0 // indirect
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.28.0 // indirect
 	github.com/riverqueue/river/rivershared v0.28.0 // indirect
 	github.com/riverqueue/river/rivertype v0.28.0 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
