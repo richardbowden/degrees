@@ -1,6 +1,6 @@
 -- First create the email, then create the user in separate operations
 -- name: CreateUserEmail :one
-INSERT INTO user_emails (
+INSERT INTO user_email (
     user_id,
     email,
     enabled,

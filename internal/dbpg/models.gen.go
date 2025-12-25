@@ -91,7 +91,7 @@ type User struct {
 	Username       string
 	LoginEmail     string
 	PrimaryEmailID int64
-	SignUpStage    pgtype.Int4
+	SignUpStage    string
 	PasswordHash   string
 	Enabled        bool
 	Sysop          bool

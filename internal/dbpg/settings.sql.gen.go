@@ -10,7 +10,7 @@ import (
 )
 
 const createSetting = `-- name: CreateSetting :exec
-INSERT INTO settings
+INSERT INTO setting
     (key, value)
  VALUES (
         $1, $2
@@ -28,7 +28,7 @@ func (q *Queries) CreateSetting(ctx context.Context, arg CreateSettingParams) er
 }
 
 const getSetting = `-- name: GetSetting :one
-select value from settings where key = $1
+select value from setting where key = $1
 `
 
 type GetSettingParams struct {

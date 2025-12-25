@@ -64,7 +64,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const createUserEmail = `-- name: CreateUserEmail :one
-INSERT INTO user_emails (
+INSERT INTO user_email (
     user_id,
     email,
     enabled,
@@ -308,7 +308,7 @@ WHERE id = $1
 
 type UpdateUserSignUpStageParams struct {
 	ID          int64
-	SignUpStage pgtype.Int4
+	SignUpStage string
 }
 
 func (q *Queries) UpdateUserSignUpStage(ctx context.Context, arg UpdateUserSignUpStageParams) (User, error) {

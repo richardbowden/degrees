@@ -57,11 +57,8 @@ func NewStore(db *pgxpool.Pool) *Store {
 	ctx := context.Background()
 	err := db.QueryRow(ctx, query).Scan(&migration.Version, &migration.Dirty)
 	if err != nil {
-		panic("cannot get db version, we should not get here")
+		panic("cannot get db version, it might mean it has not been migrated or there is a db issue, as in it is no longer there! we should not get here")
 	}
-	//if err != nil {
-	//	return nil, fmt.Errorf("failed to query schema_migrations: %w", err)
-	//}
 	return &Store{
 		New(db),
 		db,

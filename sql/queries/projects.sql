@@ -1,7 +1,7 @@
 -- -- name: CreateProjectForUser :one
--- INSERT INTO projects (display_name, slug, description, owner_id) VALUES ($1, $2, $3, $4) RETURNING *;
+-- INSERT INTO project (display_name, slug, description, owner_id) VALUES ($1, $2, $3, $4) RETURNING *;
 --
 -- -- name: ListProjectsForUserID :many
--- SELECT p.id as project_id, p.owner_id, p.description, p.display_name, p.slug from projects 
+-- SELECT p.id as project_id, p.owner_id, p.description, p.display_name, p.slug from project 
 -- p INNER JOIN Users u on p.owner_id = u.id
 -- where u.id = $1;
