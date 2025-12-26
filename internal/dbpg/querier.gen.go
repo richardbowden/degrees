@@ -17,10 +17,16 @@ type Querier interface {
 	DeleteToken(ctx context.Context, arg DeleteTokenParams) error
 	EmailExists(ctx context.Context, arg EmailExistsParams) (bool, error)
 	GetSetting(ctx context.Context, arg GetSettingParams) (string, error)
+	GetTemplateByID(ctx context.Context, arg GetTemplateByIDParams) (Template, error)
+	GetTemplateByName(ctx context.Context, arg GetTemplateByNameParams) (string, error)
+	GetTemplateBySystemName(ctx context.Context, arg GetTemplateBySystemNameParams) (string, error)
 	GetToken(ctx context.Context, arg GetTokenParams) (Verification, error)
 	GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) (User, error)
 	GetUserById(ctx context.Context, arg GetUserByIdParams) (User, error)
 	GetUserByUsername(ctx context.Context, arg GetUserByUsernameParams) (User, error)
+	ListSystemNotificationTemplateNames(ctx context.Context) ([]string, error)
+	ListSystemNotificationTemplates(ctx context.Context) ([]ListSystemNotificationTemplatesRow, error)
+	ListTemplates(ctx context.Context) ([]Template, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserEnabled(ctx context.Context, arg UpdateUserEnabledParams) (User, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error

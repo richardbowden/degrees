@@ -8,28 +8,10 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type NotificationHistory struct {
-	ID             int64
-	NotificationID int64
-	Status         string
-	ChangedAt      pgtype.Timestamptz
-	ErrorMessage   pgtype.Text
-	Metadata       []byte
-	OperationType  string
-	ChangeType     pgtype.Text
-}
-
-type NotificationQueue struct {
-	ID               int64
-	UserID           int64
-	NotificationType string
-	TemplateID       string
-	Payload          []byte
-	Status           string
-	CreatedAt        pgtype.Timestamptz
-	ScheduledFor     pgtype.Timestamptz
-	ProcessedAt      pgtype.Timestamptz
-	RetryCount       pgtype.Int4
+type NotificationTemplate struct {
+	ID         int64
+	Name       string
+	TemplateID int64
 }
 
 type OrgUserMembership struct {
