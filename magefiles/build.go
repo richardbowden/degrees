@@ -66,6 +66,13 @@ func goGen() error {
 	return err
 }
 
+func Migrate() error {
+	mg.Deps(Debug)
+
+	return sh.RunV(buildDebugBinPath, "db", "migration", "up")
+
+}
+
 func Debug() error {
 	mg.Deps(sqlGen, goGen)
 	start := time.Now()

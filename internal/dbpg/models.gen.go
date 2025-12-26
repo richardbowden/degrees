@@ -83,6 +83,20 @@ type Setting struct {
 	Value string
 }
 
+type Template struct {
+	ID        int64
+	Name      string
+	Slug      string
+	Content   string
+	ScopeType string
+	Version   int32
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+	DeletedAt pgtype.Timestamptz
+	CreatedBy pgtype.Int8
+	UpdatedBy pgtype.Int8
+}
+
 type User struct {
 	ID             int64
 	FirstName      string
