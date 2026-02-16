@@ -26,15 +26,15 @@ const (
 )
 
 type AC struct {
-	Server *server.Server
-	fs     embed.FS
-	kv     settings.Settings
+	Server   *server.Server
+	fs       embed.FS
+	settings *settings.Service
 
 	storeID string
 	authID  string
 }
 
-func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv settings.Settings) (*AC, error) {
+func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, settingsService *settings.Service) (*AC, error) {
 
 	datastore, err := postgres.NewWithDB(pool, pool, &sqlcommon.Config{
 		MaxOpenConns:          25,
@@ -60,9 +60,9 @@ func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv 
 
 	logger.Info("OpenFGA server created (in-process, shared DB config")
 	f := &AC{
-		fs:     fgafs.FGSModels,
-		Server: fgaServer,
-		kv:     kv,
+		fs:       fgafs.FGSModels,
+		Server:   fgaServer,
+		settings: settingsService,
 	}
 
 	log.Info().Msg("Creating OpenFGA store...")
@@ -77,12 +77,14 @@ func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, kv 
 
 func (f *AC) InitializeFGAModels(ctx context.Context) error {
 
-	storeID, err := f.kv.Get(ctx, "fga_store_id")
-	if err != nil {
-		return err
+	// Try to get existing store ID
+	storeID, err := f.settings.GetString(ctx, "fga", "fga_store_id", settings.SystemScope())
+	if err != nil && !settings.IsNotFound(err) {
+		return fmt.Errorf("failed to get FGA store ID: %w", err)
 	}
 
 	if storeID == "" {
+		// Create new store
 		storeResp, err := f.Server.CreateStore(ctx, &openfgav1.CreateStoreRequest{
 			Name: FGA_STORE_NAME,
 		})
@@ -90,9 +92,15 @@ func (f *AC) InitializeFGAModels(ctx context.Context) error {
 			return fmt.Errorf("failed to create store: %w", err)
 		}
 		f.storeID = storeResp.Id
-		f.kv.Set(ctx, "fga_store_id", f.storeID)
+
+		// Save store ID to settings
+		if err = f.settings.SetSystem(ctx, "fga", "fga_store_id", f.storeID, nil, nil); err != nil {
+			return fmt.Errorf("failed to save FGA store ID: %w", err)
+		}
+	} else {
+		f.storeID = storeID
 	}
-	log.Printf("Store created: %s", storeID)
+	log.Info().Str("store_id", f.storeID).Msg("FGA store initialized")
 
 	r, _ := embed.FS.Open(f.fs, "models.fga")
 
@@ -102,18 +110,19 @@ func (f *AC) InitializeFGAModels(ctx context.Context) error {
 		return fmt.Errorf("failed to hash fga model file: %w", err)
 	}
 
-	embdedModelFileHash := fmt.Sprintf("%x", h.Sum(nil))
+	embeddedModelFileHash := fmt.Sprintf("%x", h.Sum(nil))
 
-	currentModelFileHash, err := f.kv.Get(ctx, "fga_model_file_hash")
-	if err != nil {
-		return fmt.Errorf("failed to fga model hash: %w", err)
+	// Get current model hash
+	currentModelFileHash, err := f.settings.GetString(ctx, "fga", "fga_model_file_hash", settings.SystemScope())
+	if err != nil && !settings.IsNotFound(err) {
+		return fmt.Errorf("failed to get FGA model hash: %w", err)
 	}
 
 	fff := func() (string, error) {
 
 		modelBytes, err := embed.FS.ReadFile(f.fs, "models.fga")
 		if err != nil {
-			return "", fmt.Errorf("failed to read models.fga file from embdedd %w", err)
+			return "", fmt.Errorf("failed to read models.fga file from embedded %w", err)
 		}
 
 		authxModel, err := transformer.TransformDSLToProto(string(modelBytes))
@@ -137,35 +146,27 @@ func (f *AC) InitializeFGAModels(ctx context.Context) error {
 		return authzModelResp.GetAuthorizationModelId(), nil
 	}
 
-	writeModel := false
-	if currentModelFileHash == "" {
-		writeModel = true
-	}
-
-	//New version of the model
-	if currentModelFileHash != embdedModelFileHash {
-		writeModel = true
-	}
-
-	if writeModel {
+	// Write model if hash is different or doesn't exist
+	if currentModelFileHash != embeddedModelFileHash {
 		f.authID, err = fff()
 		if err != nil {
-			return fmt.Errorf("failed auth model stuff: %w", err)
+			return fmt.Errorf("failed to write authorization model: %w", err)
 		}
 
-		err = f.kv.Set(ctx, "fga_model_file_hash", embdedModelFileHash)
-		if err != nil {
-			panic(err)
-		}
-		f.kv.Set(ctx, "fga_auth_id", f.authID)
-		if err != nil {
-			panic(err)
+		// Save model hash
+		if err = f.settings.SetSystem(ctx, "fga", "fga_model_file_hash", embeddedModelFileHash, nil, nil); err != nil {
+			return fmt.Errorf("failed to save FGA model hash: %w", err)
 		}
 
+		// Save auth model ID
+		if err = f.settings.SetSystem(ctx, "fga", "fga_auth_id", f.authID, nil, nil); err != nil {
+			return fmt.Errorf("failed to save FGA auth model ID: %w", err)
+		}
 	} else {
-		authID, err := f.kv.Get(ctx, "fga_auth_id")
+		// Use existing auth model ID
+		authID, err := f.settings.GetString(ctx, "fga", "fga_auth_id", settings.SystemScope())
 		if err != nil {
-			return fmt.Errorf("failed to get auth model id from kv store: %w", err)
+			return fmt.Errorf("failed to get FGA auth model ID: %w", err)
 		}
 		f.authID = authID
 	}
@@ -187,4 +188,82 @@ func (f *AC) ListFiles() {
 			fmt.Println("-", entry.Name())
 		}
 	}
+}
+
+// GetStoreID returns the FGA store ID
+func (f *AC) GetStoreID() string {
+	return f.storeID
+}
+
+// GetAuthID returns the FGA authorization model ID
+func (f *AC) GetAuthID() string {
+	return f.authID
+}
+
+// Check verifies if a user has a specific relation to an object
+func (f *AC) Check(ctx context.Context, user, relation, object string) (bool, error) {
+	checkReq := &openfgav1.CheckRequest{
+		StoreId:              f.storeID,
+		AuthorizationModelId: f.authID,
+		TupleKey: &openfgav1.CheckRequestTupleKey{
+			User:     user,
+			Relation: relation,
+			Object:   object,
+		},
+	}
+
+	checkResp, err := f.Server.Check(ctx, checkReq)
+	if err != nil {
+		return false, fmt.Errorf("fga check failed: %w", err)
+	}
+
+	return checkResp.GetAllowed(), nil
+}
+
+// WriteRelationship writes a single relationship tuple
+func (f *AC) WriteRelationship(ctx context.Context, user, relation, object string) error {
+	writeReq := &openfgav1.WriteRequest{
+		StoreId:              f.storeID,
+		AuthorizationModelId: f.authID,
+		Writes: &openfgav1.WriteRequestWrites{
+			TupleKeys: []*openfgav1.TupleKey{
+				{
+					User:     user,
+					Relation: relation,
+					Object:   object,
+				},
+			},
+		},
+	}
+
+	_, err := f.Server.Write(ctx, writeReq)
+	if err != nil {
+		return fmt.Errorf("fga write failed: %w", err)
+	}
+
+	return nil
+}
+
+// DeleteRelationship removes a relationship tuple
+func (f *AC) DeleteRelationship(ctx context.Context, user, relation, object string) error {
+	deleteReq := &openfgav1.WriteRequest{
+		StoreId:              f.storeID,
+		AuthorizationModelId: f.authID,
+		Deletes: &openfgav1.WriteRequestDeletes{
+			TupleKeys: []*openfgav1.TupleKeyWithoutCondition{
+				{
+					User:     user,
+					Relation: relation,
+					Object:   object,
+				},
+			},
+		},
+	}
+
+	_, err := f.Server.Write(ctx, deleteReq)
+	if err != nil {
+		return fmt.Errorf("fga delete failed: %w", err)
+	}
+
+	return nil
 }

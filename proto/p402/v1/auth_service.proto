@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package p402.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "p402/v1/common.proto";
+
+option go_package = "github.com/typewriterco/p402/internal/pb/p402/v1;p402v1";
+
+// ========================================
+// Request/Response Messages
+// ========================================
+
+message RegisterRequest {
+  string email = 1;
+  string first_name = 2;
+  string middle_name = 3;
+  string surname = 4;
+  string username = 5;
+  string password = 6;
+  string password_confirm = 7;
+}
+
+message RegisterResponse {
+  string message = 1;
+  string signup_id = 2;
+}
+
+message VerifyEmailRequest {
+  string token = 1;
+}
+
+message VerifyEmailResponse {
+  string message = 1;
+  User user = 2;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string session_token = 1;
+  User user = 2;
+  string message = 3;
+}
+
+message LogoutRequest {
+  string session_token = 1;
+}
+
+message LogoutResponse {
+  string message = 1;
+}
+
+message ChangePasswordRequest {
+  string old_password = 1;
+  string new_password = 2;
+  string new_password_confirm = 3;
+}
+
+message ChangePasswordResponse {
+  string message = 1;
+}
+
+message ResetPasswordRequest {
+  string email = 1;
+}
+
+message ResetPasswordResponse {
+  string message = 1;
+}
+
+message CompletePasswordResetRequest {
+  string token = 1;
+  string new_password = 2;
+  string new_password_confirm = 3;
+}
+
+message CompletePasswordResetResponse {
+  string message = 1;
+}
+
+// ========================================
+// AuthService
+// ========================================
+
+service AuthService {
+  // Register a new user
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/register"
+      body: "*"
+    };
+  }
+
+  // Verify email address with token
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/verify-email"
+      body: "*"
+    };
+  }
+
+  // Login with email and password
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/login"
+      body: "*"
+    };
+  }
+
+  // Logout current session
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/logout"
+      body: "*"
+    };
+  }
+
+  // Change password for authenticated user
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/change-password"
+      body: "*"
+    };
+  }
+
+  // Request password reset email
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/reset-password"
+      body: "*"
+    };
+  }
+
+  // Complete password reset with token
+  rpc CompletePasswordReset(CompletePasswordResetRequest) returns (CompletePasswordResetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/complete-password-reset"
+      body: "*"
+    };
+  }
+}

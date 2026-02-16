@@ -19,8 +19,9 @@ INSERT INTO users (
     username,
     login_email,
     primary_email_id,
-    password_hash
-) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    password_hash,
+    sign_up_stage
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at
 `
 
@@ -32,6 +33,7 @@ type CreateUserParams struct {
 	LoginEmail     string
 	PrimaryEmailID int64
 	PasswordHash   string
+	SignUpStage    string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -43,6 +45,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.LoginEmail,
 		arg.PrimaryEmailID,
 		arg.PasswordHash,
+		arg.SignUpStage,
 	)
 	var i User
 	err := row.Scan(
@@ -204,6 +207,56 @@ func (q *Queries) GetUserByUsername(ctx context.Context, arg GetUserByUsernamePa
 	return i, err
 }
 
+const isFirstUser = `-- name: IsFirstUser :one
+SELECT (COUNT(*) = 1) AS is_first_user FROM users
+`
+
+func (q *Queries) IsFirstUser(ctx context.Context) (bool, error) {
+	row := q.db.QueryRow(ctx, isFirstUser)
+	var is_first_user bool
+	err := row.Scan(&is_first_user)
+	return is_first_user, err
+}
+
+const listAllUsers = `-- name: ListAllUsers :many
+SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at FROM users
+ORDER BY created_on DESC
+`
+
+func (q *Queries) ListAllUsers(ctx context.Context) ([]User, error) {
+	rows, err := q.db.Query(ctx, listAllUsers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []User
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.FirstName,
+			&i.MiddleName,
+			&i.Surname,
+			&i.Username,
+			&i.LoginEmail,
+			&i.PrimaryEmailID,
+			&i.SignUpStage,
+			&i.PasswordHash,
+			&i.Enabled,
+			&i.Sysop,
+			&i.CreatedOn,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateUser = `-- name: UpdateUser :one
 UPDATE users
 SET
@@ -313,6 +366,40 @@ type UpdateUserSignUpStageParams struct {
 
 func (q *Queries) UpdateUserSignUpStage(ctx context.Context, arg UpdateUserSignUpStageParams) (User, error) {
 	row := q.db.QueryRow(ctx, updateUserSignUpStage, arg.ID, arg.SignUpStage)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.MiddleName,
+		&i.Surname,
+		&i.Username,
+		&i.LoginEmail,
+		&i.PrimaryEmailID,
+		&i.SignUpStage,
+		&i.PasswordHash,
+		&i.Enabled,
+		&i.Sysop,
+		&i.CreatedOn,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateUserSysop = `-- name: UpdateUserSysop :one
+UPDATE users
+SET sysop = $2,
+    updated_at = NOW()
+WHERE id = $1
+    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at
+`
+
+type UpdateUserSysopParams struct {
+	ID    int64
+	Sysop bool
+}
+
+func (q *Queries) UpdateUserSysop(ctx context.Context, arg UpdateUserSysopParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateUserSysop, arg.ID, arg.Sysop)
 	var i User
 	err := row.Scan(
 		&i.ID,

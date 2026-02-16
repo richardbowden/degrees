@@ -48,22 +48,20 @@ type Store struct {
 	SchemaMigration
 }
 
-func NewStore(db *pgxpool.Pool) *Store {
-	//todo(rich): tidy up getting db version in newstore
-
+func NewStore(db *pgxpool.Pool) (*Store, error) {
 	query := `SELECT version, dirty FROM schema_migrations ORDER BY version DESC LIMIT 1`
 
 	var migration SchemaMigration
 	ctx := context.Background()
 	err := db.QueryRow(ctx, query).Scan(&migration.Version, &migration.Dirty)
 	if err != nil {
-		panic("cannot get db version, it might mean it has not been migrated or there is a db issue, as in it is no longer there! we should not get here")
+		return nil, fmt.Errorf("failed to get database schema version: %w (database may not be migrated)", err)
 	}
 	return &Store{
 		New(db),
 		db,
 		migration,
-	}
+	}, nil
 }
 
 func NewConnection(conStr string, conName string) (*pgxpool.Pool, error) {
@@ -93,14 +91,15 @@ func NewConnection(conStr string, conName string) (*pgxpool.Pool, error) {
 }
 
 func NewStoreCreateCon(conStr string, conID string) (*Store, error) {
-	//TODO(rich): name needs to come from main at some point
 	con, err := NewConnection(conStr, conID)
-
 	if err != nil {
 		return nil, err
 	}
 
-	s := NewStore(con)
+	s, err := NewStore(con)
+	if err != nil {
+		return nil, err
+	}
 	return s, nil
 }
 
@@ -140,11 +139,5 @@ func (s *Store) GetTX(ctx context.Context) (*TXStore, error) {
 }
 
 func (s *Store) CheckDB(ctx context.Context) error {
-	err := s.dbpg.Ping(ctx)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return nil
+	return s.dbpg.Ping(ctx)
 }

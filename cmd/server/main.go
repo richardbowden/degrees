@@ -42,7 +42,7 @@ func main() {
 func run(args []string) {
 	app := &cli.App{
 		Name:    "p402 server",
-		Version: "v0.0.1+alpha",
+		Version: getVersion(),
 		Flags: []cli.Flag{
 			&cli.GenericFlag{Name: LoggingLevelFlag, Value: &EnumFlag{Enum: []string{"TRACE", "DEBUG", "ERROR", "INFO"}, Default: "INFO"}, Aliases: []string{"l"}, EnvVars: []string{"P402_LOG_LEVEL"}},
 			&cli.BoolFlag{Name: HumanLogsFlag, Value: false, EnvVars: []string{"P402_HUMAN_LOGS"}},
@@ -71,14 +71,18 @@ func run(args []string) {
 					&cli.StringFlag{Name: SMTPPortFlag, Value: "2500", EnvVars: []string{"P402_SMTP_PORT"}},
 					&cli.StringFlag{Name: SMTPUsernameFlag, Value: "anything", EnvVars: []string{"P402_SMTP_USERNAME"}},
 					&cli.StringFlag{Name: SMTPPasswordFlag, Value: "anypassword", EnvVars: []string{"P402_SMTP_PASSWORD"}},
+					&cli.StringFlag{Name: BaseURLFlag, Value: "http://localhost:8080", Usage: "Base URL for the application (used in emails, etc.)", EnvVars: []string{"P402_BASE_URL"}},
+					&cli.StringFlag{Name: DefaultFromEmailFlag, Value: "noreply@localhost", Usage: "Default from email address for notifications", EnvVars: []string{"P402_DEFAULT_FROM_EMAIL"}},
 				},
 				Subcommands: []*cli.Command{
 					{
 						Name:   "run",
 						Action: serverRun,
 						Flags: []cli.Flag{
-							&cli.IntFlag{Name: HTTPPortFlag, Value: 3030, Usage: "port number for http", EnvVars: []string{"P402_HTTP_PORT"}},
+							&cli.IntFlag{Name: HTTPPortFlag, Value: 8080, Usage: "port number for http", EnvVars: []string{"P402_HTTP_PORT"}},
 							&cli.StringFlag{Name: HTTPHostFlag, Value: "localhost", Usage: "host or ip address to listen on, set to ':' to bind to all ip available ip addresses", EnvVars: []string{"P402_HTTP_HOST"}},
+							&cli.IntFlag{Name: GRPCPortFlag, Value: 9090, Usage: "port number for gRPC", EnvVars: []string{"P402_GRPC_PORT"}},
+							&cli.StringFlag{Name: GRPCHostFlag, Value: "localhost", Usage: "host or ip address for gRPC server", EnvVars: []string{"P402_GRPC_HOST"}},
 							&cli.StringFlag{Name: FGAStoreIDFlag, EnvVars: []string{"P402_FGA_STORE_ID"}},
 						},
 					},

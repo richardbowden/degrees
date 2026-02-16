@@ -1,0 +1,15 @@
+version: v2
+modules:
+  - path: .
+    name: buf.build/typewriterco/p402
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
+  except:
+    - PACKAGE_VERSION_SUFFIX
+    - FIELD_LOWER_SNAKE_CASE  # Allow camelCase if you prefer
+deps:
+  - buf.build/googleapis/googleapis

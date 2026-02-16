@@ -34,6 +34,14 @@ type Organization struct {
 	DeletedAt   pgtype.Timestamptz
 }
 
+type PasswordResetToken struct {
+	ID        int64
+	UserID    int64
+	Token     string
+	ExpiresAt pgtype.Timestamptz
+	CreatedAt pgtype.Timestamptz
+}
+
 type Profile struct {
 	UserID      int64
 	DisplayName pgtype.Text
@@ -60,15 +68,36 @@ type Project struct {
 	DeletedAt   pgtype.Timestamptz
 }
 
+type Session struct {
+	ID             int64
+	UserID         int64
+	SessionToken   string
+	CreatedAt      pgtype.Timestamptz
+	ExpiresAt      pgtype.Timestamptz
+	LastActivityAt pgtype.Timestamptz
+	UserAgent      pgtype.Text
+	IpAddress      pgtype.Text
+}
+
 type Setting struct {
-	Key   string
-	Value string
+	ID             int64
+	Scope          string
+	OrganizationID pgtype.Int8
+	ProjectID      pgtype.Int8
+	UserID         pgtype.Int8
+	Subsystem      string
+	Key            string
+	Value          []byte
+	Description    pgtype.Text
+	CreatedAt      pgtype.Timestamptz
+	UpdatedAt      pgtype.Timestamptz
+	UpdatedBy      pgtype.Int8
 }
 
 type Template struct {
 	ID        int64
 	Name      string
-	Slug      string
+	Ref       string
 	Content   string
 	ScopeType string
 	Version   int32

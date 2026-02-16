@@ -61,13 +61,15 @@ type AuthConfig struct {
 	CookieLifetime  int
 }
 
-type DevOverrideConfig struct {
-	SkipUserConfirm bool
+type GRPCConfig struct {
+	Port int
+	Host string
 }
 
 type Config struct {
 	Version          string
 	HTTP             HTTPConfig
+	GRPC             GRPCConfig
 	Database         DatabaseConfig
 	GoogleClientID   string
 	GoogleSecKey     string
@@ -75,6 +77,7 @@ type Config struct {
 	HostedDomainName string
 	CookieLifeTime   int
 	Auth             AuthConfig
-	DevOverrides     DevOverrideConfig
 	SMTP             SMTPConfig
+	BaseURL          string // Base URL for the application (e.g., https://myapp.com)
+	DefaultFromEmail string // Default from email for notifications
 }

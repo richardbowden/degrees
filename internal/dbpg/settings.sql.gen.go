@@ -10,34 +10,36 @@ import (
 )
 
 const createSetting = `-- name: CreateSetting :exec
-INSERT INTO setting
-    (key, value)
+INSERT INTO settings
+    (subsystem, key, value)
  VALUES (
-        $1, $2
-         ) on conflict (key) do update set value = EXCLUDED.value
+        $1, $2, $3
+         ) on conflict (subsystem, key) do update set value = EXCLUDED.value
 `
 
 type CreateSettingParams struct {
-	Key   string
-	Value string
+	Subsystem string
+	Key       string
+	Value     []byte
 }
 
 func (q *Queries) CreateSetting(ctx context.Context, arg CreateSettingParams) error {
-	_, err := q.db.Exec(ctx, createSetting, arg.Key, arg.Value)
+	_, err := q.db.Exec(ctx, createSetting, arg.Subsystem, arg.Key, arg.Value)
 	return err
 }
 
 const getSetting = `-- name: GetSetting :one
-select value from setting where key = $1
+select value from settings where subsystem = $1 and key = $2
 `
 
 type GetSettingParams struct {
-	Key string
+	Subsystem string
+	Key       string
 }
 
-func (q *Queries) GetSetting(ctx context.Context, arg GetSettingParams) (string, error) {
-	row := q.db.QueryRow(ctx, getSetting, arg.Key)
-	var value string
+func (q *Queries) GetSetting(ctx context.Context, arg GetSettingParams) ([]byte, error) {
+	row := q.db.QueryRow(ctx, getSetting, arg.Subsystem, arg.Key)
+	var value []byte
 	err := row.Scan(&value)
 	return value, err
 }

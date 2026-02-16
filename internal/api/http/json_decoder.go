@@ -46,7 +46,7 @@ func DecodeJSON(w http.ResponseWriter, r *http.Request, dst any) error {
 			return fmt.Errorf("body must not be larger than %d bytes", maxBytes)
 
 		case errors.As(err, &invalidUnmarshalError):
-			panic(err)
+			return fmt.Errorf("invalid unmarshal error: %w", err)
 
 		default:
 			return err

@@ -1,8 +1,7 @@
--- Templates table
 CREATE TABLE template (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    slug VARCHAR(100) NOT NULL,
+    ref VARCHAR(100) NOT NULL,
     content TEXT NOT NULL,
     scope_type TEXT NOT NULL,
     version INTEGER NOT NULL,
@@ -11,17 +10,17 @@ CREATE TABLE template (
     deleted_at TIMESTAMP WITH TIME ZONE NULL,
     created_by BIGINT REFERENCES users(id),
     updated_by BIGINT REFERENCES users(id),
-    UNIQUE (name, version)
+    UNIQUE (ref, version)
 );
 
 SELECT add_updated_at_trigger('template');
 
-INSERT INTO template (name, slug, content, scope_type, version, created_by, updated_by)
+INSERT INTO template (name, ref, content, scope_type, version, created_by, updated_by)
 VALUES 
   ('Welcome Email', 'welcome-email', 'Dear {{.Name}}, welcome to our platform!', 'System', 1, NULL, NULL),
   ('Verify Email Address', 'verify-email-address', 'Click here to verify email address: {{.EmailVerifyURL}}', 'System', 1, NULL, NULL),
   ('Password Reset', 'password-reset', 'Click here to reset: {{.ResetLink}}', 'System', 1, NULL, NULL)
-ON CONFLICT (name, version) DO NOTHING;
+ON CONFLICT (ref, version) DO NOTHING;
 
 CREATE TABLE notification_template (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

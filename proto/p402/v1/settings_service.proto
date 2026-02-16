@@ -1,0 +1,231 @@
+syntax = "proto3";
+
+package p402.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/typewriterco/p402/proto/p402/v1;p402v1";
+
+// SettingsService provides runtime configuration management for multi-tenant SaaS
+service SettingsService {
+  // GetSystemSettings retrieves all settings for a subsystem at system scope
+  rpc GetSystemSettings(GetSystemSettingsRequest) returns (GetSettingsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/settings/system/{subsystem}"
+    };
+  }
+
+  // SetSystemSetting sets a system-level setting
+  rpc SetSystemSetting(SetSystemSettingRequest) returns (SetSettingResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/settings/system/{subsystem}/{key}"
+      body: "*"
+    };
+  }
+
+  // GetOrganizationSettings retrieves all settings for a subsystem at organization scope
+  rpc GetOrganizationSettings(GetOrganizationSettingsRequest) returns (GetSettingsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/settings/organization/{organization_id}/{subsystem}"
+    };
+  }
+
+  // SetOrganizationSetting sets an organization-level setting
+  rpc SetOrganizationSetting(SetOrganizationSettingRequest) returns (SetSettingResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/settings/organization/{organization_id}/{subsystem}/{key}"
+      body: "*"
+    };
+  }
+
+  // GetProjectSettings retrieves all settings for a subsystem at project scope
+  rpc GetProjectSettings(GetProjectSettingsRequest) returns (GetSettingsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/settings/project/{project_id}/{subsystem}"
+    };
+  }
+
+  // SetProjectSetting sets a project-level setting
+  rpc SetProjectSetting(SetProjectSettingRequest) returns (SetSettingResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/settings/project/{project_id}/{subsystem}/{key}"
+      body: "*"
+    };
+  }
+
+  // GetUserSettings retrieves all settings for a subsystem at user scope
+  rpc GetUserSettings(GetUserSettingsRequest) returns (GetSettingsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/settings/user/{user_id}/{subsystem}"
+    };
+  }
+
+  // SetUserSetting sets a user-level setting
+  rpc SetUserSetting(SetUserSettingRequest) returns (SetSettingResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/settings/user/{user_id}/{subsystem}/{key}"
+      body: "*"
+    };
+  }
+
+  // DeleteSetting deletes a setting by ID (removes override, falls back to parent scope)
+  rpc DeleteSetting(DeleteSettingRequest) returns (DeleteSettingResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/admin/settings/{id}"
+    };
+  }
+
+  // ListAllSettings lists all settings (for admin interface)
+  rpc ListAllSettings(ListAllSettingsRequest) returns (ListAllSettingsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/settings"
+    };
+  }
+
+  // GetSetting retrieves a single setting with hierarchical resolution
+  // This is useful for clients that need a specific setting value
+  rpc GetSetting(GetSettingRequest) returns (GetSettingResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/settings/get"
+      body: "*"
+    };
+  }
+}
+
+// Scope for hierarchical settings resolution
+enum SettingScope {
+  SETTING_SCOPE_UNSPECIFIED = 0;
+  SETTING_SCOPE_SYSTEM = 1;
+  SETTING_SCOPE_ORGANIZATION = 2;
+  SETTING_SCOPE_PROJECT = 3;
+  SETTING_SCOPE_USER = 4;
+}
+
+// Setting represents a configuration value
+message Setting {
+  int64 id = 1;
+  SettingScope scope = 2;
+  int64 organization_id = 3;
+  int64 project_id = 4;
+  int64 user_id = 5;
+  string subsystem = 6;
+  string key = 7;
+  google.protobuf.Value value = 8;  // JSON value
+  string description = 9;
+  int64 created_at = 10;  // Unix timestamp
+  int64 updated_at = 11;  // Unix timestamp
+  int64 updated_by = 12;
+}
+
+// System-level requests/responses
+
+message GetSystemSettingsRequest {
+  string subsystem = 1;
+}
+
+message SetSystemSettingRequest {
+  string subsystem = 1;
+  string key = 2;
+  google.protobuf.Value value = 3;
+  optional string description = 4;
+}
+
+// Organization-level requests/responses
+
+message GetOrganizationSettingsRequest {
+  int64 organization_id = 1;
+  string subsystem = 2;
+}
+
+message SetOrganizationSettingRequest {
+  int64 organization_id = 1;
+  string subsystem = 2;
+  string key = 3;
+  google.protobuf.Value value = 4;
+  optional string description = 5;
+}
+
+// Project-level requests/responses
+
+message GetProjectSettingsRequest {
+  int64 project_id = 1;
+  string subsystem = 2;
+}
+
+message SetProjectSettingRequest {
+  int64 project_id = 1;
+  string subsystem = 2;
+  string key = 3;
+  google.protobuf.Value value = 4;
+  optional string description = 5;
+}
+
+// User-level requests/responses
+
+message GetUserSettingsRequest {
+  int64 user_id = 1;
+  string subsystem = 2;
+}
+
+message SetUserSettingRequest {
+  int64 user_id = 1;
+  string subsystem = 2;
+  string key = 3;
+  google.protobuf.Value value = 4;
+  optional string description = 5;
+}
+
+// Delete requests/responses
+
+message DeleteSettingRequest {
+  int64 id = 1;
+}
+
+message DeleteSettingResponse {
+  bool success = 1;
+}
+
+// List requests/responses
+
+message ListAllSettingsRequest {
+  // Optional filters
+  optional string subsystem = 1;
+  optional SettingScope scope = 2;
+  optional int64 organization_id = 3;
+  optional int64 project_id = 4;
+  optional int64 user_id = 5;
+}
+
+message ListAllSettingsResponse {
+  repeated Setting settings = 1;
+}
+
+// Get single setting (with hierarchy)
+
+message GetSettingRequest {
+  string subsystem = 1;
+  string key = 2;
+  // Scope context (provide what you have, hierarchy handles the rest)
+  optional int64 organization_id = 3;
+  optional int64 project_id = 4;
+  optional int64 user_id = 5;
+}
+
+message GetSettingResponse {
+  google.protobuf.Value value = 1;
+  SettingScope resolved_scope = 2;  // Which scope provided this value
+  string description = 3;
+}
+
+// Common responses
+
+message GetSettingsResponse {
+  string subsystem = 1;
+  map<string, google.protobuf.Value> settings = 2;  // key -> value map
+}
+
+message SetSettingResponse {
+  bool success = 1;
+  Setting setting = 2;
+}

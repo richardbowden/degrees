@@ -1,0 +1,38 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/typewriterco/p402/internal/pb
+  disable:
+    - module: buf.build/googleapis/googleapis
+      file_option: go_package_prefix
+plugins:
+  # Generate Go protobuf code
+  - remote: buf.build/protocolbuffers/go
+    out: ../internal/pb
+    opt:
+      - paths=source_relative
+
+  # Generate gRPC Go code
+  - remote: buf.build/grpc/go
+    out: ../internal/pb
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
+
+  # Generate gRPC-Gateway reverse proxy (separate package to avoid import cycles)
+  - remote: buf.build/grpc-ecosystem/gateway
+    out: ../internal/gateway
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+      - standalone=true
+
+  # Generate OpenAPI v2 (Swagger) documentation
+  - remote: buf.build/grpc-ecosystem/openapiv2
+    out: ../docs/openapi
+    opt:
+      - allow_merge=true
+      - merge_file_name=api
+      - use_go_templates=true

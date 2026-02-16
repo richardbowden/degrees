@@ -3,8 +3,10 @@ package services
 
 import (
 	"context"
-
+	"errors"
 	"time"
+
+	"github.com/typewriterco/p402/internal/problems"
 )
 
 type UserState string
@@ -61,6 +63,12 @@ type EmailAddresses []EmailAddress
 type UserRepository interface {
 	Create(ctx context.Context, params NewUser) (User, error)
 	DoesUserExist(ctx context.Context, email string, username string) (bool, bool, error)
+	GetUserByID(ctx context.Context, userID int64) (User, error)
+	UpdateUser(ctx context.Context, userID int64, firstName string, middleName string, surname string) (User, error)
+	UpdateSysop(ctx context.Context, userID int64, sysop bool) error
+	UpdateEnabled(ctx context.Context, userID int64, enabled bool) (User, error)
+	ListAllUsers(ctx context.Context) ([]User, error)
+	IsFirstUser(ctx context.Context) (bool, error)
 }
 
 type NewUserRequest struct {
@@ -74,13 +82,24 @@ type NewUserRequest struct {
 }
 
 type UserService struct {
-	repo UserRepository
-	ac   *AuthzSvc
+	repo  UserRepository
+	ac    *AuthzSvc
+	authn *AuthN
 }
 
-func NewUserService(repo UserRepository, authz *AuthzSvc) (*UserService, error) {
-	us := &UserService{repo: repo, ac: authz}
+func NewUserService(repo UserRepository, authz *AuthzSvc, authn *AuthN) (*UserService, error) {
+	us := &UserService{repo: repo, ac: authz, authn: authn}
 	return us, nil
+}
+
+// SetUserSysop updates the sysop flag for a user
+func (us *UserService) SetUserSysop(ctx context.Context, userID int64, sysop bool) error {
+	return us.repo.UpdateSysop(ctx, userID, sysop)
+}
+
+// IsFirstUser returns true if there is exactly one user in the system
+func (us *UserService) IsFirstUser(ctx context.Context) (bool, error) {
+	return us.repo.IsFirstUser(ctx)
 }
 
 func (us *UserService) EmailExists(ctx context.Context, email string) (bool, error) {
@@ -97,29 +116,75 @@ func (us *UserService) CreateUser(ctx context.Context, nu NewUser) (User, error)
 
 }
 
-func (us *UserService) GetUser(ctx context.Context, params string) error {
-	//err := problems.O(problems.Database, "error from db call in userService")
-	// log := httplog.LogEntry(ctx)
-	//
-	// if errors.Is(err, ErrNoRecord) {
-	// 	eeee := problems.New(problems.NotExist, "account not found")
-	//
-	// 	detai := problems.Detail{
-	// 		Message: "acount_number	",
-	// 		Value:   "9999999",
-	// 	}
-	// 	eeee.AddDetail(detai)
-	// 	eeee.AddDetail(fmt.Errorf("test native error"))
-	// 	log.Error().Err(err).Msg("base error")
-	// 	log.Error().Err(eeee).Msg("problems error")
-	// 	return eeee
-	// }
-	//
-	//if errors.Is(err, repos.ErrNoRecord) {
-	//	return problems.O(problems.NotExist, "failed to find account")
-	//}
-	//return errs.E(errs.Database, "UserService.GetAccount")
-	//e := errs.E(errs.Validation, "error from service", nil)
-	//return e
+// GetUserByID retrieves a user by ID from the repository
+func (us *UserService) GetUserByID(ctx context.Context, userID int64) (*User, error) {
+	user, err := us.repo.GetUserByID(ctx, userID)
+	if err != nil {
+		if errors.Is(err, ErrNoRecord) {
+			return nil, problems.New(problems.NotExist, "user not found")
+		}
+		return nil, problems.New(problems.Database, "failed to retrieve user", err)
+	}
+	return &user, nil
+}
+
+func (us *UserService) EnableUser(ctx context.Context, userID int64) error {
+	_, err := us.repo.UpdateEnabled(ctx, userID, true)
+	return err
+}
+
+func (us *UserService) DisableUser(ctx context.Context, userID int64) error {
+	_, err := us.repo.UpdateEnabled(ctx, userID, false)
+	return err
+}
+
+func (us *UserService) ListAllUsers(ctx context.Context) ([]User, error) {
+	// Requires new DB query - see repository implementation
+	return us.repo.ListAllUsers(ctx)
+}
+
+// ResetUserPassword resets a user's password (admin action)
+func (us *UserService) ResetUserPassword(ctx context.Context, userID int64, newPassword string) error {
+	// Hash the new password (pass same value twice since we don't need confirmation for admin reset)
+	hashedPassword, err := us.authn.HashPassword(newPassword, newPassword)
+	if err != nil {
+		return problems.New(problems.Internal, "failed to hash password", err)
+	}
+
+	// Update password directly in database
+	err = us.authn.UpdateUserPasswordHash(ctx, userID, hashedPassword)
+	if err != nil {
+		if errors.Is(err, ErrNoRecord) {
+			return problems.New(problems.NotExist, "user not found")
+		}
+		return problems.New(problems.Database, "failed to update password", err)
+	}
+
+	// Invalidate all user sessions for security
+	err = us.authn.InvalidateAllUserSessions(ctx, userID)
+	if err != nil {
+		// Log but don't fail - password was updated successfully
+		return nil
+	}
+
 	return nil
+}
+
+// UpdateUserRequest contains fields that can be updated
+type UpdateUserRequest struct {
+	FirstName  string
+	MiddleName string
+	Surname    string
+}
+
+// UpdateUser updates user profile information
+func (us *UserService) UpdateUser(ctx context.Context, userID int64, req UpdateUserRequest) (*User, error) {
+	user, err := us.repo.UpdateUser(ctx, userID, req.FirstName, req.MiddleName, req.Surname)
+	if err != nil {
+		if errors.Is(err, ErrNoRecord) {
+			return nil, problems.New(problems.NotExist, "user not found")
+		}
+		return nil, problems.New(problems.Database, "failed to update user", err)
+	}
+	return &user, nil
 }

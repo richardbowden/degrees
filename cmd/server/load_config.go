@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/typewriterco/p402/internal/config"
 	"github.com/urfave/cli/v2"
 )
@@ -17,6 +14,8 @@ const (
 	DBSSLModeFlag       = "db-sslmode"
 	HTTPPortFlag        = "http-port"
 	HTTPHostFlag        = "http-host"
+	GRPCPortFlag        = "grpc-port"
+	GRPCHostFlag        = "grpc-host"
 	HumanLogsFlag       = "human-logs"
 	LoggingLevelFlag    = "logging-level"
 	GoogleClientIDFlag  = "google-client-id"  //TODO(rich): prob not needed here, will be moved into run time config
@@ -28,6 +27,8 @@ const (
 	SMTPUsernameFlag    = "smtp-username"
 	SMTPPasswordFlag    = "smtp-password"
 	FGAStoreIDFlag      = "fga-store-id"
+	BaseURLFlag         = "base-url"
+	DefaultFromEmailFlag = "default-from-email"
 )
 
 func loadDBConfigFromCLI(ctx *cli.Context) config.DatabaseConfig {
@@ -56,6 +57,10 @@ func loadConfigFromCLI(ctx *cli.Context) *config.Config {
 			Port: ctx.Int(HTTPPortFlag),
 			Host: ctx.String(HTTPHostFlag),
 		},
+		GRPC: config.GRPCConfig{
+			Port: ctx.Int(GRPCPortFlag),
+			Host: ctx.String(GRPCHostFlag),
+		},
 		Database: loadDBConfigFromCLI(ctx),
 		Auth:     loadAuthConfigFromCLI(ctx),
 		SMTP: config.SMTPConfig{
@@ -64,35 +69,7 @@ func loadConfigFromCLI(ctx *cli.Context) *config.Config {
 			Username: ctx.String(SMTPUsernameFlag),
 			Password: ctx.String(SMTPPasswordFlag),
 		},
-		DevOverrides: loadDevOverrides(),
+		BaseURL:          ctx.String(BaseURLFlag),
+		DefaultFromEmail: ctx.String(DefaultFromEmailFlag),
 	}
-}
-
-func loadDevOverrides() config.DevOverrideConfig {
-
-	devOverridesEnabled, exists := os.LookupEnv("OP_DEV_OVERRIDE_ENABLE")
-
-	if (exists && devOverridesEnabled == "0") || !exists {
-		return config.DevOverrideConfig{}
-	}
-
-	fmt.Println("***********************************************************************************")
-	fmt.Println("**********************                                        *********************")
-	fmt.Println("**********************    DEV_OVERRIDES have been enabled     *********************")
-	fmt.Println("**********************                                        *********************")
-	fmt.Println("***********************************************************************************")
-	fmt.Println("")
-
-	orc := config.DevOverrideConfig{}
-
-	skipUserConfirm, exists := os.LookupEnv("OP_DEV_SKIP_USER_CONFIRM_EMAIL")
-
-	fmt.Printf("OP_DEV_SKIP_USER_CONFIG_EMAIL: %s\n", skipUserConfirm)
-	if exists && skipUserConfirm == "1" {
-		orc.SkipUserConfirm = true
-	}
-
-	fmt.Println("***********************************************************************************")
-	fmt.Println("")
-	return orc
 }

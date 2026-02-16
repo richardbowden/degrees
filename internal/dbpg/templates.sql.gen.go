@@ -9,8 +9,26 @@ import (
 	"context"
 )
 
+const getNotificationTemplateByName = `-- name: GetNotificationTemplateByName :one
+SELECT t.content
+FROM notification_template nt
+         JOIN template t on nt.template_id = t.id
+WHERE nt.name = $1
+`
+
+type GetNotificationTemplateByNameParams struct {
+	Name string
+}
+
+func (q *Queries) GetNotificationTemplateByName(ctx context.Context, arg GetNotificationTemplateByNameParams) (string, error) {
+	row := q.db.QueryRow(ctx, getNotificationTemplateByName, arg.Name)
+	var content string
+	err := row.Scan(&content)
+	return content, err
+}
+
 const getTemplateByID = `-- name: GetTemplateByID :one
-select id, name, slug, content, scope_type, version, created_at, updated_at, deleted_at, created_by, updated_by from template where id = $1
+select id, name, ref, content, scope_type, version, created_at, updated_at, deleted_at, created_by, updated_by from template where id = $1
 `
 
 type GetTemplateByIDParams struct {
@@ -23,7 +41,7 @@ func (q *Queries) GetTemplateByID(ctx context.Context, arg GetTemplateByIDParams
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.Slug,
+		&i.Ref,
 		&i.Content,
 		&i.ScopeType,
 		&i.Version,
@@ -36,69 +54,28 @@ func (q *Queries) GetTemplateByID(ctx context.Context, arg GetTemplateByIDParams
 	return i, err
 }
 
-const getTemplateByName = `-- name: GetTemplateByName :one
+const getTemplateByRef = `-- name: GetTemplateByRef :one
 SELECT content
 FROM template
-WHERE name = $1
+WHERE ref = $1
   AND deleted_at IS NULL
 ORDER BY version DESC
 LIMIT 1
 `
 
-type GetTemplateByNameParams struct {
-	Name string
+type GetTemplateByRefParams struct {
+	Ref string
 }
 
-func (q *Queries) GetTemplateByName(ctx context.Context, arg GetTemplateByNameParams) (string, error) {
-	row := q.db.QueryRow(ctx, getTemplateByName, arg.Name)
+func (q *Queries) GetTemplateByRef(ctx context.Context, arg GetTemplateByRefParams) (string, error) {
+	row := q.db.QueryRow(ctx, getTemplateByRef, arg.Ref)
 	var content string
 	err := row.Scan(&content)
 	return content, err
-}
-
-const getTemplateBySystemName = `-- name: GetTemplateBySystemName :one
-SELECT t.content
-FROM notification_template nt
-         JOIN template t on nt.template_id = t.id
-WHERE nt.name = $1
-`
-
-type GetTemplateBySystemNameParams struct {
-	Name string
-}
-
-func (q *Queries) GetTemplateBySystemName(ctx context.Context, arg GetTemplateBySystemNameParams) (string, error) {
-	row := q.db.QueryRow(ctx, getTemplateBySystemName, arg.Name)
-	var content string
-	err := row.Scan(&content)
-	return content, err
-}
-
-const listSystemNotificationTemplateNames = `-- name: ListSystemNotificationTemplateNames :many
-select name from notification_template
-`
-
-func (q *Queries) ListSystemNotificationTemplateNames(ctx context.Context) ([]string, error) {
-	rows, err := q.db.Query(ctx, listSystemNotificationTemplateNames)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []string
-	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err != nil {
-			return nil, err
-		}
-		items = append(items, name)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }
 
 const listSystemNotificationTemplates = `-- name: ListSystemNotificationTemplates :many
+
 select t.id, t.name, t.content,t.version, nt.name system_name
     from template t
          join notification_template nt on t.id = nt.id
@@ -112,6 +89,8 @@ type ListSystemNotificationTemplatesRow struct {
 	SystemName string
 }
 
+// -- name: ListSystemNotificationTemplates :many
+// select name from notification_template;
 func (q *Queries) ListSystemNotificationTemplates(ctx context.Context) ([]ListSystemNotificationTemplatesRow, error) {
 	rows, err := q.db.Query(ctx, listSystemNotificationTemplates)
 	if err != nil {
@@ -139,7 +118,7 @@ func (q *Queries) ListSystemNotificationTemplates(ctx context.Context) ([]ListSy
 }
 
 const listTemplates = `-- name: ListTemplates :many
-SELECT id, name, slug, content, scope_type, version, created_at, updated_at, deleted_at, created_by, updated_by from template
+SELECT id, name, ref, content, scope_type, version, created_at, updated_at, deleted_at, created_by, updated_by from template
 `
 
 func (q *Queries) ListTemplates(ctx context.Context) ([]Template, error) {
@@ -154,7 +133,7 @@ func (q *Queries) ListTemplates(ctx context.Context) ([]Template, error) {
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
-			&i.Slug,
+			&i.Ref,
 			&i.Content,
 			&i.ScopeType,
 			&i.Version,
@@ -172,4 +151,28 @@ func (q *Queries) ListTemplates(ctx context.Context) ([]Template, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const saveTemplate = `-- name: SaveTemplate :exec
+insert into template (name, ref, content, scope_type, version)
+values ($1, $2, $3, $4, $5)
+`
+
+type SaveTemplateParams struct {
+	Name      string
+	Ref       string
+	Content   string
+	ScopeType string
+	Version   int32
+}
+
+func (q *Queries) SaveTemplate(ctx context.Context, arg SaveTemplateParams) error {
+	_, err := q.db.Exec(ctx, saveTemplate,
+		arg.Name,
+		arg.Ref,
+		arg.Content,
+		arg.ScopeType,
+		arg.Version,
+	)
+	return err
 }

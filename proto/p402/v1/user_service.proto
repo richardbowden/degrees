@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package p402.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "p402/v1/common.proto";
+
+option go_package = "github.com/typewriterco/p402/internal/pb/p402/v1;p402v1";
+
+// ========================================
+// Request/Response Messages
+// ========================================
+
+message EnableUserRequest {
+  int64 user_id = 1;
+}
+
+message EnableUserResponse {
+  User user = 1;
+  string message = 2;
+}
+
+message DisableUserRequest {
+  int64 user_id = 1;
+}
+
+message DisableUserResponse {
+  User user = 1;
+  string message = 2;
+}
+
+message ListUsersRequest {
+  // Future: add pagination
+  // PaginationRequest pagination = 1;
+}
+
+message ListUsersResponse {
+  repeated User users = 1;
+  // PaginationResponse pagination = 2;
+}
+
+message GetUserRequest {
+  int64 user_id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message UpdateUserRequest {
+  int64 user_id = 1;
+  string first_name = 2;
+  string middle_name = 3;
+  string surname = 4;
+}
+
+message UpdateUserResponse {
+  User user = 1;
+  string message = 2;
+}
+
+message SetUserSysopRequest {
+  int64 user_id = 1;
+  bool sysop = 2;
+}
+
+message SetUserSysopResponse {
+  User user = 1;
+  string message = 2;
+}
+
+// ========================================
+// UserService
+// ========================================
+
+service UserService {
+  // Get a specific user by ID
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/user/{user_id}"
+    };
+  }
+
+  // Update user profile information
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/user/{user_id}"
+      body: "*"
+    };
+  }
+
+  // Enable a user account (admin only)
+  rpc EnableUser(EnableUserRequest) returns (EnableUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/{user_id}/enable"
+      body: "*"
+    };
+  }
+
+  // Disable a user account (admin only)
+  rpc DisableUser(DisableUserRequest) returns (DisableUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/{user_id}/disable"
+      body: "*"
+    };
+  }
+
+  // Set sysop status for a user (sysop only)
+  rpc SetUserSysop(SetUserSysopRequest) returns (SetUserSysopResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/{user_id}/sysop"
+      body: "*"
+    };
+  }
+
+  // List all users (admin only)
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/users"
+    };
+  }
+}

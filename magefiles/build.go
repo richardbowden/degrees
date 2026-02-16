@@ -37,11 +37,28 @@ func init() {
 }
 
 func Gen() error {
-	err := sqlGen()
+	err := protoGen()
+	if err != nil {
+		return err
+	}
+
+	err = sqlGen()
 	if err != nil {
 		return err
 	}
 	return goGen()
+}
+
+func protoGen() error {
+	start := time.Now()
+	fmt.Printf("\nrunning proto gen\n")
+	// Change to proto directory and run buf generate
+	err := sh.RunV("sh", "-c", "cd proto && go run github.com/bufbuild/buf/cmd/buf@latest generate")
+	elapsed := time.Since(start)
+
+	fmt.Printf("took %s\n\n", elapsed)
+
+	return err
 }
 
 func sqlGen() error {
@@ -116,4 +133,40 @@ func Run() error {
 func Test() error {
 	err := sh.RunV("go", "test", "./...")
 	return err
+}
+
+// Proto namespace for proto-related commands
+type Proto mg.Namespace
+
+// Lint runs buf lint on proto files
+func (Proto) Lint() error {
+	fmt.Println("linting proto files")
+	return sh.RunV("sh", "-c", "cd proto && go run github.com/bufbuild/buf/cmd/buf@latest lint")
+}
+
+// Format formats proto files
+func (Proto) Format() error {
+	fmt.Println("formatting proto files")
+	return sh.RunV("sh", "-c", "cd proto && go run github.com/bufbuild/buf/cmd/buf@latest format -w")
+}
+
+// Breaking checks for breaking changes against main branch
+func (Proto) Breaking() error {
+	fmt.Println("checking for breaking changes")
+	return sh.RunV("sh", "-c", "cd proto && go run github.com/bufbuild/buf/cmd/buf@latest breaking --against '.git#branch=main'")
+}
+
+// GRPC namespace for gRPC testing commands
+type GRPC mg.Namespace
+
+// List lists all gRPC services (requires server running on :9090)
+func (GRPC) List() error {
+	fmt.Println("listing gRPC services")
+	return sh.RunV("go", "run", "github.com/fullstorydev/grpcurl/cmd/grpcurl@latest", "-plaintext", "localhost:9090", "list")
+}
+
+// UI opens interactive gRPC UI (requires server running on :9090)
+func (GRPC) UI() error {
+	fmt.Println("opening gRPC UI at http://localhost:8081")
+	return sh.RunV("go", "run", "github.com/fullstorydev/grpcui/cmd/grpcui@latest", "-plaintext", "-port", "8081", "localhost:9090")
 }

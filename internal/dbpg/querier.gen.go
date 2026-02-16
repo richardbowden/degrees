@@ -9,28 +9,71 @@ import (
 )
 
 type Querier interface {
+	CreatePasswordResetToken(ctx context.Context, arg CreatePasswordResetTokenParams) error
+	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateSetting(ctx context.Context, arg CreateSettingParams) error
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	// First create the email, then create the user in separate operations
 	CreateUserEmail(ctx context.Context, arg CreateUserEmailParams) (UserEmail, error)
 	CreateVerificationToken(ctx context.Context, arg CreateVerificationTokenParams) error
+	DeleteExpiredPasswordResetTokens(ctx context.Context) error
+	DeleteExpiredSessions(ctx context.Context) error
+	DeletePasswordResetToken(ctx context.Context, arg DeletePasswordResetTokenParams) error
+	DeleteSession(ctx context.Context, arg DeleteSessionParams) error
+	// Delete a specific setting by ID
+	DeleteSetting(ctx context.Context, arg DeleteSettingParams) error
 	DeleteToken(ctx context.Context, arg DeleteTokenParams) error
+	DeleteUserPasswordResetTokens(ctx context.Context, arg DeleteUserPasswordResetTokensParams) error
+	DeleteUserSessions(ctx context.Context, arg DeleteUserSessionsParams) error
 	EmailExists(ctx context.Context, arg EmailExistsParams) (bool, error)
-	GetSetting(ctx context.Context, arg GetSettingParams) (string, error)
+	GetNotificationTemplateByName(ctx context.Context, arg GetNotificationTemplateByNameParams) (string, error)
+	GetPasswordResetToken(ctx context.Context, arg GetPasswordResetTokenParams) (PasswordResetToken, error)
+	GetSessionByToken(ctx context.Context, arg GetSessionByTokenParams) (Session, error)
+	GetSetting(ctx context.Context, arg GetSettingParams) ([]byte, error)
+	// Get a specific setting by ID
+	GetSettingByID(ctx context.Context, arg GetSettingByIDParams) (Setting, error)
+	// Get all matching settings in hierarchy order (system → org → project → user)
+	// Returns ordered by precedence (higher scope overrides lower)
+	GetSettingHierarchy(ctx context.Context, arg GetSettingHierarchyParams) ([]Setting, error)
+	// Get all settings for a subsystem with hierarchy resolution
+	GetSettingsBySubsystem(ctx context.Context, arg GetSettingsBySubsystemParams) ([]Setting, error)
 	GetTemplateByID(ctx context.Context, arg GetTemplateByIDParams) (Template, error)
-	GetTemplateByName(ctx context.Context, arg GetTemplateByNameParams) (string, error)
-	GetTemplateBySystemName(ctx context.Context, arg GetTemplateBySystemNameParams) (string, error)
+	GetTemplateByRef(ctx context.Context, arg GetTemplateByRefParams) (string, error)
 	GetToken(ctx context.Context, arg GetTokenParams) (Verification, error)
+	GetUserActiveSessions(ctx context.Context, arg GetUserActiveSessionsParams) ([]Session, error)
 	GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) (User, error)
 	GetUserById(ctx context.Context, arg GetUserByIdParams) (User, error)
 	GetUserByUsername(ctx context.Context, arg GetUserByUsernameParams) (User, error)
-	ListSystemNotificationTemplateNames(ctx context.Context) ([]string, error)
+	IsFirstUser(ctx context.Context) (bool, error)
+	// List all settings (for admin interface)
+	ListAllSettings(ctx context.Context) ([]Setting, error)
+	ListAllUsers(ctx context.Context) ([]User, error)
+	// List settings for a specific organization (including system defaults)
+	ListOrganizationSettings(ctx context.Context, arg ListOrganizationSettingsParams) ([]Setting, error)
+	// List settings for a specific project (including org and system defaults)
+	// Note: Pass both project_id and org_id as parameters
+	ListProjectSettings(ctx context.Context, arg ListProjectSettingsParams) ([]Setting, error)
+	// -- name: ListSystemNotificationTemplates :many
+	// select name from notification_template;
 	ListSystemNotificationTemplates(ctx context.Context) ([]ListSystemNotificationTemplatesRow, error)
+	// List all system-level settings
+	ListSystemSettings(ctx context.Context) ([]Setting, error)
 	ListTemplates(ctx context.Context) ([]Template, error)
+	SaveTemplate(ctx context.Context, arg SaveTemplateParams) error
+	UpdateSessionActivity(ctx context.Context, arg UpdateSessionActivityParams) error
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserEnabled(ctx context.Context, arg UpdateUserEnabledParams) (User, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
 	UpdateUserSignUpStage(ctx context.Context, arg UpdateUserSignUpStageParams) (User, error)
+	UpdateUserSysop(ctx context.Context, arg UpdateUserSysopParams) (User, error)
+	// Create or update an organization-level setting
+	UpsertOrganizationSetting(ctx context.Context, arg UpsertOrganizationSettingParams) (Setting, error)
+	// Create or update a project-level setting
+	UpsertProjectSetting(ctx context.Context, arg UpsertProjectSettingParams) (Setting, error)
+	// Create or update a system-level setting
+	UpsertSystemSetting(ctx context.Context, arg UpsertSystemSettingParams) (Setting, error)
+	// Create or update a user-level setting
+	UpsertUserSetting(ctx context.Context, arg UpsertUserSettingParams) (Setting, error)
 	UserExists(ctx context.Context, arg UserExistsParams) (UserExistsRow, error)
 }
 

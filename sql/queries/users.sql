@@ -16,8 +16,9 @@ INSERT INTO users (
     username,
     login_email,
     primary_email_id,
-    password_hash
-) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    password_hash,
+    sign_up_stage
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING *;
 
 -- name: UserExists :one
@@ -66,3 +67,17 @@ WHERE id = $1
 UPDATE users
 set password_hash = $2
 where id = $1;
+
+-- name: UpdateUserSysop :one
+UPDATE users
+SET sysop = $2,
+    updated_at = NOW()
+WHERE id = $1
+    RETURNING *;
+
+-- name: IsFirstUser :one
+SELECT (COUNT(*) = 1) AS is_first_user FROM users;
+
+-- name: ListAllUsers :many
+SELECT * FROM users
+ORDER BY created_on DESC;
