@@ -96,6 +96,11 @@ func (s *Server) setupRoutes() chi.Router {
 	r.Use(middleware.SetHeader("X-Frame-Options", "DENY"))
 	r.Use(middleware.AllowContentType("application/json"))
 
+	// Bridge cookie-based auth to Bearer header for future web frontend support
+	if s.authMiddleware != nil {
+		r.Use(s.authMiddleware.CookieToAuthHeader)
+	}
+
 	// Internal endpoints for health checks
 	r.Route("/_internal", func(r chi.Router) {
 		r.Get("/health", s.healthCheck)
@@ -109,10 +114,10 @@ func (s *Server) setupRoutes() chi.Router {
 
 	// Admin routes for non-gRPC functionality
 	r.Route("/admin", func(r chi.Router) {
-		// Apply authentication and authorization middleware
+		// Validate bearer token + require sysop for admin routes
 		if s.authMiddleware != nil {
-			r.Use(s.authMiddleware.RequireAuth)  // First authenticate
-			r.Use(s.authMiddleware.RequireSysop) // Then check sysop role
+			r.Use(s.authMiddleware.RequireBearerAuth)
+			r.Use(s.authMiddleware.RequireSysop)
 		}
 
 		// SMTP configuration endpoints (not in proto - direct HTTP only)
