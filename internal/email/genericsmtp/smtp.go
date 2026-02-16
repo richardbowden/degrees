@@ -29,11 +29,31 @@ type config struct {
 	Identity    string `json:"identity,omitempty"`
 }
 
+// Status represents the current SMTP configuration status
+type Status struct {
+	Ready       bool
+	SMTPAddress string
+	SMTPPort    int
+	Username    string
+	Configured  bool
+}
+
 var ErrSMTPNotReady = errors.New("smtp not ready")
 
 // IsReady returns true if the SMTP client is configured and ready to send emails
 func (c *Client) IsReady() bool {
 	return c.ready
+}
+
+// GetStatus returns the current SMTP configuration status
+func (c *Client) GetStatus() Status {
+	return Status{
+		Ready:       c.ready,
+		SMTPAddress: c.config.SMTPAddress,
+		SMTPPort:    c.config.SMTPPort,
+		Username:    c.config.Username,
+		Configured:  c.ready,
+	}
 }
 
 func (c *Client) loadConfig() error {

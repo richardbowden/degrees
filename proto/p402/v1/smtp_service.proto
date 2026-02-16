@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package p402.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/typewriterco/p402/proto/p402/v1;p402v1";
+
+// SMTPService provides SMTP configuration management for system administrators
+service SMTPService {
+  // ConfigureSMTP updates the SMTP configuration
+  rpc ConfigureSMTP(ConfigureSMTPRequest) returns (ConfigureSMTPResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/smtp/config"
+      body: "*"
+    };
+  }
+
+  // GetSMTPStatus returns the current SMTP configuration status
+  rpc GetSMTPStatus(GetSMTPStatusRequest) returns (GetSMTPStatusResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/smtp/status"
+    };
+  }
+}
+
+message ConfigureSMTPRequest {
+  string smtp_address = 1;
+  int32 smtp_port = 2;
+  string username = 3;
+  string password = 4;
+  string identity = 5;
+}
+
+message ConfigureSMTPResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetSMTPStatusRequest {}
+
+message GetSMTPStatusResponse {
+  bool ready = 1;
+  string smtp_address = 2;
+  int32 smtp_port = 3;
+  string username = 4;
+  bool configured = 5;
+}

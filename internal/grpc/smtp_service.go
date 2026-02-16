@@ -1,0 +1,72 @@
+package grpc
+
+import (
+	"context"
+
+	fastmail "github.com/typewriterco/p402/internal/email/genericsmtp"
+	pb "github.com/typewriterco/p402/internal/pb/p402/v1"
+	"github.com/typewriterco/p402/internal/services"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+)
+
+// SMTPServiceServer implements the gRPC SMTPService
+type SMTPServiceServer struct {
+	pb.UnimplementedSMTPServiceServer
+	smtpClient *fastmail.Client
+	authSvc    *services.AuthN
+}
+
+// NewSMTPServiceServer creates a new SMTP service gRPC server
+func NewSMTPServiceServer(smtpClient *fastmail.Client, authSvc *services.AuthN) *SMTPServiceServer {
+	return &SMTPServiceServer{
+		smtpClient: smtpClient,
+		authSvc:    authSvc,
+	}
+}
+
+// ConfigureSMTP updates the SMTP configuration
+func (s *SMTPServiceServer) ConfigureSMTP(ctx context.Context, req *pb.ConfigureSMTPRequest) (*pb.ConfigureSMTPResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
+	if req.SmtpAddress == "" {
+		return nil, status.Error(codes.InvalidArgument, "smtp_address is required")
+	}
+	if req.SmtpPort == 0 {
+		return nil, status.Error(codes.InvalidArgument, "smtp_port is required")
+	}
+	if req.Username == "" {
+		return nil, status.Error(codes.InvalidArgument, "username is required")
+	}
+	if req.Password == "" {
+		return nil, status.Error(codes.InvalidArgument, "password is required")
+	}
+
+	err := s.smtpClient.SetConfig(ctx, req.SmtpAddress, int(req.SmtpPort), req.Username, req.Password, req.Identity)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to configure SMTP: %v", err)
+	}
+
+	return &pb.ConfigureSMTPResponse{
+		Success: true,
+		Message: "SMTP configuration updated successfully",
+	}, nil
+}
+
+// GetSMTPStatus returns the current SMTP configuration status
+func (s *SMTPServiceServer) GetSMTPStatus(ctx context.Context, req *pb.GetSMTPStatusRequest) (*pb.GetSMTPStatusResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
+	st := s.smtpClient.GetStatus()
+	return &pb.GetSMTPStatusResponse{
+		Ready:       st.Ready,
+		SmtpAddress: st.SMTPAddress,
+		SmtpPort:    int32(st.SMTPPort),
+		Username:    st.Username,
+		Configured:  st.Configured,
+	}, nil
+}

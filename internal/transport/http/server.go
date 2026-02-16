@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"reflect"
 	"strings"
 	"sync"
 	"syscall"
@@ -44,27 +45,23 @@ type Server struct {
 	authMiddleware *AuthMiddleware
 
 	middleware map[string]Middleware
-
-	handlers Handlers
 }
 
-func NewServer(cfg *config.Config, healthSvc *health.Service, handlers *Handlers, authMiddleware *AuthMiddleware) *Server {
+func NewServer(cfg *config.Config, healthSvc *health.Service, authMiddleware *AuthMiddleware) *Server {
 	return &Server{
 		config:         cfg,
 		healthSvc:      healthSvc,
-		handlers:       *handlers,
 		authMiddleware: authMiddleware,
 		startTime:      time.Now().UTC(),
 	}
 }
 
 // NewServerWithGateway creates a server with gRPC-Gateway integration
-func NewServerWithGateway(cfg *config.Config, healthSvc *health.Service, handlers *Handlers, authMiddleware *AuthMiddleware, gatewayMux *runtime.ServeMux) *Server {
+func NewServerWithGateway(cfg *config.Config, healthSvc *health.Service, authMiddleware *AuthMiddleware, gatewayMux *runtime.ServeMux) *Server {
 	return &Server{
 		config:         cfg,
 		healthSvc:      healthSvc,
 		gatewayMux:     gatewayMux,
-		handlers:       *handlers,
 		authMiddleware: authMiddleware,
 		startTime:      time.Now().UTC(),
 	}
@@ -111,23 +108,6 @@ func (s *Server) setupRoutes() chi.Router {
 	// All API endpoints (/api/v1/*) are handled by gRPC-Gateway (auto-generated from proto)
 	rlog.Info().Msg("mounting gRPC-Gateway at /api/v1")
 	r.Mount("/", s.gatewayMux)
-
-	// Admin routes for non-gRPC functionality
-	r.Route("/admin", func(r chi.Router) {
-		// Validate bearer token + require sysop for admin routes
-		if s.authMiddleware != nil {
-			r.Use(s.authMiddleware.RequireBearerAuth)
-			r.Use(s.authMiddleware.RequireSysop)
-		}
-
-		// SMTP configuration endpoints (not in proto - direct HTTP only)
-		if s.handlers.SMTP != nil {
-			r.Route("/smtp", func(r chi.Router) {
-				r.Post("/configure", s.handlers.SMTP.HTTPConfigureHandler)
-				r.Get("/status", s.handlers.SMTP.HTTPStatusHandler)
-			})
-		}
-	})
 
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -195,6 +175,17 @@ func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status":"healthy"}`))
+}
+
+func getHandlerName(handler http.Handler) string {
+	if handler == nil {
+		return "nil"
+	}
+	t := reflect.TypeOf(handler)
+	if t.Kind() == reflect.Ptr {
+		return t.Elem().Name()
+	}
+	return t.Name()
 }
 
 func (s *Server) readinessCheck(w http.ResponseWriter, r *http.Request) {

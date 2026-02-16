@@ -12,6 +12,9 @@
       "name": "SettingsService"
     },
     {
+      "name": "SMTPService"
+    },
+    {
       "name": "UserService"
     }
   ],
@@ -464,6 +467,62 @@
         ],
         "tags": [
           "SettingsService"
+        ]
+      }
+    },
+    "/api/v1/admin/smtp/config": {
+      "put": {
+        "summary": "ConfigureSMTP updates the SMTP configuration",
+        "operationId": "SMTPService_ConfigureSMTP",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ConfigureSMTPResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ConfigureSMTPRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SMTPService"
+        ]
+      }
+    },
+    "/api/v1/admin/smtp/status": {
+      "get": {
+        "summary": "GetSMTPStatus returns the current SMTP configuration status",
+        "operationId": "SMTPService_GetSMTPStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetSMTPStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SMTPService"
         ]
       }
     },
@@ -1090,6 +1149,38 @@
         }
       }
     },
+    "v1ConfigureSMTPRequest": {
+      "type": "object",
+      "properties": {
+        "smtpAddress": {
+          "type": "string"
+        },
+        "smtpPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "identity": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ConfigureSMTPResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
     "v1DeleteSettingResponse": {
       "type": "object",
       "properties": {
@@ -1117,6 +1208,27 @@
         },
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "v1GetSMTPStatusResponse": {
+      "type": "object",
+      "properties": {
+        "ready": {
+          "type": "boolean"
+        },
+        "smtpAddress": {
+          "type": "string"
+        },
+        "smtpPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "username": {
+          "type": "string"
+        },
+        "configured": {
+          "type": "boolean"
         }
       }
     },

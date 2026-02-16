@@ -221,10 +221,6 @@ func serverRun(ctx *cli.Context) error {
 	dbChecker := health.NewDatabaseChecker(dbStore)
 	healthSvc := health.NewService(dbChecker)
 
-	// HTTP handlers (only for non-gRPC functionality)
-	handlers := thttp.NewHandlers()
-	handlers.SMTP = smtpClient // SMTP admin - not in proto
-
 	// ========================================
 	// gRPC Server Setup
 	// ========================================
@@ -244,6 +240,9 @@ func serverRun(ctx *cli.Context) error {
 	settingsRepo := repos.NewSettingsRepo(ds)
 	settingsGrpcSvc := grpcsvr.NewSettingsServiceServer(settingsService, settingsRepo)
 	pb.RegisterSettingsServiceServer(grpcServer, settingsGrpcSvc)
+
+	smtpGrpcSvc := grpcsvr.NewSMTPServiceServer(smtpClient, authNService)
+	pb.RegisterSMTPServiceServer(grpcServer, smtpGrpcSvc)
 
 	// Enable gRPC reflection for grpcurl/grpcui
 	reflection.Register(grpcServer)
@@ -288,11 +287,16 @@ func serverRun(ctx *cli.Context) error {
 		log.Fatal().Err(err).Msg("failed to register SettingsService gateway")
 	}
 
+	err = gw.RegisterSMTPServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to register SMTPService gateway")
+	}
+
 	// ========================================
 	// HTTP Server with Gateway + Chi
 	// ========================================
 
-	server := thttp.NewServerWithGateway(config, healthSvc, handlers, authMiddleware, gwmux)
+	server := thttp.NewServerWithGateway(config, healthSvc, authMiddleware, gwmux)
 	err = server.Serve()
 
 	if err != nil {
