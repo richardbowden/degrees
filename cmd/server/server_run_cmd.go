@@ -4,18 +4,21 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"os"
 	"runtime/debug"
+	"sort"
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jpillora/backoff"
-	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
+	"google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/reflect/protoregistry"
 
 	ac "github.com/typewriterco/p402/internal/accesscontrol"
 	"github.com/typewriterco/p402/internal/dbpg"
@@ -105,6 +108,7 @@ func serverRun(ctx *cli.Context) error {
 		continue
 	}
 	b.Reset()
+	defer dbCon.Close()
 
 	dbStore, err = dbpg.NewStore(dbCon)
 	if err != nil {
@@ -121,12 +125,10 @@ func serverRun(ctx *cli.Context) error {
 	queries := dbpg.New(dbCon)
 
 	fgaDBCon, err := dbpg.NewConnection(config.Database.ConnectionStringWithSchema(FGA_DB_SCHEMA_NAME), FGA_DB_SCHEMA_NAME)
-	defer fgaDBCon.Close()
-
 	if err != nil {
-		log.Error().Err(err).Msg("failed to create a fga db client")
-		return err
+		log.Fatal().Err(err).Msg("failed to create fga db connection")
 	}
+	defer fgaDBCon.Close()
 
 	// Initialize new hierarchical settings service
 	settingsService := settings.NewService(queries, log.Logger)
@@ -149,13 +151,11 @@ func serverRun(ctx *cli.Context) error {
 	}
 
 	acClient, err := ac.New(context.Background(), fgaDBCon, log.Logger, settingsService)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to create access control client")
+	}
 
 	authzClient := services.NewAuthz(*acClient)
-
-	if err != nil {
-		log.Error().Err(err).Msg("cannot")
-		os.Exit(1)
-	}
 
 	dr := repos.NewUserRepo(ds)
 
@@ -171,6 +171,9 @@ func serverRun(ctx *cli.Context) error {
 	}
 
 	riverDBCon, err := dbpg.NewConnection(config.Database.ConnectionStringWithSchema(RIVER_DB_SCHEMA_NAME), ctx.App.Version)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to create river db connection")
+	}
 
 	ll := log.With().Logger()
 	rq := riverqueue.New(riverDBCon, ll)
@@ -185,7 +188,9 @@ func serverRun(ctx *cli.Context) error {
 		MaxWorkers: 2,
 	}
 
-	riverqueue.Register(rq, emailWkrConfig, emailWorker)
+	if err := riverqueue.Register(rq, emailWkrConfig, emailWorker); err != nil {
+		log.Fatal().Err(err).Msg("failed to register email worker")
+	}
 
 	// Session cleanup worker
 	sessionCleanupWorker := workers.NewSessionCleanupWorker(dbStore)
@@ -194,19 +199,16 @@ func serverRun(ctx *cli.Context) error {
 		Queue:      "maintenance",
 		MaxWorkers: 1,
 	}
-	riverqueue.Register(rq, maintenanceWkrConfig, sessionCleanupWorker)
+	if err := riverqueue.Register(rq, maintenanceWkrConfig, sessionCleanupWorker); err != nil {
+		log.Fatal().Err(err).Msg("failed to register session cleanup worker")
+	}
+
+	// Schedule session cleanup to run hourly (and once on start)
+	riverqueue.AddPeriodicJob(rq, 1*time.Hour, workers.SessionCleanupArgs{})
 
 	err = rq.Start(context.Background())
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to start river queuing")
-	}
-
-	// Schedule initial cleanup job
-	_, err = rq.Client().InsertMany(context.Background(), []river.InsertManyParams{
-		{Args: workers.SessionCleanupArgs{}},
-	})
-	if err != nil {
-		log.Warn().Err(err).Msg("failed to schedule session cleanup job")
 	}
 
 	n := notification.NewNotifier(rq, tpler, config.DefaultFromEmail)
@@ -231,14 +233,14 @@ func serverRun(ctx *cli.Context) error {
 	)
 
 	// Register gRPC services
-	userGrpcSvc := grpcsvr.NewUserServiceServer(userSvc)
+	userGrpcSvc := grpcsvr.NewUserServiceServer(userSvc, authNService)
 	pb.RegisterUserServiceServer(grpcServer, userGrpcSvc)
 
 	authGrpcSvc := grpcsvr.NewAuthServiceServer(authNService, signUpSvc, config.BaseURL)
 	pb.RegisterAuthServiceServer(grpcServer, authGrpcSvc)
 
 	settingsRepo := repos.NewSettingsRepo(ds)
-	settingsGrpcSvc := grpcsvr.NewSettingsServiceServer(settingsService, settingsRepo)
+	settingsGrpcSvc := grpcsvr.NewSettingsServiceServer(settingsService, settingsRepo, authNService)
 	pb.RegisterSettingsServiceServer(grpcServer, settingsGrpcSvc)
 
 	smtpGrpcSvc := grpcsvr.NewSMTPServiceServer(smtpClient, authNService)
@@ -265,7 +267,8 @@ func serverRun(ctx *cli.Context) error {
 	// gRPC-Gateway HTTP Proxy Setup
 	// ========================================
 
-	gwCtx := context.Background()
+	gwCtx, gwCancel := context.WithCancel(context.Background())
+	defer gwCancel()
 	gwmux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
@@ -296,6 +299,9 @@ func serverRun(ctx *cli.Context) error {
 	// HTTP Server with Gateway + Chi
 	// ========================================
 
+	httpAddr := fmt.Sprintf("%s:%d", config.HTTP.Host, config.HTTP.Port)
+	logStartupInfo(grpcServer, grpcAddr, httpAddr)
+
 	server := thttp.NewServerWithGateway(config, healthSvc, authMiddleware, gwmux)
 	err = server.Serve()
 
@@ -308,4 +314,101 @@ func serverRun(ctx *cli.Context) error {
 	log.Info().Msg("gRPC server stopped gracefully")
 
 	return nil
+}
+
+// logStartupInfo logs server addresses and all registered HTTP endpoints
+// by reading the google.api.http annotations from the proto descriptors.
+func logStartupInfo(grpcServer *grpc.Server, grpcAddr, httpAddr string) {
+	log.Info().
+		Str("http", httpAddr).
+		Str("grpc", grpcAddr).
+		Str("gateway_target", grpcAddr).
+		Msg("server addresses")
+
+	type endpoint struct {
+		method  string
+		path    string
+		service string
+		rpc     string
+	}
+
+	var endpoints []endpoint
+
+	for serviceName, serviceInfo := range grpcServer.GetServiceInfo() {
+		desc, err := protoregistry.GlobalFiles.FindDescriptorByName(protoreflect.FullName(serviceName))
+		if err != nil {
+			for _, m := range serviceInfo.Methods {
+				log.Warn().
+					Str("service", serviceName).
+					Str("rpc", m.Name).
+					Msg("no proto descriptor found, cannot resolve HTTP path")
+			}
+			continue
+		}
+
+		serviceDesc, ok := desc.(protoreflect.ServiceDescriptor)
+		if !ok {
+			continue
+		}
+
+		methods := serviceDesc.Methods()
+		for i := 0; i < methods.Len(); i++ {
+			md := methods.Get(i)
+			opts := md.Options()
+			if opts == nil {
+				continue
+			}
+
+			httpRule, ok := proto.GetExtension(opts, annotations.E_Http).(*annotations.HttpRule)
+			if !ok || httpRule == nil {
+				continue
+			}
+
+			var method, path string
+			switch p := httpRule.Pattern.(type) {
+			case *annotations.HttpRule_Get:
+				method, path = "GET", p.Get
+			case *annotations.HttpRule_Post:
+				method, path = "POST", p.Post
+			case *annotations.HttpRule_Put:
+				method, path = "PUT", p.Put
+			case *annotations.HttpRule_Delete:
+				method, path = "DELETE", p.Delete
+			case *annotations.HttpRule_Patch:
+				method, path = "PATCH", p.Patch
+			}
+
+			if path != "" {
+				endpoints = append(endpoints, endpoint{
+					method:  method,
+					path:    path,
+					service: serviceName,
+					rpc:     string(md.Name()),
+				})
+			}
+		}
+	}
+
+	sort.Slice(endpoints, func(i, j int) bool {
+		if endpoints[i].path == endpoints[j].path {
+			return endpoints[i].method < endpoints[j].method
+		}
+		return endpoints[i].path < endpoints[j].path
+	})
+
+	for _, ep := range endpoints {
+		log.Info().
+			Str("method", ep.method).
+			Str("path", ep.path).
+			Str("service", ep.service).
+			Str("rpc", ep.rpc).
+			Msg("endpoint")
+	}
+
+	log.Info().
+		Str("method", "GET").Str("path", "/_internal/health").Msg("endpoint")
+	log.Info().
+		Str("method", "GET").Str("path", "/_internal/ready").Msg("endpoint")
+
+	log.Info().Int("total", len(endpoints)+2).Msg("endpoints registered")
 }

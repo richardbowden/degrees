@@ -26,6 +26,7 @@ func (a *Users) Create(ctx context.Context, params services.NewUser) (services.U
 	if err != nil {
 		return services.User{}, err
 	}
+	defer tx.Rollback(ctx)
 	cap := dbpg.CreateUserParams{
 		FirstName:    params.FirstName,
 		MiddleName:   dbpg.StringToPGString(params.MiddleName),
@@ -137,7 +138,7 @@ func (a *Users) GetUserByID(ctx context.Context, userID int64) (services.User, e
 		MiddleName:  dbUser.MiddleName.String,
 		Surname:     dbUser.Surname.String,
 		EMail:       dbUser.LoginEmail,
-		SignUpStage: int(dbUser.SignUpStage[0]) - int('0'), // Convert string to int
+		SignUpStage: dbUser.SignUpStage,
 		Enabled:     dbUser.Enabled,
 		CreatedOn:   dbUser.CreatedOn.Time,
 		UpdatedAt:   dbUser.UpdatedAt.Time,
@@ -164,7 +165,7 @@ func (a *Users) UpdateUser(ctx context.Context, userID int64, firstName string, 
 		MiddleName:  dbUser.MiddleName.String,
 		Surname:     dbUser.Surname.String,
 		EMail:       dbUser.LoginEmail,
-		SignUpStage: int(dbUser.SignUpStage[0]) - int('0'),
+		SignUpStage: dbUser.SignUpStage,
 		Enabled:     dbUser.Enabled,
 		CreatedOn:   dbUser.CreatedOn.Time,
 		UpdatedAt:   dbUser.UpdatedAt.Time,

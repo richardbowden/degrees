@@ -2,7 +2,6 @@ package workers
 
 import (
 	"context"
-	"time"
 
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
@@ -17,8 +16,7 @@ func (SessionCleanupArgs) Kind() string { return "session_cleanup" }
 
 func (SessionCleanupArgs) InsertOpts() river.InsertOpts {
 	return river.InsertOpts{
-		Queue:       QueueMaintenance,
-		ScheduledAt: time.Now().Add(1 * time.Hour),
+		Queue: QueueMaintenance,
 	}
 }
 

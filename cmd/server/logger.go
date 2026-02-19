@@ -9,7 +9,7 @@ import (
 func setBaseLogger(c *cli.Context) {
 
 	humanizeLogs := c.Bool(HumanLogsFlag)
-	logLevel := c.String("loglevel")
+	logLevel := c.String(LoggingLevelFlag)
 
 	logger := httplog.NewLogger(c.App.Name, httplog.Options{
 		JSON:     !humanizeLogs,

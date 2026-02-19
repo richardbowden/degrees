@@ -44,7 +44,7 @@ type User struct {
 	MiddleName  string
 	Surname     string
 	EMail       string
-	SignUpStage int
+	SignUpStage string
 	Enabled     bool
 	CreatedOn   time.Time
 	UpdatedAt   time.Time

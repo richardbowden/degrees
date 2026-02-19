@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -29,11 +30,12 @@ type RiverQueue struct {
 	pool   *pgxpool.Pool
 	logger zerolog.Logger
 
-	mu      sync.RWMutex
-	client  *river.Client[pgx.Tx]
-	workers *river.Workers
-	configs []WorkerConfig
-	started bool
+	mu           sync.RWMutex
+	client       *river.Client[pgx.Tx]
+	workers      *river.Workers
+	configs      []WorkerConfig
+	periodicJobs []*river.PeriodicJob
+	started      bool
 }
 
 func New(pool *pgxpool.Pool, logger zerolog.Logger) *RiverQueue {
@@ -79,6 +81,20 @@ func Register[T river.JobArgs](rq *RiverQueue, cfg WorkerConfig, worker river.Wo
 	return nil
 }
 
+// AddPeriodicJob registers a periodic job. Must be called before Start.
+func AddPeriodicJob[T river.JobArgs](rq *RiverQueue, interval time.Duration, args T) {
+	rq.mu.Lock()
+	defer rq.mu.Unlock()
+
+	rq.periodicJobs = append(rq.periodicJobs, river.NewPeriodicJob(
+		river.PeriodicInterval(interval),
+		func() (river.JobArgs, *river.InsertOpts) {
+			return args, nil
+		},
+		&river.PeriodicJobOpts{RunOnStart: true},
+	))
+}
+
 func (rq *RiverQueue) Start(ctx context.Context) error {
 	rq.mu.Lock()
 	defer rq.mu.Unlock()
@@ -97,9 +113,10 @@ func (rq *RiverQueue) Start(ctx context.Context) error {
 	}
 
 	client, err := river.NewClient(riverpgxv5.New(rq.pool), &river.Config{
-		Logger:  NewZerologAdapter(rq.logger),
-		Queues:  queues,
-		Workers: rq.workers,
+		Logger:       NewZerologAdapter(rq.logger),
+		Queues:       queues,
+		Workers:      rq.workers,
+		PeriodicJobs: rq.periodicJobs,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to create river client: %w", err)

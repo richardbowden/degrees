@@ -53,6 +53,7 @@ func NewServer(cfg *config.Config, healthSvc *health.Service, authMiddleware *Au
 		healthSvc:      healthSvc,
 		authMiddleware: authMiddleware,
 		startTime:      time.Now().UTC(),
+		middleware:     make(map[string]Middleware),
 	}
 }
 
@@ -64,10 +65,11 @@ func NewServerWithGateway(cfg *config.Config, healthSvc *health.Service, authMid
 		gatewayMux:     gatewayMux,
 		authMiddleware: authMiddleware,
 		startTime:      time.Now().UTC(),
+		middleware:     make(map[string]Middleware),
 	}
 }
 
-func (s *Server) RegisterMIddleware(name string, middleware http.Handler) {
+func (s *Server) RegisterMiddleware(name string, middleware http.Handler) {
 	s.middleware[name] = middleware
 }
 
@@ -91,23 +93,25 @@ func (s *Server) setupRoutes() chi.Router {
 	r.Use(middleware.Timeout(60 * time.Second))
 	r.Use(middleware.SetHeader("X-Content-Type-Options", "nosniff"))
 	r.Use(middleware.SetHeader("X-Frame-Options", "DENY"))
-	r.Use(middleware.AllowContentType("application/json"))
 
 	// Bridge cookie-based auth to Bearer header for future web frontend support
 	if s.authMiddleware != nil {
 		r.Use(s.authMiddleware.CookieToAuthHeader)
 	}
 
-	// Internal endpoints for health checks
+	// Internal endpoints for health checks (no content-type restriction)
 	r.Route("/_internal", func(r chi.Router) {
 		r.Get("/health", s.healthCheck)
 		r.Get("/ready", s.readinessCheck)
 	})
 
-	// Mount gRPC-Gateway
+	// Mount gRPC-Gateway with JSON content-type restriction
 	// All API endpoints (/api/v1/*) are handled by gRPC-Gateway (auto-generated from proto)
 	rlog.Info().Msg("mounting gRPC-Gateway at /api/v1")
-	r.Mount("/", s.gatewayMux)
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.AllowContentType("application/json"))
+		r.Mount("/", s.gatewayMux)
+	})
 
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

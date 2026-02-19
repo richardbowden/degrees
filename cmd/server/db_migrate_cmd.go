@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/jackc/pgx/v5"
 	openFGAMigrate "github.com/openfga/openfga/pkg/storage/migrate"
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivermigrate"
@@ -22,7 +23,7 @@ func ensureSchemaExists(ctx context.Context, connString, schemaName string) erro
 	}
 	defer tempConn.Close()
 
-	_, err = tempConn.Exec(ctx, fmt.Sprintf("CREATE SCHEMA IF NOT EXISTS %s", schemaName))
+	_, err = tempConn.Exec(ctx, fmt.Sprintf("CREATE SCHEMA IF NOT EXISTS %s", pgx.Identifier{schemaName}.Sanitize()))
 	if err != nil {
 		return fmt.Errorf("failed to create schema %s: %w", schemaName, err)
 	}

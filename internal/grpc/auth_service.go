@@ -110,6 +110,11 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*p
 		return nil, status.Error(codes.PermissionDenied, "account is disabled")
 	}
 
+	// Check if user has verified their email
+	if user.SignUpStage != "verified" {
+		return nil, status.Error(codes.PermissionDenied, "please verify your email before logging in")
+	}
+
 	// Create session (no UserAgent or RemoteAddr in gRPC context for now)
 	session, err := s.authNSvc.CreateSession(ctx, user.ID, false, "", "")
 	if err != nil {

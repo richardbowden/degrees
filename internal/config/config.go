@@ -18,7 +18,7 @@ type SMTPConfig struct {
 
 type DatabaseConfig struct {
 	Host                 string
-	Port                 string
+	Port                 int
 	User                 string
 	Password             string
 	DBName               string
@@ -39,7 +39,7 @@ func (d *DatabaseConfig) ConnectionStringWithSchema(schema string) string {
 		creds = fmt.Sprintf("%s:%s", creds, d.Password)
 	}
 
-	c = fmt.Sprintf("postgres://%s@%s:%s/%s", creds, d.Host, d.Port, d.DBName)
+	c = fmt.Sprintf("postgres://%s@%s:%d/%s", creds, d.Host, d.Port, d.DBName)
 
 	sslMode := "disable"
 
@@ -47,7 +47,7 @@ func (d *DatabaseConfig) ConnectionStringWithSchema(schema string) string {
 		sslMode = "verify-full"
 	}
 
-	c = fmt.Sprintf("%s?&sslmode=%s", c, sslMode)
+	c = fmt.Sprintf("%s?sslmode=%s", c, sslMode)
 
 	c = fmt.Sprintf("%s&search_path=%s,public", c, schema)
 

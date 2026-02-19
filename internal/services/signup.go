@@ -168,8 +168,7 @@ func (s *SignUp) Register(ctx context.Context, newUser *NewUserRequest) error {
 		log.Warn().Err(err).
 			Int64("user_id", user.ID).
 			Str("email", user.EMail).
-			Str("verification_token", verificationToken).
-			Msg("failed to send verification email - SMTP may not be configured. Use this token to verify manually.")
+			Msg("failed to send verification email - SMTP may not be configured. Token is stored in the database.")
 
 		// Registration still succeeds, user just needs manual verification
 		return nil

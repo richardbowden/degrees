@@ -71,5 +71,9 @@ func (ts *TemplateManager) RenderTemplate(ctx context.Context, templateName stri
 	ts.mu.RLock()
 	defer ts.mu.RUnlock()
 
-	return ts.t.Lookup(templateName).Execute(w, data)
+	tmpl := ts.t.Lookup(templateName)
+	if tmpl == nil {
+		return fmt.Errorf("template %q not found", templateName)
+	}
+	return tmpl.Execute(w, data)
 }

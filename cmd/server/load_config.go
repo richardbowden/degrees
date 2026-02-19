@@ -34,7 +34,7 @@ const (
 func loadDBConfigFromCLI(ctx *cli.Context) config.DatabaseConfig {
 	return config.DatabaseConfig{
 		Host:     ctx.String(DBHostFlag),
-		Port:     ctx.String(DBPortFlag),
+		Port:     ctx.Int(DBPortFlag),
 		User:     ctx.String(DBUserFlag),
 		DBName:   ctx.String(DBNameFlag),
 		SSLMode:  ctx.Bool(DBSSLModeFlag),

@@ -102,7 +102,11 @@ func (f *AC) InitializeFGAModels(ctx context.Context) error {
 	}
 	log.Info().Str("store_id", f.storeID).Msg("FGA store initialized")
 
-	r, _ := embed.FS.Open(f.fs, "models.fga")
+	r, err := embed.FS.Open(f.fs, "models.fga")
+	if err != nil {
+		return fmt.Errorf("failed to open embedded fga model file: %w", err)
+	}
+	defer r.Close()
 
 	h := sha256.New()
 	if _, err := io.Copy(h, r); err != nil {

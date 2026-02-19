@@ -51,6 +51,7 @@ func run(args []string) {
 			&cli.StringFlag{Name: DBUserFlag, Value: "p402", EnvVars: []string{"P402_DB_USER"}},
 			&cli.StringFlag{Name: DBPasswordFlag, EnvVars: []string{"P402_DB_PASS"}},
 			&cli.StringFlag{Name: DBNameFlag, Value: "p402", EnvVars: []string{"P402_DB_NAME"}},
+			&cli.BoolFlag{Name: DBSSLModeFlag, Value: false, EnvVars: []string{"P402_DB_SSL_MODE"}},
 		},
 		Commands: []*cli.Command{
 			{
@@ -108,7 +109,7 @@ func run(args []string) {
 		},
 	}
 
-	if err := app.Run(os.Args); err != nil {
+	if err := app.Run(args); err != nil {
 		log.Fatal().Err(err).Msg("failed to start app")
 	}
 }

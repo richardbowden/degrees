@@ -7,6 +7,7 @@ import (
 
 	pb "github.com/typewriterco/p402/internal/pb/p402/v1"
 	"github.com/typewriterco/p402/internal/repos"
+	"github.com/typewriterco/p402/internal/services"
 	"github.com/typewriterco/p402/internal/settings"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,13 +19,15 @@ type SettingsServiceServer struct {
 	pb.UnimplementedSettingsServiceServer
 	settingsService *settings.Service
 	settingsRepo    *repos.Settings
+	authSvc         *services.AuthN
 }
 
 // NewSettingsServiceServer creates a new settings service gRPC server
-func NewSettingsServiceServer(settingsService *settings.Service, settingsRepo *repos.Settings) *SettingsServiceServer {
+func NewSettingsServiceServer(settingsService *settings.Service, settingsRepo *repos.Settings, authSvc *services.AuthN) *SettingsServiceServer {
 	return &SettingsServiceServer{
 		settingsService: settingsService,
 		settingsRepo:    settingsRepo,
+		authSvc:         authSvc,
 	}
 }
 
@@ -53,6 +56,10 @@ func (s *SettingsServiceServer) GetSystemSettings(ctx context.Context, req *pb.G
 
 // SetSystemSetting sets a system-level setting
 func (s *SettingsServiceServer) SetSystemSetting(ctx context.Context, req *pb.SetSystemSettingRequest) (*pb.SetSettingResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	if req.Subsystem == "" || req.Key == "" {
 		return nil, status.Error(codes.InvalidArgument, "subsystem and key are required")
 	}
@@ -121,6 +128,10 @@ func (s *SettingsServiceServer) GetOrganizationSettings(ctx context.Context, req
 
 // SetOrganizationSetting sets an organization-level setting
 func (s *SettingsServiceServer) SetOrganizationSetting(ctx context.Context, req *pb.SetOrganizationSettingRequest) (*pb.SetSettingResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	if req.OrganizationId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "organization_id is required")
 	}
@@ -190,6 +201,10 @@ func (s *SettingsServiceServer) GetProjectSettings(ctx context.Context, req *pb.
 
 // SetProjectSetting sets a project-level setting
 func (s *SettingsServiceServer) SetProjectSetting(ctx context.Context, req *pb.SetProjectSettingRequest) (*pb.SetSettingResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	if req.ProjectId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "project_id is required")
 	}
@@ -259,6 +274,10 @@ func (s *SettingsServiceServer) GetUserSettings(ctx context.Context, req *pb.Get
 
 // SetUserSetting sets a user-level setting
 func (s *SettingsServiceServer) SetUserSetting(ctx context.Context, req *pb.SetUserSettingRequest) (*pb.SetSettingResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	if req.UserId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
 	}
@@ -303,6 +322,10 @@ func (s *SettingsServiceServer) SetUserSetting(ctx context.Context, req *pb.SetU
 
 // DeleteSetting deletes a setting by ID
 func (s *SettingsServiceServer) DeleteSetting(ctx context.Context, req *pb.DeleteSettingRequest) (*pb.DeleteSettingResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	if req.Id == 0 {
 		return nil, status.Error(codes.InvalidArgument, "id is required")
 	}
@@ -319,6 +342,10 @@ func (s *SettingsServiceServer) DeleteSetting(ctx context.Context, req *pb.Delet
 
 // ListAllSettings lists all settings (for admin interface)
 func (s *SettingsServiceServer) ListAllSettings(ctx context.Context, req *pb.ListAllSettingsRequest) (*pb.ListAllSettingsResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	// Get all settings from repository via service
 	domainSettings, err := s.settingsService.ListAll(ctx, s.settingsRepo)
 	if err != nil {

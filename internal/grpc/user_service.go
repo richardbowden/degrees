@@ -15,17 +15,29 @@ import (
 type UserServiceServer struct {
 	pb.UnimplementedUserServiceServer
 	userSvc *services.UserService
+	authSvc *services.AuthN
 }
 
 // NewUserServiceServer creates a new gRPC user service server
-func NewUserServiceServer(userSvc *services.UserService) *UserServiceServer {
-	return &UserServiceServer{userSvc: userSvc}
+func NewUserServiceServer(userSvc *services.UserService, authSvc *services.AuthN) *UserServiceServer {
+	return &UserServiceServer{userSvc: userSvc, authSvc: authSvc}
 }
 
 // GetUser retrieves a user by ID
 func (s *UserServiceServer) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
 	if req.UserId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
+	}
+
+	// Users can get their own profile; sysops can get anyone's
+	callerID, ok := GetUserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+	if callerID != req.UserId {
+		if err := RequireSysop(ctx, s.authSvc); err != nil {
+			return nil, err
+		}
 	}
 
 	user, err := s.userSvc.GetUserByID(ctx, req.UserId)
@@ -51,6 +63,17 @@ func (s *UserServiceServer) GetUser(ctx context.Context, req *pb.GetUserRequest)
 func (s *UserServiceServer) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
 	if req.UserId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
+	}
+
+	// Users can update their own profile; sysops can update anyone's
+	callerID, ok := GetUserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+	if callerID != req.UserId {
+		if err := RequireSysop(ctx, s.authSvc); err != nil {
+			return nil, err
+		}
 	}
 
 	updateReq := services.UpdateUserRequest{
@@ -81,6 +104,10 @@ func (s *UserServiceServer) UpdateUser(ctx context.Context, req *pb.UpdateUserRe
 
 // EnableUser enables a user account
 func (s *UserServiceServer) EnableUser(ctx context.Context, req *pb.EnableUserRequest) (*pb.EnableUserResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	if req.UserId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
 	}
@@ -97,6 +124,10 @@ func (s *UserServiceServer) EnableUser(ctx context.Context, req *pb.EnableUserRe
 
 // DisableUser disables a user account
 func (s *UserServiceServer) DisableUser(ctx context.Context, req *pb.DisableUserRequest) (*pb.DisableUserResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	if req.UserId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
 	}
@@ -113,6 +144,10 @@ func (s *UserServiceServer) DisableUser(ctx context.Context, req *pb.DisableUser
 
 // SetUserSysop sets sysop status for a user
 func (s *UserServiceServer) SetUserSysop(ctx context.Context, req *pb.SetUserSysopRequest) (*pb.SetUserSysopResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	if req.UserId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
 	}
@@ -129,6 +164,10 @@ func (s *UserServiceServer) SetUserSysop(ctx context.Context, req *pb.SetUserSys
 
 // ListUsers lists all users
 func (s *UserServiceServer) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
+	if err := RequireSysop(ctx, s.authSvc); err != nil {
+		return nil, err
+	}
+
 	users, err := s.userSvc.ListAllUsers(ctx)
 	if err != nil {
 		return nil, ToGRPCError(err)

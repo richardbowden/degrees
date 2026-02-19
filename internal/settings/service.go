@@ -3,7 +3,9 @@ package settings
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -98,9 +100,11 @@ func IsNotFound(err error) bool {
 	if err == nil {
 		return false
 	}
-	errMsg := err.Error()
-	return errMsg == "setting not found" ||
-		(len(errMsg) >= 18 && errMsg[:18] == "setting not found:")
+	var p problems.Problem
+	if errors.As(err, &p) && p.Kind == problems.NotExist {
+		return true
+	}
+	return errors.Is(err, ErrSettingNotFound)
 }
 
 // Get retrieves a setting with hierarchical resolution
@@ -426,11 +430,10 @@ func (s *Service) invalidateCache(subsystem, key string) {
 	s.cacheMutex.Lock()
 	defer s.cacheMutex.Unlock()
 
-	// Remove all cache entries for this subsystem:key
+	// Remove all cache entries for this subsystem:key (any scope suffix)
+	prefix := subsystem + ":" + key + ":"
 	for cacheKey := range s.cache {
-		if len(cacheKey) > len(subsystem)+len(key)+1 &&
-			cacheKey[:len(subsystem)] == subsystem &&
-			cacheKey[len(subsystem)+1:len(subsystem)+1+len(key)] == key {
+		if strings.HasPrefix(cacheKey, prefix) {
 			delete(s.cache, cacheKey)
 		}
 	}

@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"net/smtp"
 	"strings"
+	"sync"
 
 	"github.com/rs/zerolog/log"
 	"github.com/typewriterco/p402/internal/settings"
 )
 
 type Client struct {
+	mu             sync.RWMutex
 	configChanged  bool
 	auth           smtp.Auth
 	reloadSettings bool
@@ -42,11 +44,15 @@ var ErrSMTPNotReady = errors.New("smtp not ready")
 
 // IsReady returns true if the SMTP client is configured and ready to send emails
 func (c *Client) IsReady() bool {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	return c.ready
 }
 
 // GetStatus returns the current SMTP configuration status
 func (c *Client) GetStatus() Status {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	return Status{
 		Ready:       c.ready,
 		SMTPAddress: c.config.SMTPAddress,
@@ -57,6 +63,9 @@ func (c *Client) GetStatus() Status {
 }
 
 func (c *Client) loadConfig() error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
 	ctx := context.Background()
 
 	// Use new hierarchical settings service (system scope for SMTP config)
@@ -105,6 +114,8 @@ func NewClient(settingsService *settings.Service) *Client {
 }
 
 func (c *Client) getSMTPAuth() smtp.Auth {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	if c.auth == nil || c.configChanged {
 		c.auth = smtp.PlainAuth(c.config.Identity, c.config.Username, c.config.Password, c.config.SMTPAddress)
 		c.configChanged = false
@@ -133,20 +144,27 @@ func (c *Client) SetConfig(ctx context.Context, smtpAddress string, smtpPort int
 }
 
 func (c *Client) Send(sender string, rcpt []string, subject, body string) error {
+	c.mu.RLock()
+	ready := c.ready
+	smtpServer := c.config.smtpServer
+	c.mu.RUnlock()
 
-	if !c.ready {
+	if !ready {
 		return ErrSMTPNotReady
 	}
 
 	var buf strings.Builder
-	buf.WriteString(fmt.Sprintf("From: %s\n", sender))
-	buf.WriteString(fmt.Sprintf("To: %s\n", rcpt[0]))
-	buf.WriteString(fmt.Sprintf("Subject: %s\n\n", subject))
+	buf.WriteString(fmt.Sprintf("From: %s\r\n", sender))
+	buf.WriteString(fmt.Sprintf("To: %s\r\n", rcpt[0]))
+	buf.WriteString(fmt.Sprintf("Subject: %s\r\n", subject))
+	buf.WriteString("MIME-Version: 1.0\r\n")
+	buf.WriteString("Content-Type: text/html; charset=UTF-8\r\n")
+	buf.WriteString("\r\n")
 	buf.WriteString(body)
-	buf.WriteString("\n")
+	buf.WriteString("\r\n")
 
 	return smtp.SendMail(
-		c.config.smtpServer,
+		smtpServer,
 		c.getSMTPAuth(),
 		sender,
 		rcpt,
