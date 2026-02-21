@@ -5,8 +5,170 @@
 package dbpg
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type BookingStatus string
+
+const (
+	BookingStatusPendingPayment BookingStatus = "pending_payment"
+	BookingStatusDepositPaid    BookingStatus = "deposit_paid"
+	BookingStatusConfirmed      BookingStatus = "confirmed"
+	BookingStatusInProgress     BookingStatus = "in_progress"
+	BookingStatusCompleted      BookingStatus = "completed"
+	BookingStatusCancelled      BookingStatus = "cancelled"
+)
+
+func (e *BookingStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BookingStatus(s)
+	case string:
+		*e = BookingStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BookingStatus: %T", src)
+	}
+	return nil
+}
+
+type NullBookingStatus struct {
+	BookingStatus BookingStatus
+	Valid         bool // Valid is true if BookingStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBookingStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.BookingStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BookingStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBookingStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.BookingStatus), nil
+}
+
+type PaymentStatus string
+
+const (
+	PaymentStatusPending           PaymentStatus = "pending"
+	PaymentStatusDepositPaid       PaymentStatus = "deposit_paid"
+	PaymentStatusFullyPaid         PaymentStatus = "fully_paid"
+	PaymentStatusRefunded          PaymentStatus = "refunded"
+	PaymentStatusPartiallyRefunded PaymentStatus = "partially_refunded"
+)
+
+func (e *PaymentStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = PaymentStatus(s)
+	case string:
+		*e = PaymentStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for PaymentStatus: %T", src)
+	}
+	return nil
+}
+
+type NullPaymentStatus struct {
+	PaymentStatus PaymentStatus
+	Valid         bool // Valid is true if PaymentStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPaymentStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.PaymentStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.PaymentStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPaymentStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.PaymentStatus), nil
+}
+
+type Booking struct {
+	ID                    int64
+	CustomerID            int64
+	VehicleID             pgtype.Int8
+	ScheduledDate         pgtype.Date
+	ScheduledTime         pgtype.Time
+	EstimatedDurationMins int32
+	Status                BookingStatus
+	PaymentStatus         PaymentStatus
+	Subtotal              int64
+	DepositAmount         int64
+	TotalAmount           int64
+	StripePaymentIntentID pgtype.Text
+	StripeDepositIntentID pgtype.Text
+	Notes                 pgtype.Text
+	CreatedAt             pgtype.Timestamptz
+	UpdatedAt             pgtype.Timestamptz
+}
+
+type BookingService struct {
+	ID             int64
+	BookingID      int64
+	ServiceID      int64
+	PriceAtBooking int64
+}
+
+type BookingServiceOption struct {
+	ID               int64
+	BookingServiceID int64
+	ServiceOptionID  int64
+	PriceAtBooking   int64
+}
+
+type CartItem struct {
+	ID            int64
+	CartSessionID int64
+	ServiceID     int64
+	VehicleID     pgtype.Int8
+	Quantity      int32
+	CreatedAt     pgtype.Timestamptz
+}
+
+type CartItemOption struct {
+	ID              int64
+	CartItemID      int64
+	ServiceOptionID int64
+}
+
+type CartSession struct {
+	ID           int64
+	UserID       pgtype.Int8
+	SessionToken string
+	ExpiresAt    pgtype.Timestamptz
+	CreatedAt    pgtype.Timestamptz
+}
+
+type CustomerProfile struct {
+	ID        int64
+	UserID    int64
+	Phone     pgtype.Text
+	Address   pgtype.Text
+	Suburb    pgtype.Text
+	Postcode  pgtype.Text
+	Notes     pgtype.Text
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+}
 
 type NotificationTemplate struct {
 	ID         int64
@@ -66,6 +228,94 @@ type Project struct {
 	CreatedAt   pgtype.Timestamptz
 	UpdatedAt   pgtype.Timestamptz
 	DeletedAt   pgtype.Timestamptz
+}
+
+type ScheduleBlackout struct {
+	ID        int64
+	Date      pgtype.Date
+	Reason    pgtype.Text
+	CreatedAt pgtype.Timestamptz
+}
+
+type ScheduleConfig struct {
+	ID            int64
+	DayOfWeek     int32
+	OpenTime      pgtype.Time
+	CloseTime     pgtype.Time
+	IsOpen        bool
+	BufferMinutes int32
+}
+
+type Service struct {
+	ID              int64
+	CategoryID      int64
+	Name            string
+	Slug            string
+	Description     pgtype.Text
+	ShortDesc       pgtype.Text
+	BasePrice       int64
+	DurationMinutes int32
+	IsActive        bool
+	SortOrder       int32
+	CreatedAt       pgtype.Timestamptz
+	UpdatedAt       pgtype.Timestamptz
+}
+
+type ServiceCategory struct {
+	ID          int64
+	Name        string
+	Slug        string
+	Description pgtype.Text
+	SortOrder   int32
+	CreatedAt   pgtype.Timestamptz
+	UpdatedAt   pgtype.Timestamptz
+}
+
+type ServiceNote struct {
+	ID                  int64
+	ServiceRecordID     int64
+	NoteType            string
+	Content             string
+	IsVisibleToCustomer bool
+	CreatedBy           pgtype.Int8
+	CreatedAt           pgtype.Timestamptz
+}
+
+type ServiceOption struct {
+	ID          int64
+	ServiceID   int64
+	Name        string
+	Description pgtype.Text
+	Price       int64
+	IsActive    bool
+	SortOrder   int32
+	CreatedAt   pgtype.Timestamptz
+}
+
+type ServicePhoto struct {
+	ID              int64
+	ServiceRecordID int64
+	PhotoType       string
+	Url             string
+	Caption         pgtype.Text
+	CreatedAt       pgtype.Timestamptz
+}
+
+type ServiceProductsUsed struct {
+	ID              int64
+	ServiceRecordID int64
+	ProductName     string
+	Notes           pgtype.Text
+}
+
+type ServiceRecord struct {
+	ID            int64
+	BookingID     int64
+	CustomerID    int64
+	VehicleID     pgtype.Int8
+	CompletedDate pgtype.Timestamptz
+	CreatedAt     pgtype.Timestamptz
+	UpdatedAt     pgtype.Timestamptz
 }
 
 type Session struct {
@@ -132,6 +382,21 @@ type UserEmail struct {
 	Enabled    bool
 	CreatedOn  pgtype.Timestamptz
 	UpdatedAt  pgtype.Timestamptz
+}
+
+type Vehicle struct {
+	ID             int64
+	CustomerID     int64
+	Make           string
+	Model          string
+	Year           pgtype.Int4
+	Colour         pgtype.Text
+	Rego           pgtype.Text
+	PaintType      pgtype.Text
+	ConditionNotes pgtype.Text
+	IsPrimary      bool
+	CreatedAt      pgtype.Timestamptz
+	UpdatedAt      pgtype.Timestamptz
 }
 
 type Verification struct {

@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	pb "github.com/richardbowden/degrees/internal/pb/p402/v1"
+	pb "github.com/richardbowden/degrees/internal/pb/degrees/v1"
 	"github.com/richardbowden/degrees/internal/services"
 )
 

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	fastmail "github.com/richardbowden/degrees/internal/email/genericsmtp"
-	pb "github.com/richardbowden/degrees/internal/pb/p402/v1"
+	pb "github.com/richardbowden/degrees/internal/pb/degrees/v1"
 	"github.com/richardbowden/degrees/internal/services"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

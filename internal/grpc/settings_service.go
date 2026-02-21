@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	pb "github.com/richardbowden/degrees/internal/pb/p402/v1"
+	pb "github.com/richardbowden/degrees/internal/pb/degrees/v1"
 	"github.com/richardbowden/degrees/internal/repos"
 	"github.com/richardbowden/degrees/internal/services"
 	"github.com/richardbowden/degrees/internal/settings"
