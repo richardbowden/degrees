@@ -6,6 +6,7 @@ import (
 	"net"
 	"runtime/debug"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -321,7 +322,16 @@ func serverRun(ctx *cli.Context) error {
 
 	gwCtx, gwCancel := context.WithCancel(context.Background())
 	defer gwCancel()
-	gwmux := runtime.NewServeMux()
+	gwmux := runtime.NewServeMux(
+		runtime.WithIncomingHeaderMatcher(func(key string) (string, bool) {
+			switch strings.ToLower(key) {
+			case "x-cart-session":
+				return key, true
+			default:
+				return runtime.DefaultHeaderMatcher(key)
+			}
+		}),
+	)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// Register gateway handlers - connect to gRPC server
