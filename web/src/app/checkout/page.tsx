@@ -44,7 +44,7 @@ export default function CheckoutPage() {
     load();
   }, []);
 
-  const totalDuration = cart?.items?.reduce((sum, item) => sum + 60 * item.quantity, 0) ?? 60;
+  const totalDuration = cart?.items?.reduce((sum, item) => sum + 60 * Number(item.quantity), 0) ?? 60;
 
   const fetchSlots = useCallback(async (date: string) => {
     setSlotsLoading(true);

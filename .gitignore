@@ -9,3 +9,5 @@ cmd/cmd
 .DS_Store
 web/node_modules
 web/.next
+.next
+server

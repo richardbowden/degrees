@@ -29,7 +29,7 @@ export function ScheduleClient({ token }: { token: string }) {
     setError('');
     try {
       const res = await api<{ days: ScheduleDay[] }>('/admin/schedule/config', { token });
-      const sorted = (res.days ?? []).sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+      const sorted = (res.days ?? []).sort((a, b) => Number(a.dayOfWeek) - Number(b.dayOfWeek));
       setDays(sorted);
     } catch {
       setError('Failed to load schedule config');

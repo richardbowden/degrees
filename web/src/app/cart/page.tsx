@@ -105,8 +105,8 @@ export default function CartPage() {
               <div className="flex items-center gap-2 mt-2">
                 <button
                   type="button"
-                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                  disabled={actionLoading === item.id || item.quantity <= 1}
+                  onClick={() => updateQuantity(item.id, Number(item.quantity) - 1)}
+                  disabled={actionLoading === item.id || Number(item.quantity) <= 1}
                   className="w-7 h-7 border border-gray-300 rounded text-sm hover:bg-gray-100 disabled:opacity-50"
                 >
                   -
@@ -114,7 +114,7 @@ export default function CartPage() {
                 <span className="text-sm font-medium w-6 text-center">{item.quantity}</span>
                 <button
                   type="button"
-                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                  onClick={() => updateQuantity(item.id, Number(item.quantity) + 1)}
                   disabled={actionLoading === item.id}
                   className="w-7 h-7 border border-gray-300 rounded text-sm hover:bg-gray-100 disabled:opacity-50"
                 >
@@ -123,7 +123,7 @@ export default function CartPage() {
               </div>
             </div>
             <div className="text-right">
-              <p className="font-semibold">{formatPrice(item.servicePrice * item.quantity)}</p>
+              <p className="font-semibold">{formatPrice(Number(item.servicePrice) * Number(item.quantity))}</p>
               <button
                 type="button"
                 onClick={() => removeItem(item.id)}

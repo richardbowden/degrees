@@ -1,5 +1,5 @@
-export function formatPrice(cents: number): string {
-  return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(cents / 100);
+export function formatPrice(cents: number | string): string {
+  return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(Number(cents) / 100);
 }
 
 export function formatDate(dateStr: string): string {

@@ -17,8 +17,8 @@ export function AddToCart({ service }: { service: DetailingService }) {
 
   const optionsTotal = (service.options ?? [])
     .filter(o => selectedOptions.includes(o.id))
-    .reduce((sum, o) => sum + o.price, 0);
-  const total = (service.basePrice + optionsTotal) * quantity;
+    .reduce((sum, o) => sum + Number(o.price), 0);
+  const total = (Number(service.basePrice) + optionsTotal) * quantity;
 
   async function handleAdd() {
     setLoading(true);

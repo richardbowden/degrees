@@ -107,7 +107,7 @@ export function ServicesClient({ token }: { token: string }) {
       slug: svc.slug,
       description: svc.description,
       shortDesc: svc.shortDesc,
-      basePriceDollars: (svc.basePrice / 100).toFixed(2),
+      basePriceDollars: (Number(svc.basePrice) / 100).toFixed(2),
       durationMinutes: String(svc.durationMinutes),
       isActive: svc.isActive,
       sortOrder: String(svc.sortOrder),
