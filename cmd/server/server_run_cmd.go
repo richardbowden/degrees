@@ -39,7 +39,7 @@ import (
 )
 
 const (
-	SERVER_DB_SCHEMA_NAME = "p402"
+	SERVER_DB_SCHEMA_NAME = "degrees"
 	RIVER_DB_SCHEMA_NAME  = "river"
 	FGA_DB_SCHEMA_NAME    = "fga"
 )

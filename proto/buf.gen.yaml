@@ -3,7 +3,7 @@ managed:
   enabled: true
   override:
     - file_option: go_package_prefix
-      value: github.com/typewriterco/p402/internal/pb
+      value: github.com/richardbowden/degrees/internal/pb
   disable:
     - module: buf.build/googleapis/googleapis
       file_option: go_package_prefix
