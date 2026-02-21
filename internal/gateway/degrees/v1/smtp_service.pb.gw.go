@@ -2,11 +2,11 @@
 // source: degrees/v1/smtp_service.proto
 
 /*
-Package p402v1 is a reverse proxy.
+Package degreesv1 is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package p402v1
+package degreesv1
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
-	extP402v1 "github.com/richardbowden/degrees/internal/pb/degrees/v1"
+	extDegreesv1 "github.com/richardbowden/degrees/internal/pb/degrees/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
@@ -36,9 +36,9 @@ var (
 	_ = metadata.Join
 )
 
-func request_SMTPService_ConfigureSMTP_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SMTPServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SMTPService_ConfigureSMTP_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SMTPServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ConfigureSMTPRequest
+		protoReq extDegreesv1.ConfigureSMTPRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -51,9 +51,9 @@ func request_SMTPService_ConfigureSMTP_0(ctx context.Context, marshaler runtime.
 	return msg, metadata, err
 }
 
-func local_request_SMTPService_ConfigureSMTP_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SMTPServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SMTPService_ConfigureSMTP_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SMTPServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ConfigureSMTPRequest
+		protoReq extDegreesv1.ConfigureSMTPRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -63,9 +63,9 @@ func local_request_SMTPService_ConfigureSMTP_0(ctx context.Context, marshaler ru
 	return msg, metadata, err
 }
 
-func request_SMTPService_GetSMTPStatus_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SMTPServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SMTPService_GetSMTPStatus_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SMTPServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetSMTPStatusRequest
+		protoReq extDegreesv1.GetSMTPStatusRequest
 		metadata runtime.ServerMetadata
 	)
 	if req.Body != nil {
@@ -75,9 +75,9 @@ func request_SMTPService_GetSMTPStatus_0(ctx context.Context, marshaler runtime.
 	return msg, metadata, err
 }
 
-func local_request_SMTPService_GetSMTPStatus_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SMTPServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SMTPService_GetSMTPStatus_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SMTPServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetSMTPStatusRequest
+		protoReq extDegreesv1.GetSMTPStatusRequest
 		metadata runtime.ServerMetadata
 	)
 	msg, err := server.GetSMTPStatus(ctx, &protoReq)
@@ -89,14 +89,14 @@ func local_request_SMTPService_GetSMTPStatus_0(ctx context.Context, marshaler ru
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterSMTPServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterSMTPServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extP402v1.SMTPServiceServer) error {
+func RegisterSMTPServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extDegreesv1.SMTPServiceServer) error {
 	mux.Handle(http.MethodPut, pattern_SMTPService_ConfigureSMTP_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SMTPService/ConfigureSMTP", runtime.WithHTTPPathPattern("/api/v1/admin/smtp/config"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SMTPService/ConfigureSMTP", runtime.WithHTTPPathPattern("/api/v1/admin/smtp/config"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -116,7 +116,7 @@ func RegisterSMTPServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SMTPService/GetSMTPStatus", runtime.WithHTTPPathPattern("/api/v1/admin/smtp/status"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SMTPService/GetSMTPStatus", runtime.WithHTTPPathPattern("/api/v1/admin/smtp/status"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -161,20 +161,20 @@ func RegisterSMTPServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.Se
 // RegisterSMTPServiceHandler registers the http handlers for service SMTPService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
 func RegisterSMTPServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterSMTPServiceHandlerClient(ctx, mux, extP402v1.NewSMTPServiceClient(conn))
+	return RegisterSMTPServiceHandlerClient(ctx, mux, extDegreesv1.NewSMTPServiceClient(conn))
 }
 
 // RegisterSMTPServiceHandlerClient registers the http handlers for service SMTPService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "extP402v1.SMTPServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "extP402v1.SMTPServiceClient"
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "extDegreesv1.SMTPServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "extDegreesv1.SMTPServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "extP402v1.SMTPServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterSMTPServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extP402v1.SMTPServiceClient) error {
+// "extDegreesv1.SMTPServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterSMTPServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extDegreesv1.SMTPServiceClient) error {
 	mux.Handle(http.MethodPut, pattern_SMTPService_ConfigureSMTP_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SMTPService/ConfigureSMTP", runtime.WithHTTPPathPattern("/api/v1/admin/smtp/config"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SMTPService/ConfigureSMTP", runtime.WithHTTPPathPattern("/api/v1/admin/smtp/config"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -191,7 +191,7 @@ func RegisterSMTPServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SMTPService/GetSMTPStatus", runtime.WithHTTPPathPattern("/api/v1/admin/smtp/status"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SMTPService/GetSMTPStatus", runtime.WithHTTPPathPattern("/api/v1/admin/smtp/status"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

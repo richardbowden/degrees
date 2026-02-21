@@ -1,0 +1,188 @@
+syntax = "proto3";
+
+package degrees.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1";
+
+// ========================================
+// Messages
+// ========================================
+
+message CustomerProfile {
+  int64 id = 1;
+  int64 user_id = 2;
+  string phone = 3;
+  string address = 4;
+  string suburb = 5;
+  string postcode = 6;
+  string notes = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+message Vehicle {
+  int64 id = 1;
+  int64 customer_id = 2;
+  string make = 3;
+  string model = 4;
+  int32 year = 5;
+  string colour = 6;
+  string rego = 7;
+  string paint_type = 8;
+  string condition_notes = 9;
+  bool is_primary = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}
+
+// ========================================
+// Request/Response Messages
+// ========================================
+
+message GetMyProfileRequest {}
+
+message GetMyProfileResponse {
+  CustomerProfile profile = 1;
+}
+
+message UpdateMyProfileRequest {
+  string phone = 1;
+  string address = 2;
+  string suburb = 3;
+  string postcode = 4;
+}
+
+message UpdateMyProfileResponse {
+  CustomerProfile profile = 1;
+}
+
+message ListMyVehiclesRequest {}
+
+message ListMyVehiclesResponse {
+  repeated Vehicle vehicles = 1;
+}
+
+message AddVehicleRequest {
+  string make = 1;
+  string model = 2;
+  int32 year = 3;
+  string colour = 4;
+  string rego = 5;
+  string paint_type = 6;
+  string condition_notes = 7;
+  bool is_primary = 8;
+}
+
+message AddVehicleResponse {
+  Vehicle vehicle = 1;
+}
+
+message UpdateVehicleRequest {
+  int64 id = 1;
+  string make = 2;
+  string model = 3;
+  int32 year = 4;
+  string colour = 5;
+  string rego = 6;
+  string paint_type = 7;
+  string condition_notes = 8;
+  bool is_primary = 9;
+}
+
+message UpdateVehicleResponse {
+  Vehicle vehicle = 1;
+}
+
+message DeleteVehicleRequest {
+  int64 id = 1;
+}
+
+message DeleteVehicleResponse {
+  bool success = 1;
+}
+
+message ListCustomersRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+
+message ListCustomersResponse {
+  repeated CustomerProfile customers = 1;
+}
+
+message GetCustomerRequest {
+  int64 id = 1;
+}
+
+message GetCustomerResponse {
+  CustomerProfile profile = 1;
+  repeated Vehicle vehicles = 2;
+}
+
+// ========================================
+// CustomerService
+// ========================================
+
+service CustomerService {
+  // Get the authenticated user's profile
+  rpc GetMyProfile(GetMyProfileRequest) returns (GetMyProfileResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/me/profile"
+    };
+  }
+
+  // Update the authenticated user's profile
+  rpc UpdateMyProfile(UpdateMyProfileRequest) returns (UpdateMyProfileResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/me/profile"
+      body: "*"
+    };
+  }
+
+  // List the authenticated user's vehicles
+  rpc ListMyVehicles(ListMyVehiclesRequest) returns (ListMyVehiclesResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/me/vehicles"
+    };
+  }
+
+  // Add a vehicle
+  rpc AddVehicle(AddVehicleRequest) returns (AddVehicleResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/me/vehicles"
+      body: "*"
+    };
+  }
+
+  // Update a vehicle
+  rpc UpdateVehicle(UpdateVehicleRequest) returns (UpdateVehicleResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/me/vehicles/{id}"
+      body: "*"
+    };
+  }
+
+  // Delete a vehicle
+  rpc DeleteVehicle(DeleteVehicleRequest) returns (DeleteVehicleResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/me/vehicles/{id}"
+    };
+  }
+
+  // List all customers (admin)
+  rpc ListCustomers(ListCustomersRequest) returns (ListCustomersResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/customers"
+    };
+  }
+
+  // Get a customer by ID (admin)
+  rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/customers/{id}"
+    };
+  }
+}

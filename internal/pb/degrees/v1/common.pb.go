@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: degrees/v1/common.proto
 
-package p402v1
+package degreesv1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -310,7 +310,8 @@ var File_degrees_v1_common_proto protoreflect.FileDescriptor
 
 const file_degrees_v1_common_proto_rawDesc = "" +
 	"\n" +
-	"\x17degrees/v1/common.proto\x12\ap402.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd0\x02\n" +
+	"\x17degrees/v1/common.proto\x12\n" +
+	"degrees.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd0\x02\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
@@ -326,11 +327,11 @@ const file_degrees_v1_common_proto_rawDesc = "" +
 	"created_on\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedOn\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa8\x01\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xab\x01\n" +
 	"\x05Error\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\x125\n" +
-	"\adetails\x18\x03 \x03(\v2\x1b.p402.v1.Error.DetailsEntryR\adetails\x1a:\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x128\n" +
+	"\adetails\x18\x03 \x03(\v2\x1e.degrees.v1.Error.DetailsEntryR\adetails\x1a:\n" +
 	"\fDetailsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"O\n" +
@@ -341,8 +342,10 @@ const file_degrees_v1_common_proto_rawDesc = "" +
 	"\x12PaginationResponse\x12&\n" +
 	"\x0fnext_page_token\x18\x01 \x01(\tR\rnextPageToken\x12\x1f\n" +
 	"\vtotal_count\x18\x02 \x01(\x05R\n" +
-	"totalCountB\x97\x01\n" +
-	"\vcom.p402.v1B\vCommonProtoP\x01Z>github.com/richardbowden/degrees/internal/pb/degrees/v1;p402v1\xa2\x02\x03PXX\xaa\x02\aP402.V1\xca\x02\aP402\\V1\xe2\x02\x13P402\\V1\\GPBMetadata\xea\x02\bP402::V1b\x06proto3"
+	"totalCountB\xa9\x01\n" +
+	"\x0ecom.degrees.v1B\vCommonProtoP\x01ZAgithub.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1\xa2\x02\x03DXX\xaa\x02\n" +
+	"Degrees.V1\xca\x02\n" +
+	"Degrees\\V1\xe2\x02\x16Degrees\\V1\\GPBMetadata\xea\x02\vDegrees::V1b\x06proto3"
 
 var (
 	file_degrees_v1_common_proto_rawDescOnce sync.Once
@@ -358,17 +361,17 @@ func file_degrees_v1_common_proto_rawDescGZIP() []byte {
 
 var file_degrees_v1_common_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_degrees_v1_common_proto_goTypes = []any{
-	(*User)(nil),                  // 0: p402.v1.User
-	(*Error)(nil),                 // 1: p402.v1.Error
-	(*PaginationRequest)(nil),     // 2: p402.v1.PaginationRequest
-	(*PaginationResponse)(nil),    // 3: p402.v1.PaginationResponse
-	nil,                           // 4: p402.v1.Error.DetailsEntry
+	(*User)(nil),                  // 0: degrees.v1.User
+	(*Error)(nil),                 // 1: degrees.v1.Error
+	(*PaginationRequest)(nil),     // 2: degrees.v1.PaginationRequest
+	(*PaginationResponse)(nil),    // 3: degrees.v1.PaginationResponse
+	nil,                           // 4: degrees.v1.Error.DetailsEntry
 	(*timestamppb.Timestamp)(nil), // 5: google.protobuf.Timestamp
 }
 var file_degrees_v1_common_proto_depIdxs = []int32{
-	5, // 0: p402.v1.User.created_on:type_name -> google.protobuf.Timestamp
-	5, // 1: p402.v1.User.updated_at:type_name -> google.protobuf.Timestamp
-	4, // 2: p402.v1.Error.details:type_name -> p402.v1.Error.DetailsEntry
+	5, // 0: degrees.v1.User.created_on:type_name -> google.protobuf.Timestamp
+	5, // 1: degrees.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	4, // 2: degrees.v1.Error.details:type_name -> degrees.v1.Error.DetailsEntry
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name

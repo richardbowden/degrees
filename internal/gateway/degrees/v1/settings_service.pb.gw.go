@@ -2,11 +2,11 @@
 // source: degrees/v1/settings_service.proto
 
 /*
-Package p402v1 is a reverse proxy.
+Package degreesv1 is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package p402v1
+package degreesv1
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
-	extP402v1 "github.com/richardbowden/degrees/internal/pb/degrees/v1"
+	extDegreesv1 "github.com/richardbowden/degrees/internal/pb/degrees/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
@@ -36,9 +36,9 @@ var (
 	_ = metadata.Join
 )
 
-func request_SettingsService_GetSystemSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_GetSystemSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetSystemSettingsRequest
+		protoReq extDegreesv1.GetSystemSettingsRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -57,9 +57,9 @@ func request_SettingsService_GetSystemSettings_0(ctx context.Context, marshaler 
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_GetSystemSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_GetSystemSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetSystemSettingsRequest
+		protoReq extDegreesv1.GetSystemSettingsRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -75,9 +75,9 @@ func local_request_SettingsService_GetSystemSettings_0(ctx context.Context, mars
 	return msg, metadata, err
 }
 
-func request_SettingsService_SetSystemSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_SetSystemSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetSystemSettingRequest
+		protoReq extDegreesv1.SetSystemSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -107,9 +107,9 @@ func request_SettingsService_SetSystemSetting_0(ctx context.Context, marshaler r
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_SetSystemSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_SetSystemSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetSystemSettingRequest
+		protoReq extDegreesv1.SetSystemSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -136,9 +136,9 @@ func local_request_SettingsService_SetSystemSetting_0(ctx context.Context, marsh
 	return msg, metadata, err
 }
 
-func request_SettingsService_GetOrganizationSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_GetOrganizationSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetOrganizationSettingsRequest
+		protoReq extDegreesv1.GetOrganizationSettingsRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -165,9 +165,9 @@ func request_SettingsService_GetOrganizationSettings_0(ctx context.Context, mars
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_GetOrganizationSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_GetOrganizationSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetOrganizationSettingsRequest
+		protoReq extDegreesv1.GetOrganizationSettingsRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -191,9 +191,9 @@ func local_request_SettingsService_GetOrganizationSettings_0(ctx context.Context
 	return msg, metadata, err
 }
 
-func request_SettingsService_SetOrganizationSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_SetOrganizationSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetOrganizationSettingRequest
+		protoReq extDegreesv1.SetOrganizationSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -231,9 +231,9 @@ func request_SettingsService_SetOrganizationSetting_0(ctx context.Context, marsh
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_SetOrganizationSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_SetOrganizationSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetOrganizationSettingRequest
+		protoReq extDegreesv1.SetOrganizationSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -268,9 +268,9 @@ func local_request_SettingsService_SetOrganizationSetting_0(ctx context.Context,
 	return msg, metadata, err
 }
 
-func request_SettingsService_GetProjectSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_GetProjectSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetProjectSettingsRequest
+		protoReq extDegreesv1.GetProjectSettingsRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -297,9 +297,9 @@ func request_SettingsService_GetProjectSettings_0(ctx context.Context, marshaler
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_GetProjectSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_GetProjectSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetProjectSettingsRequest
+		protoReq extDegreesv1.GetProjectSettingsRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -323,9 +323,9 @@ func local_request_SettingsService_GetProjectSettings_0(ctx context.Context, mar
 	return msg, metadata, err
 }
 
-func request_SettingsService_SetProjectSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_SetProjectSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetProjectSettingRequest
+		protoReq extDegreesv1.SetProjectSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -363,9 +363,9 @@ func request_SettingsService_SetProjectSetting_0(ctx context.Context, marshaler 
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_SetProjectSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_SetProjectSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetProjectSettingRequest
+		protoReq extDegreesv1.SetProjectSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -400,9 +400,9 @@ func local_request_SettingsService_SetProjectSetting_0(ctx context.Context, mars
 	return msg, metadata, err
 }
 
-func request_SettingsService_GetUserSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_GetUserSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetUserSettingsRequest
+		protoReq extDegreesv1.GetUserSettingsRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -429,9 +429,9 @@ func request_SettingsService_GetUserSettings_0(ctx context.Context, marshaler ru
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_GetUserSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_GetUserSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetUserSettingsRequest
+		protoReq extDegreesv1.GetUserSettingsRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -455,9 +455,9 @@ func local_request_SettingsService_GetUserSettings_0(ctx context.Context, marsha
 	return msg, metadata, err
 }
 
-func request_SettingsService_SetUserSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_SetUserSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetUserSettingRequest
+		protoReq extDegreesv1.SetUserSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -495,9 +495,9 @@ func request_SettingsService_SetUserSetting_0(ctx context.Context, marshaler run
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_SetUserSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_SetUserSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetUserSettingRequest
+		protoReq extDegreesv1.SetUserSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -532,9 +532,9 @@ func local_request_SettingsService_SetUserSetting_0(ctx context.Context, marshal
 	return msg, metadata, err
 }
 
-func request_SettingsService_DeleteSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_DeleteSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.DeleteSettingRequest
+		protoReq extDegreesv1.DeleteSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -553,9 +553,9 @@ func request_SettingsService_DeleteSetting_0(ctx context.Context, marshaler runt
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_DeleteSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_DeleteSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.DeleteSettingRequest
+		protoReq extDegreesv1.DeleteSettingRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -573,9 +573,9 @@ func local_request_SettingsService_DeleteSetting_0(ctx context.Context, marshale
 
 var filter_SettingsService_ListAllSettings_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 
-func request_SettingsService_ListAllSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_ListAllSettings_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ListAllSettingsRequest
+		protoReq extDegreesv1.ListAllSettingsRequest
 		metadata runtime.ServerMetadata
 	)
 	if req.Body != nil {
@@ -591,9 +591,9 @@ func request_SettingsService_ListAllSettings_0(ctx context.Context, marshaler ru
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_ListAllSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_ListAllSettings_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ListAllSettingsRequest
+		protoReq extDegreesv1.ListAllSettingsRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := req.ParseForm(); err != nil {
@@ -606,9 +606,9 @@ func local_request_SettingsService_ListAllSettings_0(ctx context.Context, marsha
 	return msg, metadata, err
 }
 
-func request_SettingsService_GetSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_SettingsService_GetSetting_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.SettingsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetSettingRequest
+		protoReq extDegreesv1.GetSettingRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -621,9 +621,9 @@ func request_SettingsService_GetSetting_0(ctx context.Context, marshaler runtime
 	return msg, metadata, err
 }
 
-func local_request_SettingsService_GetSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_SettingsService_GetSetting_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.SettingsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetSettingRequest
+		protoReq extDegreesv1.GetSettingRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -638,14 +638,14 @@ func local_request_SettingsService_GetSetting_0(ctx context.Context, marshaler r
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterSettingsServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extP402v1.SettingsServiceServer) error {
+func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extDegreesv1.SettingsServiceServer) error {
 	mux.Handle(http.MethodGet, pattern_SettingsService_GetSystemSettings_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/GetSystemSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/system/{subsystem}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/GetSystemSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/system/{subsystem}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -665,7 +665,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/SetSystemSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/system/{subsystem}/{key}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/SetSystemSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/system/{subsystem}/{key}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -685,7 +685,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/GetOrganizationSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/organization/{organization_id}/{subsystem}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/GetOrganizationSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/organization/{organization_id}/{subsystem}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -705,7 +705,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/SetOrganizationSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/organization/{organization_id}/{subsystem}/{key}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/SetOrganizationSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/organization/{organization_id}/{subsystem}/{key}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -725,7 +725,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/GetProjectSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/project/{project_id}/{subsystem}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/GetProjectSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/project/{project_id}/{subsystem}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -745,7 +745,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/SetProjectSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/project/{project_id}/{subsystem}/{key}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/SetProjectSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/project/{project_id}/{subsystem}/{key}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -765,7 +765,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/GetUserSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/user/{user_id}/{subsystem}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/GetUserSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/user/{user_id}/{subsystem}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -785,7 +785,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/SetUserSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/user/{user_id}/{subsystem}/{key}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/SetUserSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/user/{user_id}/{subsystem}/{key}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -805,7 +805,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/DeleteSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/DeleteSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -825,7 +825,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/ListAllSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/ListAllSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -845,7 +845,7 @@ func RegisterSettingsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.SettingsService/GetSetting", runtime.WithHTTPPathPattern("/api/v1/settings/get"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.SettingsService/GetSetting", runtime.WithHTTPPathPattern("/api/v1/settings/get"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -890,20 +890,20 @@ func RegisterSettingsServiceHandlerFromEndpoint(ctx context.Context, mux *runtim
 // RegisterSettingsServiceHandler registers the http handlers for service SettingsService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
 func RegisterSettingsServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterSettingsServiceHandlerClient(ctx, mux, extP402v1.NewSettingsServiceClient(conn))
+	return RegisterSettingsServiceHandlerClient(ctx, mux, extDegreesv1.NewSettingsServiceClient(conn))
 }
 
 // RegisterSettingsServiceHandlerClient registers the http handlers for service SettingsService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "extP402v1.SettingsServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "extP402v1.SettingsServiceClient"
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "extDegreesv1.SettingsServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "extDegreesv1.SettingsServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "extP402v1.SettingsServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extP402v1.SettingsServiceClient) error {
+// "extDegreesv1.SettingsServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extDegreesv1.SettingsServiceClient) error {
 	mux.Handle(http.MethodGet, pattern_SettingsService_GetSystemSettings_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/GetSystemSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/system/{subsystem}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/GetSystemSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/system/{subsystem}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -920,7 +920,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/SetSystemSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/system/{subsystem}/{key}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/SetSystemSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/system/{subsystem}/{key}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -937,7 +937,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/GetOrganizationSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/organization/{organization_id}/{subsystem}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/GetOrganizationSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/organization/{organization_id}/{subsystem}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -954,7 +954,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/SetOrganizationSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/organization/{organization_id}/{subsystem}/{key}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/SetOrganizationSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/organization/{organization_id}/{subsystem}/{key}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -971,7 +971,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/GetProjectSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/project/{project_id}/{subsystem}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/GetProjectSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/project/{project_id}/{subsystem}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -988,7 +988,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/SetProjectSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/project/{project_id}/{subsystem}/{key}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/SetProjectSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/project/{project_id}/{subsystem}/{key}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1005,7 +1005,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/GetUserSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/user/{user_id}/{subsystem}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/GetUserSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings/user/{user_id}/{subsystem}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1022,7 +1022,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/SetUserSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/user/{user_id}/{subsystem}/{key}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/SetUserSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/user/{user_id}/{subsystem}/{key}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1039,7 +1039,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/DeleteSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/DeleteSetting", runtime.WithHTTPPathPattern("/api/v1/admin/settings/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1056,7 +1056,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/ListAllSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/ListAllSettings", runtime.WithHTTPPathPattern("/api/v1/admin/settings"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1073,7 +1073,7 @@ func RegisterSettingsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.SettingsService/GetSetting", runtime.WithHTTPPathPattern("/api/v1/settings/get"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.SettingsService/GetSetting", runtime.WithHTTPPathPattern("/api/v1/settings/get"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

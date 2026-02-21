@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package p402.v1;
+package degrees.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/typewriterco/p402/internal/pb/p402/v1;p402v1";
+option go_package = "github.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1";
 
 // User represents a user in the system
 message User {

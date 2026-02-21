@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package degrees.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1";
+
+// ========================================
+// Messages
+// ========================================
+
+message ScheduleDay {
+  int64 id = 1;
+  int32 day_of_week = 2;
+  string open_time = 3;
+  string close_time = 4;
+  bool is_open = 5;
+  int32 buffer_minutes = 6;
+}
+
+message Blackout {
+  int64 id = 1;
+  string date = 2;
+  string reason = 3;
+}
+
+// ========================================
+// Request/Response Messages
+// ========================================
+
+message GetScheduleConfigRequest {}
+
+message GetScheduleConfigResponse {
+  repeated ScheduleDay days = 1;
+}
+
+message UpdateScheduleConfigRequest {
+  int32 day_of_week = 1;
+  string open_time = 2;
+  string close_time = 3;
+  bool is_open = 4;
+  int32 buffer_minutes = 5;
+}
+
+message UpdateScheduleConfigResponse {
+  ScheduleDay day = 1;
+}
+
+message AddBlackoutRequest {
+  string date = 1;
+  string reason = 2;
+}
+
+message AddBlackoutResponse {
+  Blackout blackout = 1;
+}
+
+message RemoveBlackoutRequest {
+  int64 id = 1;
+}
+
+message RemoveBlackoutResponse {
+  bool success = 1;
+}
+
+// ========================================
+// ScheduleService
+// ========================================
+
+service ScheduleService {
+  // Get schedule configuration for all days
+  rpc GetScheduleConfig(GetScheduleConfigRequest) returns (GetScheduleConfigResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/schedule/config"
+    };
+  }
+
+  // Update schedule configuration for a day
+  rpc UpdateScheduleConfig(UpdateScheduleConfigRequest) returns (UpdateScheduleConfigResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/schedule/config"
+      body: "*"
+    };
+  }
+
+  // Add a blackout date
+  rpc AddBlackout(AddBlackoutRequest) returns (AddBlackoutResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/schedule/blackout"
+      body: "*"
+    };
+  }
+
+  // Remove a blackout date
+  rpc RemoveBlackout(RemoveBlackoutRequest) returns (RemoveBlackoutResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/admin/schedule/blackout/{id}"
+    };
+  }
+}

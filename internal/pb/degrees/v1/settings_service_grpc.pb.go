@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: degrees/v1/settings_service.proto
 
-package p402v1
+package degreesv1
 
 import (
 	context "context"
@@ -19,17 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SettingsService_GetSystemSettings_FullMethodName       = "/p402.v1.SettingsService/GetSystemSettings"
-	SettingsService_SetSystemSetting_FullMethodName        = "/p402.v1.SettingsService/SetSystemSetting"
-	SettingsService_GetOrganizationSettings_FullMethodName = "/p402.v1.SettingsService/GetOrganizationSettings"
-	SettingsService_SetOrganizationSetting_FullMethodName  = "/p402.v1.SettingsService/SetOrganizationSetting"
-	SettingsService_GetProjectSettings_FullMethodName      = "/p402.v1.SettingsService/GetProjectSettings"
-	SettingsService_SetProjectSetting_FullMethodName       = "/p402.v1.SettingsService/SetProjectSetting"
-	SettingsService_GetUserSettings_FullMethodName         = "/p402.v1.SettingsService/GetUserSettings"
-	SettingsService_SetUserSetting_FullMethodName          = "/p402.v1.SettingsService/SetUserSetting"
-	SettingsService_DeleteSetting_FullMethodName           = "/p402.v1.SettingsService/DeleteSetting"
-	SettingsService_ListAllSettings_FullMethodName         = "/p402.v1.SettingsService/ListAllSettings"
-	SettingsService_GetSetting_FullMethodName              = "/p402.v1.SettingsService/GetSetting"
+	SettingsService_GetSystemSettings_FullMethodName       = "/degrees.v1.SettingsService/GetSystemSettings"
+	SettingsService_SetSystemSetting_FullMethodName        = "/degrees.v1.SettingsService/SetSystemSetting"
+	SettingsService_GetOrganizationSettings_FullMethodName = "/degrees.v1.SettingsService/GetOrganizationSettings"
+	SettingsService_SetOrganizationSetting_FullMethodName  = "/degrees.v1.SettingsService/SetOrganizationSetting"
+	SettingsService_GetProjectSettings_FullMethodName      = "/degrees.v1.SettingsService/GetProjectSettings"
+	SettingsService_SetProjectSetting_FullMethodName       = "/degrees.v1.SettingsService/SetProjectSetting"
+	SettingsService_GetUserSettings_FullMethodName         = "/degrees.v1.SettingsService/GetUserSettings"
+	SettingsService_SetUserSetting_FullMethodName          = "/degrees.v1.SettingsService/SetUserSetting"
+	SettingsService_DeleteSetting_FullMethodName           = "/degrees.v1.SettingsService/DeleteSetting"
+	SettingsService_ListAllSettings_FullMethodName         = "/degrees.v1.SettingsService/ListAllSettings"
+	SettingsService_GetSetting_FullMethodName              = "/degrees.v1.SettingsService/GetSetting"
 )
 
 // SettingsServiceClient is the client API for SettingsService service.
@@ -474,7 +474,7 @@ func _SettingsService_GetSetting_Handler(srv interface{}, ctx context.Context, d
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SettingsService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "p402.v1.SettingsService",
+	ServiceName: "degrees.v1.SettingsService",
 	HandlerType: (*SettingsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

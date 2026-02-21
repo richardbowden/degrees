@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package p402.v1;
+package degrees.v1;
 
 import "google/api/annotations.proto";
 
-option go_package = "github.com/typewriterco/p402/proto/p402/v1;p402v1";
+option go_package = "github.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1";
 
 // SMTPService provides SMTP configuration management for system administrators
 service SMTPService {

@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: degrees/v1/smtp_service.proto
 
-package p402v1
+package degreesv1
 
 import (
 	context "context"
@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SMTPService_ConfigureSMTP_FullMethodName = "/p402.v1.SMTPService/ConfigureSMTP"
-	SMTPService_GetSMTPStatus_FullMethodName = "/p402.v1.SMTPService/GetSMTPStatus"
+	SMTPService_ConfigureSMTP_FullMethodName = "/degrees.v1.SMTPService/ConfigureSMTP"
+	SMTPService_GetSMTPStatus_FullMethodName = "/degrees.v1.SMTPService/GetSMTPStatus"
 )
 
 // SMTPServiceClient is the client API for SMTPService service.
@@ -148,7 +148,7 @@ func _SMTPService_GetSMTPStatus_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SMTPService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "p402.v1.SMTPService",
+	ServiceName: "degrees.v1.SMTPService",
 	HandlerType: (*SMTPServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

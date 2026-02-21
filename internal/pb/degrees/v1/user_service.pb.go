@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: degrees/v1/user_service.proto
 
-package p402v1
+package degreesv1
 
 import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
@@ -611,50 +611,53 @@ var File_degrees_v1_user_service_proto protoreflect.FileDescriptor
 
 const file_degrees_v1_user_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1ddegrees/v1/user_service.proto\x12\ap402.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17degrees/v1/common.proto\",\n" +
+	"\x1ddegrees/v1/user_service.proto\x12\n" +
+	"degrees.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17degrees/v1/common.proto\",\n" +
 	"\x11EnableUserRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"Q\n" +
-	"\x12EnableUserResponse\x12!\n" +
-	"\x04user\x18\x01 \x01(\v2\r.p402.v1.UserR\x04user\x12\x18\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"T\n" +
+	"\x12EnableUserResponse\x12$\n" +
+	"\x04user\x18\x01 \x01(\v2\x10.degrees.v1.UserR\x04user\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"-\n" +
 	"\x12DisableUserRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"R\n" +
-	"\x13DisableUserResponse\x12!\n" +
-	"\x04user\x18\x01 \x01(\v2\r.p402.v1.UserR\x04user\x12\x18\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"U\n" +
+	"\x13DisableUserResponse\x12$\n" +
+	"\x04user\x18\x01 \x01(\v2\x10.degrees.v1.UserR\x04user\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"\x12\n" +
-	"\x10ListUsersRequest\"8\n" +
-	"\x11ListUsersResponse\x12#\n" +
-	"\x05users\x18\x01 \x03(\v2\r.p402.v1.UserR\x05users\")\n" +
+	"\x10ListUsersRequest\";\n" +
+	"\x11ListUsersResponse\x12&\n" +
+	"\x05users\x18\x01 \x03(\v2\x10.degrees.v1.UserR\x05users\")\n" +
 	"\x0eGetUserRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"4\n" +
-	"\x0fGetUserResponse\x12!\n" +
-	"\x04user\x18\x01 \x01(\v2\r.p402.v1.UserR\x04user\"\x86\x01\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"7\n" +
+	"\x0fGetUserResponse\x12$\n" +
+	"\x04user\x18\x01 \x01(\v2\x10.degrees.v1.UserR\x04user\"\x86\x01\n" +
 	"\x11UpdateUserRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
 	"\n" +
 	"first_name\x18\x02 \x01(\tR\tfirstName\x12\x1f\n" +
 	"\vmiddle_name\x18\x03 \x01(\tR\n" +
 	"middleName\x12\x18\n" +
-	"\asurname\x18\x04 \x01(\tR\asurname\"Q\n" +
-	"\x12UpdateUserResponse\x12!\n" +
-	"\x04user\x18\x01 \x01(\v2\r.p402.v1.UserR\x04user\x12\x18\n" +
+	"\asurname\x18\x04 \x01(\tR\asurname\"T\n" +
+	"\x12UpdateUserResponse\x12$\n" +
+	"\x04user\x18\x01 \x01(\v2\x10.degrees.v1.UserR\x04user\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"D\n" +
 	"\x13SetUserSysopRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x14\n" +
-	"\x05sysop\x18\x02 \x01(\bR\x05sysop\"S\n" +
-	"\x14SetUserSysopResponse\x12!\n" +
-	"\x04user\x18\x01 \x01(\v2\r.p402.v1.UserR\x04user\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\x92\x05\n" +
-	"\vUserService\x12\\\n" +
-	"\aGetUser\x12\x17.p402.v1.GetUserRequest\x1a\x18.p402.v1.GetUserResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/user/{user_id}\x12h\n" +
+	"\x05sysop\x18\x02 \x01(\bR\x05sysop\"V\n" +
+	"\x14SetUserSysopResponse\x12$\n" +
+	"\x04user\x18\x01 \x01(\v2\x10.degrees.v1.UserR\x04user\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\xb6\x05\n" +
+	"\vUserService\x12b\n" +
+	"\aGetUser\x12\x1a.degrees.v1.GetUserRequest\x1a\x1b.degrees.v1.GetUserResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/user/{user_id}\x12n\n" +
 	"\n" +
-	"UpdateUser\x12\x1a.p402.v1.UpdateUserRequest\x1a\x1b.p402.v1.UpdateUserResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\x1a\x16/api/v1/user/{user_id}\x12o\n" +
+	"UpdateUser\x12\x1d.degrees.v1.UpdateUserRequest\x1a\x1e.degrees.v1.UpdateUserResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\x1a\x16/api/v1/user/{user_id}\x12u\n" +
 	"\n" +
-	"EnableUser\x12\x1a.p402.v1.EnableUserRequest\x1a\x1b.p402.v1.EnableUserResponse\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/api/v1/user/{user_id}/enable\x12s\n" +
-	"\vDisableUser\x12\x1b.p402.v1.DisableUserRequest\x1a\x1c.p402.v1.DisableUserResponse\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/api/v1/user/{user_id}/disable\x12t\n" +
-	"\fSetUserSysop\x12\x1c.p402.v1.SetUserSysopRequest\x1a\x1d.p402.v1.SetUserSysopResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/api/v1/user/{user_id}/sysop\x12_\n" +
-	"\tListUsers\x12\x19.p402.v1.ListUsersRequest\x1a\x1a.p402.v1.ListUsersResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/api/v1/admin/usersB\x9c\x01\n" +
-	"\vcom.p402.v1B\x10UserServiceProtoP\x01Z>github.com/richardbowden/degrees/internal/pb/degrees/v1;p402v1\xa2\x02\x03PXX\xaa\x02\aP402.V1\xca\x02\aP402\\V1\xe2\x02\x13P402\\V1\\GPBMetadata\xea\x02\bP402::V1b\x06proto3"
+	"EnableUser\x12\x1d.degrees.v1.EnableUserRequest\x1a\x1e.degrees.v1.EnableUserResponse\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/api/v1/user/{user_id}/enable\x12y\n" +
+	"\vDisableUser\x12\x1e.degrees.v1.DisableUserRequest\x1a\x1f.degrees.v1.DisableUserResponse\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/api/v1/user/{user_id}/disable\x12z\n" +
+	"\fSetUserSysop\x12\x1f.degrees.v1.SetUserSysopRequest\x1a .degrees.v1.SetUserSysopResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/api/v1/user/{user_id}/sysop\x12e\n" +
+	"\tListUsers\x12\x1c.degrees.v1.ListUsersRequest\x1a\x1d.degrees.v1.ListUsersResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/api/v1/admin/usersB\xae\x01\n" +
+	"\x0ecom.degrees.v1B\x10UserServiceProtoP\x01ZAgithub.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1\xa2\x02\x03DXX\xaa\x02\n" +
+	"Degrees.V1\xca\x02\n" +
+	"Degrees\\V1\xe2\x02\x16Degrees\\V1\\GPBMetadata\xea\x02\vDegrees::V1b\x06proto3"
 
 var (
 	file_degrees_v1_user_service_proto_rawDescOnce sync.Once
@@ -670,39 +673,39 @@ func file_degrees_v1_user_service_proto_rawDescGZIP() []byte {
 
 var file_degrees_v1_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_degrees_v1_user_service_proto_goTypes = []any{
-	(*EnableUserRequest)(nil),    // 0: p402.v1.EnableUserRequest
-	(*EnableUserResponse)(nil),   // 1: p402.v1.EnableUserResponse
-	(*DisableUserRequest)(nil),   // 2: p402.v1.DisableUserRequest
-	(*DisableUserResponse)(nil),  // 3: p402.v1.DisableUserResponse
-	(*ListUsersRequest)(nil),     // 4: p402.v1.ListUsersRequest
-	(*ListUsersResponse)(nil),    // 5: p402.v1.ListUsersResponse
-	(*GetUserRequest)(nil),       // 6: p402.v1.GetUserRequest
-	(*GetUserResponse)(nil),      // 7: p402.v1.GetUserResponse
-	(*UpdateUserRequest)(nil),    // 8: p402.v1.UpdateUserRequest
-	(*UpdateUserResponse)(nil),   // 9: p402.v1.UpdateUserResponse
-	(*SetUserSysopRequest)(nil),  // 10: p402.v1.SetUserSysopRequest
-	(*SetUserSysopResponse)(nil), // 11: p402.v1.SetUserSysopResponse
-	(*User)(nil),                 // 12: p402.v1.User
+	(*EnableUserRequest)(nil),    // 0: degrees.v1.EnableUserRequest
+	(*EnableUserResponse)(nil),   // 1: degrees.v1.EnableUserResponse
+	(*DisableUserRequest)(nil),   // 2: degrees.v1.DisableUserRequest
+	(*DisableUserResponse)(nil),  // 3: degrees.v1.DisableUserResponse
+	(*ListUsersRequest)(nil),     // 4: degrees.v1.ListUsersRequest
+	(*ListUsersResponse)(nil),    // 5: degrees.v1.ListUsersResponse
+	(*GetUserRequest)(nil),       // 6: degrees.v1.GetUserRequest
+	(*GetUserResponse)(nil),      // 7: degrees.v1.GetUserResponse
+	(*UpdateUserRequest)(nil),    // 8: degrees.v1.UpdateUserRequest
+	(*UpdateUserResponse)(nil),   // 9: degrees.v1.UpdateUserResponse
+	(*SetUserSysopRequest)(nil),  // 10: degrees.v1.SetUserSysopRequest
+	(*SetUserSysopResponse)(nil), // 11: degrees.v1.SetUserSysopResponse
+	(*User)(nil),                 // 12: degrees.v1.User
 }
 var file_degrees_v1_user_service_proto_depIdxs = []int32{
-	12, // 0: p402.v1.EnableUserResponse.user:type_name -> p402.v1.User
-	12, // 1: p402.v1.DisableUserResponse.user:type_name -> p402.v1.User
-	12, // 2: p402.v1.ListUsersResponse.users:type_name -> p402.v1.User
-	12, // 3: p402.v1.GetUserResponse.user:type_name -> p402.v1.User
-	12, // 4: p402.v1.UpdateUserResponse.user:type_name -> p402.v1.User
-	12, // 5: p402.v1.SetUserSysopResponse.user:type_name -> p402.v1.User
-	6,  // 6: p402.v1.UserService.GetUser:input_type -> p402.v1.GetUserRequest
-	8,  // 7: p402.v1.UserService.UpdateUser:input_type -> p402.v1.UpdateUserRequest
-	0,  // 8: p402.v1.UserService.EnableUser:input_type -> p402.v1.EnableUserRequest
-	2,  // 9: p402.v1.UserService.DisableUser:input_type -> p402.v1.DisableUserRequest
-	10, // 10: p402.v1.UserService.SetUserSysop:input_type -> p402.v1.SetUserSysopRequest
-	4,  // 11: p402.v1.UserService.ListUsers:input_type -> p402.v1.ListUsersRequest
-	7,  // 12: p402.v1.UserService.GetUser:output_type -> p402.v1.GetUserResponse
-	9,  // 13: p402.v1.UserService.UpdateUser:output_type -> p402.v1.UpdateUserResponse
-	1,  // 14: p402.v1.UserService.EnableUser:output_type -> p402.v1.EnableUserResponse
-	3,  // 15: p402.v1.UserService.DisableUser:output_type -> p402.v1.DisableUserResponse
-	11, // 16: p402.v1.UserService.SetUserSysop:output_type -> p402.v1.SetUserSysopResponse
-	5,  // 17: p402.v1.UserService.ListUsers:output_type -> p402.v1.ListUsersResponse
+	12, // 0: degrees.v1.EnableUserResponse.user:type_name -> degrees.v1.User
+	12, // 1: degrees.v1.DisableUserResponse.user:type_name -> degrees.v1.User
+	12, // 2: degrees.v1.ListUsersResponse.users:type_name -> degrees.v1.User
+	12, // 3: degrees.v1.GetUserResponse.user:type_name -> degrees.v1.User
+	12, // 4: degrees.v1.UpdateUserResponse.user:type_name -> degrees.v1.User
+	12, // 5: degrees.v1.SetUserSysopResponse.user:type_name -> degrees.v1.User
+	6,  // 6: degrees.v1.UserService.GetUser:input_type -> degrees.v1.GetUserRequest
+	8,  // 7: degrees.v1.UserService.UpdateUser:input_type -> degrees.v1.UpdateUserRequest
+	0,  // 8: degrees.v1.UserService.EnableUser:input_type -> degrees.v1.EnableUserRequest
+	2,  // 9: degrees.v1.UserService.DisableUser:input_type -> degrees.v1.DisableUserRequest
+	10, // 10: degrees.v1.UserService.SetUserSysop:input_type -> degrees.v1.SetUserSysopRequest
+	4,  // 11: degrees.v1.UserService.ListUsers:input_type -> degrees.v1.ListUsersRequest
+	7,  // 12: degrees.v1.UserService.GetUser:output_type -> degrees.v1.GetUserResponse
+	9,  // 13: degrees.v1.UserService.UpdateUser:output_type -> degrees.v1.UpdateUserResponse
+	1,  // 14: degrees.v1.UserService.EnableUser:output_type -> degrees.v1.EnableUserResponse
+	3,  // 15: degrees.v1.UserService.DisableUser:output_type -> degrees.v1.DisableUserResponse
+	11, // 16: degrees.v1.UserService.SetUserSysop:output_type -> degrees.v1.SetUserSysopResponse
+	5,  // 17: degrees.v1.UserService.ListUsers:output_type -> degrees.v1.ListUsersResponse
 	12, // [12:18] is the sub-list for method output_type
 	6,  // [6:12] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name

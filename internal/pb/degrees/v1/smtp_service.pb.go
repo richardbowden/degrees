@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: degrees/v1/smtp_service.proto
 
-package p402v1
+package degreesv1
 
 import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
@@ -266,7 +266,8 @@ var File_degrees_v1_smtp_service_proto protoreflect.FileDescriptor
 
 const file_degrees_v1_smtp_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1ddegrees/v1/smtp_service.proto\x12\ap402.v1\x1a\x1cgoogle/api/annotations.proto\"\xaa\x01\n" +
+	"\x1ddegrees/v1/smtp_service.proto\x12\n" +
+	"degrees.v1\x1a\x1cgoogle/api/annotations.proto\"\xaa\x01\n" +
 	"\x14ConfigureSMTPRequest\x12!\n" +
 	"\fsmtp_address\x18\x01 \x01(\tR\vsmtpAddress\x12\x1b\n" +
 	"\tsmtp_port\x18\x02 \x01(\x05R\bsmtpPort\x12\x1a\n" +
@@ -284,11 +285,13 @@ const file_degrees_v1_smtp_service_proto_rawDesc = "" +
 	"\busername\x18\x04 \x01(\tR\busername\x12\x1e\n" +
 	"\n" +
 	"configured\x18\x05 \x01(\bR\n" +
-	"configured2\xf6\x01\n" +
-	"\vSMTPService\x12t\n" +
-	"\rConfigureSMTP\x12\x1d.p402.v1.ConfigureSMTPRequest\x1a\x1e.p402.v1.ConfigureSMTPResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\x1a\x19/api/v1/admin/smtp/config\x12q\n" +
-	"\rGetSMTPStatus\x12\x1d.p402.v1.GetSMTPStatusRequest\x1a\x1e.p402.v1.GetSMTPStatusResponse\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/admin/smtp/statusB\x9c\x01\n" +
-	"\vcom.p402.v1B\x10SmtpServiceProtoP\x01Z>github.com/richardbowden/degrees/internal/pb/degrees/v1;p402v1\xa2\x02\x03PXX\xaa\x02\aP402.V1\xca\x02\aP402\\V1\xe2\x02\x13P402\\V1\\GPBMetadata\xea\x02\bP402::V1b\x06proto3"
+	"configured2\x82\x02\n" +
+	"\vSMTPService\x12z\n" +
+	"\rConfigureSMTP\x12 .degrees.v1.ConfigureSMTPRequest\x1a!.degrees.v1.ConfigureSMTPResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\x1a\x19/api/v1/admin/smtp/config\x12w\n" +
+	"\rGetSMTPStatus\x12 .degrees.v1.GetSMTPStatusRequest\x1a!.degrees.v1.GetSMTPStatusResponse\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/admin/smtp/statusB\xae\x01\n" +
+	"\x0ecom.degrees.v1B\x10SmtpServiceProtoP\x01ZAgithub.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1\xa2\x02\x03DXX\xaa\x02\n" +
+	"Degrees.V1\xca\x02\n" +
+	"Degrees\\V1\xe2\x02\x16Degrees\\V1\\GPBMetadata\xea\x02\vDegrees::V1b\x06proto3"
 
 var (
 	file_degrees_v1_smtp_service_proto_rawDescOnce sync.Once
@@ -304,16 +307,16 @@ func file_degrees_v1_smtp_service_proto_rawDescGZIP() []byte {
 
 var file_degrees_v1_smtp_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_degrees_v1_smtp_service_proto_goTypes = []any{
-	(*ConfigureSMTPRequest)(nil),  // 0: p402.v1.ConfigureSMTPRequest
-	(*ConfigureSMTPResponse)(nil), // 1: p402.v1.ConfigureSMTPResponse
-	(*GetSMTPStatusRequest)(nil),  // 2: p402.v1.GetSMTPStatusRequest
-	(*GetSMTPStatusResponse)(nil), // 3: p402.v1.GetSMTPStatusResponse
+	(*ConfigureSMTPRequest)(nil),  // 0: degrees.v1.ConfigureSMTPRequest
+	(*ConfigureSMTPResponse)(nil), // 1: degrees.v1.ConfigureSMTPResponse
+	(*GetSMTPStatusRequest)(nil),  // 2: degrees.v1.GetSMTPStatusRequest
+	(*GetSMTPStatusResponse)(nil), // 3: degrees.v1.GetSMTPStatusResponse
 }
 var file_degrees_v1_smtp_service_proto_depIdxs = []int32{
-	0, // 0: p402.v1.SMTPService.ConfigureSMTP:input_type -> p402.v1.ConfigureSMTPRequest
-	2, // 1: p402.v1.SMTPService.GetSMTPStatus:input_type -> p402.v1.GetSMTPStatusRequest
-	1, // 2: p402.v1.SMTPService.ConfigureSMTP:output_type -> p402.v1.ConfigureSMTPResponse
-	3, // 3: p402.v1.SMTPService.GetSMTPStatus:output_type -> p402.v1.GetSMTPStatusResponse
+	0, // 0: degrees.v1.SMTPService.ConfigureSMTP:input_type -> degrees.v1.ConfigureSMTPRequest
+	2, // 1: degrees.v1.SMTPService.GetSMTPStatus:input_type -> degrees.v1.GetSMTPStatusRequest
+	1, // 2: degrees.v1.SMTPService.ConfigureSMTP:output_type -> degrees.v1.ConfigureSMTPResponse
+	3, // 3: degrees.v1.SMTPService.GetSMTPStatus:output_type -> degrees.v1.GetSMTPStatusResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

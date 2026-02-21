@@ -9,6 +9,27 @@
       "name": "AuthService"
     },
     {
+      "name": "BookingService"
+    },
+    {
+      "name": "CartService"
+    },
+    {
+      "name": "CatalogueService"
+    },
+    {
+      "name": "CustomerService"
+    },
+    {
+      "name": "HistoryService"
+    },
+    {
+      "name": "PaymentService"
+    },
+    {
+      "name": "ScheduleService"
+    },
+    {
       "name": "SettingsService"
     },
     {
@@ -25,6 +46,633 @@
     "application/json"
   ],
   "paths": {
+    "/api/v1/admin/bookings": {
+      "get": {
+        "summary": "List all bookings (admin)",
+        "operationId": "BookingService_ListAllBookings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListAllBookingsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/admin/bookings/{id}": {
+      "get": {
+        "summary": "Get any booking by ID (admin)",
+        "operationId": "BookingService_GetBooking",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBookingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/admin/bookings/{id}/complete": {
+      "post": {
+        "summary": "Complete a booking (admin)",
+        "operationId": "BookingService_CompleteBooking",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompleteBookingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookingServiceCompleteBookingBody"
+            }
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/admin/bookings/{id}/status": {
+      "put": {
+        "summary": "Update booking status (admin)",
+        "operationId": "BookingService_UpdateBookingStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateBookingStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookingServiceUpdateBookingStatusBody"
+            }
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/admin/customers": {
+      "get": {
+        "summary": "List all customers (admin)",
+        "operationId": "CustomerService_ListCustomers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCustomersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "CustomerService"
+        ]
+      }
+    },
+    "/api/v1/admin/customers/{id}": {
+      "get": {
+        "summary": "Get a customer by ID (admin)",
+        "operationId": "CustomerService_GetCustomer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCustomerResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CustomerService"
+        ]
+      }
+    },
+    "/api/v1/admin/customers/{id}/history": {
+      "get": {
+        "summary": "List history for a specific customer (admin)",
+        "operationId": "HistoryService_ListCustomerHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCustomerHistoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HistoryService"
+        ]
+      }
+    },
+    "/api/v1/admin/records": {
+      "post": {
+        "summary": "Create a service record (admin)",
+        "operationId": "HistoryService_CreateServiceRecord",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateServiceRecordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateServiceRecordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HistoryService"
+        ]
+      }
+    },
+    "/api/v1/admin/records/{id}/notes": {
+      "post": {
+        "summary": "Add a note to a service record (admin)",
+        "operationId": "HistoryService_AddServiceNote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddServiceNoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HistoryServiceAddServiceNoteBody"
+            }
+          }
+        ],
+        "tags": [
+          "HistoryService"
+        ]
+      }
+    },
+    "/api/v1/admin/records/{id}/products": {
+      "post": {
+        "summary": "Add a product used to a service record (admin)",
+        "operationId": "HistoryService_AddProductUsed",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddProductUsedResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HistoryServiceAddProductUsedBody"
+            }
+          }
+        ],
+        "tags": [
+          "HistoryService"
+        ]
+      }
+    },
+    "/api/v1/admin/schedule/blackout": {
+      "post": {
+        "summary": "Add a blackout date",
+        "operationId": "ScheduleService_AddBlackout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddBlackoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddBlackoutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ScheduleService"
+        ]
+      }
+    },
+    "/api/v1/admin/schedule/blackout/{id}": {
+      "delete": {
+        "summary": "Remove a blackout date",
+        "operationId": "ScheduleService_RemoveBlackout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveBlackoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ScheduleService"
+        ]
+      }
+    },
+    "/api/v1/admin/schedule/config": {
+      "get": {
+        "summary": "Get schedule configuration for all days",
+        "operationId": "ScheduleService_GetScheduleConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetScheduleConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "ScheduleService"
+        ]
+      },
+      "put": {
+        "summary": "Update schedule configuration for a day",
+        "operationId": "ScheduleService_UpdateScheduleConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateScheduleConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateScheduleConfigRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ScheduleService"
+        ]
+      }
+    },
+    "/api/v1/admin/services": {
+      "post": {
+        "summary": "Create a new service (admin)",
+        "operationId": "CatalogueService_CreateService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateServiceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
+    "/api/v1/admin/services/{id}": {
+      "delete": {
+        "summary": "Soft-delete a service (admin)",
+        "operationId": "CatalogueService_DeleteService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      },
+      "put": {
+        "summary": "Update a service (admin)",
+        "operationId": "CatalogueService_UpdateService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CatalogueServiceUpdateServiceBody"
+            }
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
+    "/api/v1/admin/services/{serviceId}/options": {
+      "post": {
+        "summary": "Add an option to a service (admin)",
+        "operationId": "CatalogueService_AddServiceOption",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddServiceOptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CatalogueServiceAddServiceOptionBody"
+            }
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
     "/api/v1/admin/settings": {
       "get": {
         "summary": "ListAllSettings lists all settings (for admin interface)",
@@ -747,6 +1395,662 @@
         ]
       }
     },
+    "/api/v1/cart": {
+      "get": {
+        "summary": "Get the current cart",
+        "operationId": "CartService_GetCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "CartService"
+        ]
+      },
+      "delete": {
+        "summary": "Clear all items from the cart",
+        "operationId": "CartService_ClearCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ClearCartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "CartService"
+        ]
+      }
+    },
+    "/api/v1/cart/items": {
+      "post": {
+        "summary": "Add an item to the cart",
+        "operationId": "CartService_AddCartItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddCartItemResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddCartItemRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CartService"
+        ]
+      }
+    },
+    "/api/v1/cart/items/{id}": {
+      "delete": {
+        "summary": "Remove an item from the cart",
+        "operationId": "CartService_RemoveCartItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveCartItemResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CartService"
+        ]
+      },
+      "put": {
+        "summary": "Update cart item quantity",
+        "operationId": "CartService_UpdateCartItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCartItemResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CartServiceUpdateCartItemBody"
+            }
+          }
+        ],
+        "tags": [
+          "CartService"
+        ]
+      }
+    },
+    "/api/v1/catalogue": {
+      "get": {
+        "summary": "List all active services",
+        "operationId": "CatalogueService_ListServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCatalogueServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
+    "/api/v1/catalogue/categories": {
+      "get": {
+        "summary": "List all service categories",
+        "operationId": "CatalogueService_ListCategories",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCategoriesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
+    "/api/v1/catalogue/{slug}": {
+      "get": {
+        "summary": "Get a service by slug",
+        "operationId": "CatalogueService_GetService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCatalogueServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
+    "/api/v1/checkout": {
+      "post": {
+        "summary": "Create a booking from the current cart",
+        "operationId": "BookingService_CreateBookingFromCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateBookingFromCartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateBookingFromCartRequest"
+            }
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/checkout/available-slots": {
+      "get": {
+        "summary": "Get available time slots for a date",
+        "operationId": "BookingService_GetAvailableSlots",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAvailableSlotsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "durationMinutes",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/checkout/deposit": {
+      "post": {
+        "summary": "Create a Stripe deposit payment session for a booking",
+        "operationId": "PaymentService_CreateDepositSession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateDepositSessionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateDepositSessionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PaymentService"
+        ]
+      }
+    },
+    "/api/v1/me/bookings": {
+      "get": {
+        "summary": "List bookings for the authenticated user",
+        "operationId": "BookingService_ListMyBookings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMyBookingsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/me/bookings/{id}": {
+      "get": {
+        "summary": "Get a specific booking for the authenticated user",
+        "operationId": "BookingService_GetMyBooking",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMyBookingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/me/bookings/{id}/cancel": {
+      "post": {
+        "summary": "Cancel a booking",
+        "operationId": "BookingService_CancelBooking",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CancelBookingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookingServiceCancelBookingBody"
+            }
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/v1/me/history": {
+      "get": {
+        "summary": "List service history for the authenticated user",
+        "operationId": "HistoryService_ListMyHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMyHistoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "HistoryService"
+        ]
+      }
+    },
+    "/api/v1/me/history/{id}": {
+      "get": {
+        "summary": "Get a specific service record",
+        "operationId": "HistoryService_GetServiceRecord",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetServiceRecordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HistoryService"
+        ]
+      }
+    },
+    "/api/v1/me/profile": {
+      "get": {
+        "summary": "Get the authenticated user's profile",
+        "operationId": "CustomerService_GetMyProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMyProfileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "CustomerService"
+        ]
+      },
+      "put": {
+        "summary": "Update the authenticated user's profile",
+        "operationId": "CustomerService_UpdateMyProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMyProfileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMyProfileRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CustomerService"
+        ]
+      }
+    },
+    "/api/v1/me/vehicles": {
+      "get": {
+        "summary": "List the authenticated user's vehicles",
+        "operationId": "CustomerService_ListMyVehicles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMyVehiclesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "CustomerService"
+        ]
+      },
+      "post": {
+        "summary": "Add a vehicle",
+        "operationId": "CustomerService_AddVehicle",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddVehicleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddVehicleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CustomerService"
+        ]
+      }
+    },
+    "/api/v1/me/vehicles/{id}": {
+      "delete": {
+        "summary": "Delete a vehicle",
+        "operationId": "CustomerService_DeleteVehicle",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteVehicleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CustomerService"
+        ]
+      },
+      "put": {
+        "summary": "Update a vehicle",
+        "operationId": "CustomerService_UpdateVehicle",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateVehicleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomerServiceUpdateVehicleBody"
+            }
+          }
+        ],
+        "tags": [
+          "CustomerService"
+        ]
+      }
+    },
     "/api/v1/settings/get": {
       "post": {
         "summary": "GetSetting retrieves a single setting with hierarchical resolution\nThis is useful for clients that need a specific setting value",
@@ -1005,6 +2309,147 @@
     }
   },
   "definitions": {
+    "BookingServiceCancelBookingBody": {
+      "type": "object"
+    },
+    "BookingServiceCompleteBookingBody": {
+      "type": "object",
+      "properties": {
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "BookingServiceUpdateBookingStatusBody": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "CartServiceUpdateCartItemBody": {
+      "type": "object",
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CatalogueServiceAddServiceOptionBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string",
+          "format": "int64"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CatalogueServiceUpdateServiceBody": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "shortDesc": {
+          "type": "string"
+        },
+        "basePrice": {
+          "type": "string",
+          "format": "int64"
+        },
+        "durationMinutes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CustomerServiceUpdateVehicleBody": {
+      "type": "object",
+      "properties": {
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "colour": {
+          "type": "string"
+        },
+        "rego": {
+          "type": "string"
+        },
+        "paintType": {
+          "type": "string"
+        },
+        "conditionNotes": {
+          "type": "string"
+        },
+        "isPrimary": {
+          "type": "boolean"
+        }
+      }
+    },
+    "HistoryServiceAddProductUsedBody": {
+      "type": "object",
+      "properties": {
+        "productName": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "HistoryServiceAddServiceNoteBody": {
+      "type": "object",
+      "properties": {
+        "noteType": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "isVisibleToCustomer": {
+          "type": "boolean"
+        }
+      }
+    },
     "SettingsServiceSetOrganizationSettingBody": {
       "type": "object",
       "properties": {
@@ -1105,6 +2550,371 @@
         }
       }
     },
+    "v1AddBlackoutRequest": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AddBlackoutResponse": {
+      "type": "object",
+      "properties": {
+        "blackout": {
+          "$ref": "#/definitions/v1Blackout"
+        }
+      }
+    },
+    "v1AddCartItemRequest": {
+      "type": "object",
+      "properties": {
+        "serviceId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "vehicleId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "optionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "v1AddCartItemResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/v1Cart"
+        }
+      }
+    },
+    "v1AddProductUsedResponse": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "$ref": "#/definitions/v1ProductUsed"
+        }
+      }
+    },
+    "v1AddServiceNoteResponse": {
+      "type": "object",
+      "properties": {
+        "note": {
+          "$ref": "#/definitions/v1ServiceNote"
+        }
+      }
+    },
+    "v1AddServiceOptionResponse": {
+      "type": "object",
+      "properties": {
+        "option": {
+          "$ref": "#/definitions/v1DetailingServiceOption"
+        }
+      }
+    },
+    "v1AddVehicleRequest": {
+      "type": "object",
+      "properties": {
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "colour": {
+          "type": "string"
+        },
+        "rego": {
+          "type": "string"
+        },
+        "paintType": {
+          "type": "string"
+        },
+        "conditionNotes": {
+          "type": "string"
+        },
+        "isPrimary": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1AddVehicleResponse": {
+      "type": "object",
+      "properties": {
+        "vehicle": {
+          "$ref": "#/definitions/v1Vehicle"
+        }
+      }
+    },
+    "v1AvailableSlot": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "availableDurationMins": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1Blackout": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "date": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Booking": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "customerId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "vehicleId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "scheduledDate": {
+          "type": "string"
+        },
+        "scheduledTime": {
+          "type": "string"
+        },
+        "estimatedDurationMins": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "status": {
+          "type": "string"
+        },
+        "paymentStatus": {
+          "type": "string"
+        },
+        "subtotal": {
+          "type": "string",
+          "format": "int64"
+        },
+        "depositAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "totalAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1BookingServiceItem"
+          }
+        },
+        "customer": {
+          "$ref": "#/definitions/v1BookingCustomerInfo"
+        },
+        "vehicle": {
+          "$ref": "#/definitions/v1BookingVehicleInfo"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1BookingCustomerInfo": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "phone": {
+          "type": "string"
+        }
+      }
+    },
+    "v1BookingServiceItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "serviceId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "serviceName": {
+          "type": "string"
+        },
+        "serviceSlug": {
+          "type": "string"
+        },
+        "priceAtBooking": {
+          "type": "string",
+          "format": "int64"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1BookingServiceOptionItem"
+          }
+        }
+      }
+    },
+    "v1BookingServiceOptionItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "serviceOptionId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "optionName": {
+          "type": "string"
+        },
+        "priceAtBooking": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1BookingVehicleInfo": {
+      "type": "object",
+      "properties": {
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "rego": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CancelBookingResponse": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/v1Booking"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Cart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sessionToken": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CartItem"
+          }
+        },
+        "subtotal": {
+          "type": "string",
+          "format": "int64"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1CartItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "serviceId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "vehicleId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "serviceName": {
+          "type": "string"
+        },
+        "servicePrice": {
+          "type": "string",
+          "format": "int64"
+        },
+        "optionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "v1ChangePasswordRequest": {
       "type": "object",
       "properties": {
@@ -1124,6 +2934,22 @@
       "properties": {
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "v1ClearCartResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1CompleteBookingResponse": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/v1Booking"
         }
       }
     },
@@ -1181,11 +3007,275 @@
         }
       }
     },
+    "v1CreateBookingFromCartRequest": {
+      "type": "object",
+      "properties": {
+        "vehicleId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "scheduledDate": {
+          "type": "string"
+        },
+        "scheduledTime": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateBookingFromCartResponse": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/v1Booking"
+        }
+      }
+    },
+    "v1CreateDepositSessionRequest": {
+      "type": "object",
+      "properties": {
+        "bookingId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1CreateDepositSessionResponse": {
+      "type": "object",
+      "properties": {
+        "clientSecret": {
+          "type": "string"
+        },
+        "depositAmount": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1CreateServiceRecordRequest": {
+      "type": "object",
+      "properties": {
+        "bookingId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "customerId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "vehicleId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "completedDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1CreateServiceRecordResponse": {
+      "type": "object",
+      "properties": {
+        "record": {
+          "$ref": "#/definitions/v1ServiceRecord"
+        }
+      }
+    },
+    "v1CreateServiceRequest": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "shortDesc": {
+          "type": "string"
+        },
+        "basePrice": {
+          "type": "string",
+          "format": "int64"
+        },
+        "durationMinutes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1CreateServiceResponse": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/v1DetailingService"
+        }
+      }
+    },
+    "v1CustomerProfile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "suburb": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1DeleteServiceResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
     "v1DeleteSettingResponse": {
       "type": "object",
       "properties": {
         "success": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1DeleteVehicleResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1DetailingService": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "categoryId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "shortDesc": {
+          "type": "string"
+        },
+        "basePrice": {
+          "type": "string",
+          "format": "int64"
+        },
+        "durationMinutes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DetailingServiceOption"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1DetailingServiceOption": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "serviceId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string",
+          "format": "int64"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -1211,6 +3301,73 @@
         }
       }
     },
+    "v1GetAvailableSlotsResponse": {
+      "type": "object",
+      "properties": {
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AvailableSlot"
+          }
+        }
+      }
+    },
+    "v1GetBookingResponse": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/v1Booking"
+        }
+      }
+    },
+    "v1GetCartResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/v1Cart"
+        }
+      }
+    },
+    "v1GetCatalogueServiceResponse": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/v1DetailingService"
+        }
+      }
+    },
+    "v1GetCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "$ref": "#/definitions/v1CustomerProfile"
+        },
+        "vehicles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Vehicle"
+          }
+        }
+      }
+    },
+    "v1GetMyBookingResponse": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/v1Booking"
+        }
+      }
+    },
+    "v1GetMyProfileResponse": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "$ref": "#/definitions/v1CustomerProfile"
+        }
+      }
+    },
     "v1GetSMTPStatusResponse": {
       "type": "object",
       "properties": {
@@ -1229,6 +3386,26 @@
         },
         "configured": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1GetScheduleConfigResponse": {
+      "type": "object",
+      "properties": {
+        "days": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ScheduleDay"
+          }
+        }
+      }
+    },
+    "v1GetServiceRecordResponse": {
+      "type": "object",
+      "properties": {
+        "record": {
+          "$ref": "#/definitions/v1ServiceRecord"
         }
       }
     },
@@ -1290,6 +3467,18 @@
         }
       }
     },
+    "v1ListAllBookingsResponse": {
+      "type": "object",
+      "properties": {
+        "bookings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Booking"
+          }
+        }
+      }
+    },
     "v1ListAllSettingsResponse": {
       "type": "object",
       "properties": {
@@ -1298,6 +3487,90 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1Setting"
+          }
+        }
+      }
+    },
+    "v1ListCatalogueServicesResponse": {
+      "type": "object",
+      "properties": {
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DetailingService"
+          }
+        }
+      }
+    },
+    "v1ListCategoriesResponse": {
+      "type": "object",
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ServiceCategory"
+          }
+        }
+      }
+    },
+    "v1ListCustomerHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ServiceRecord"
+          }
+        }
+      }
+    },
+    "v1ListCustomersResponse": {
+      "type": "object",
+      "properties": {
+        "customers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CustomerProfile"
+          }
+        }
+      }
+    },
+    "v1ListMyBookingsResponse": {
+      "type": "object",
+      "properties": {
+        "bookings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Booking"
+          }
+        }
+      }
+    },
+    "v1ListMyHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ServiceRecord"
+          }
+        }
+      }
+    },
+    "v1ListMyVehiclesResponse": {
+      "type": "object",
+      "properties": {
+        "vehicles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Vehicle"
           }
         }
       }
@@ -1356,6 +3629,25 @@
         }
       }
     },
+    "v1ProductUsed": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "serviceRecordId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "productName": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
     "v1RegisterRequest": {
       "type": "object",
       "properties": {
@@ -1393,6 +3685,22 @@
         }
       }
     },
+    "v1RemoveBlackoutResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1RemoveCartItemResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/v1Cart"
+        }
+      }
+    },
     "v1ResetPasswordRequest": {
       "type": "object",
       "properties": {
@@ -1406,6 +3714,172 @@
       "properties": {
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "v1ScheduleDay": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "dayOfWeek": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "openTime": {
+          "type": "string"
+        },
+        "closeTime": {
+          "type": "string"
+        },
+        "isOpen": {
+          "type": "boolean"
+        },
+        "bufferMinutes": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1ServiceCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ServiceNote": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "serviceRecordId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "noteType": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "isVisibleToCustomer": {
+          "type": "boolean"
+        },
+        "createdBy": {
+          "type": "string",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ServicePhoto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "serviceRecordId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "photoType": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ServiceRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "bookingId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "customerId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "vehicleId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "completedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ServiceNote"
+          }
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ProductUsed"
+          }
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ServicePhoto"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -1494,6 +3968,85 @@
       "default": "SETTING_SCOPE_UNSPECIFIED",
       "title": "Scope for hierarchical settings resolution"
     },
+    "v1UpdateBookingStatusResponse": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/v1Booking"
+        }
+      }
+    },
+    "v1UpdateCartItemResponse": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "$ref": "#/definitions/v1Cart"
+        }
+      }
+    },
+    "v1UpdateMyProfileRequest": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "suburb": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        }
+      }
+    },
+    "v1UpdateMyProfileResponse": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "$ref": "#/definitions/v1CustomerProfile"
+        }
+      }
+    },
+    "v1UpdateScheduleConfigRequest": {
+      "type": "object",
+      "properties": {
+        "dayOfWeek": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "openTime": {
+          "type": "string"
+        },
+        "closeTime": {
+          "type": "string"
+        },
+        "isOpen": {
+          "type": "boolean"
+        },
+        "bufferMinutes": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1UpdateScheduleConfigResponse": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "$ref": "#/definitions/v1ScheduleDay"
+        }
+      }
+    },
+    "v1UpdateServiceResponse": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/v1DetailingService"
+        }
+      }
+    },
     "v1UpdateUserResponse": {
       "type": "object",
       "properties": {
@@ -1502,6 +4055,14 @@
         },
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "v1UpdateVehicleResponse": {
+      "type": "object",
+      "properties": {
+        "vehicle": {
+          "$ref": "#/definitions/v1Vehicle"
         }
       }
     },
@@ -1544,6 +4105,52 @@
         }
       },
       "title": "User represents a user in the system"
+    },
+    "v1Vehicle": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "customerId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "colour": {
+          "type": "string"
+        },
+        "rego": {
+          "type": "string"
+        },
+        "paintType": {
+          "type": "string"
+        },
+        "conditionNotes": {
+          "type": "string"
+        },
+        "isPrimary": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "v1VerifyEmailRequest": {
       "type": "object",

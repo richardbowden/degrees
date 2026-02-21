@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: degrees/v1/settings_service.proto
 
-package p402v1
+package degreesv1
 
 import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
@@ -83,7 +83,7 @@ func (SettingScope) EnumDescriptor() ([]byte, []int) {
 type Setting struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Scope          SettingScope           `protobuf:"varint,2,opt,name=scope,proto3,enum=p402.v1.SettingScope" json:"scope,omitempty"`
+	Scope          SettingScope           `protobuf:"varint,2,opt,name=scope,proto3,enum=degrees.v1.SettingScope" json:"scope,omitempty"`
 	OrganizationId int64                  `protobuf:"varint,3,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"`
 	ProjectId      int64                  `protobuf:"varint,4,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
 	UserId         int64                  `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -800,7 +800,7 @@ type ListAllSettingsRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Optional filters
 	Subsystem      *string       `protobuf:"bytes,1,opt,name=subsystem,proto3,oneof" json:"subsystem,omitempty"`
-	Scope          *SettingScope `protobuf:"varint,2,opt,name=scope,proto3,enum=p402.v1.SettingScope,oneof" json:"scope,omitempty"`
+	Scope          *SettingScope `protobuf:"varint,2,opt,name=scope,proto3,enum=degrees.v1.SettingScope,oneof" json:"scope,omitempty"`
 	OrganizationId *int64        `protobuf:"varint,3,opt,name=organization_id,json=organizationId,proto3,oneof" json:"organization_id,omitempty"`
 	ProjectId      *int64        `protobuf:"varint,4,opt,name=project_id,json=projectId,proto3,oneof" json:"project_id,omitempty"`
 	UserId         *int64        `protobuf:"varint,5,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"`
@@ -997,7 +997,7 @@ func (x *GetSettingRequest) GetUserId() int64 {
 type GetSettingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Value         *structpb.Value        `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	ResolvedScope SettingScope           `protobuf:"varint,2,opt,name=resolved_scope,json=resolvedScope,proto3,enum=p402.v1.SettingScope" json:"resolved_scope,omitempty"` // Which scope provided this value
+	ResolvedScope SettingScope           `protobuf:"varint,2,opt,name=resolved_scope,json=resolvedScope,proto3,enum=degrees.v1.SettingScope" json:"resolved_scope,omitempty"` // Which scope provided this value
 	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1162,10 +1162,11 @@ var File_degrees_v1_settings_service_proto protoreflect.FileDescriptor
 
 const file_degrees_v1_settings_service_proto_rawDesc = "" +
 	"\n" +
-	"!degrees/v1/settings_service.proto\x12\ap402.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x84\x03\n" +
+	"!degrees/v1/settings_service.proto\x12\n" +
+	"degrees.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x87\x03\n" +
 	"\aSetting\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12+\n" +
-	"\x05scope\x18\x02 \x01(\x0e2\x15.p402.v1.SettingScopeR\x05scope\x12'\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12.\n" +
+	"\x05scope\x18\x02 \x01(\x0e2\x18.degrees.v1.SettingScopeR\x05scope\x12'\n" +
 	"\x0forganization_id\x18\x03 \x01(\x03R\x0eorganizationId\x12\x1d\n" +
 	"\n" +
 	"project_id\x18\x04 \x01(\x03R\tprojectId\x12\x17\n" +
@@ -1224,10 +1225,10 @@ const file_degrees_v1_settings_service_proto_rawDesc = "" +
 	"\x14DeleteSettingRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"1\n" +
 	"\x15DeleteSettingResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xa4\x02\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xa7\x02\n" +
 	"\x16ListAllSettingsRequest\x12!\n" +
-	"\tsubsystem\x18\x01 \x01(\tH\x00R\tsubsystem\x88\x01\x01\x120\n" +
-	"\x05scope\x18\x02 \x01(\x0e2\x15.p402.v1.SettingScopeH\x01R\x05scope\x88\x01\x01\x12,\n" +
+	"\tsubsystem\x18\x01 \x01(\tH\x00R\tsubsystem\x88\x01\x01\x123\n" +
+	"\x05scope\x18\x02 \x01(\x0e2\x18.degrees.v1.SettingScopeH\x01R\x05scope\x88\x01\x01\x12,\n" +
 	"\x0forganization_id\x18\x03 \x01(\x03H\x02R\x0eorganizationId\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"project_id\x18\x04 \x01(\x03H\x03R\tprojectId\x88\x01\x01\x12\x1c\n" +
@@ -1238,9 +1239,9 @@ const file_degrees_v1_settings_service_proto_rawDesc = "" +
 	"\x10_organization_idB\r\n" +
 	"\v_project_idB\n" +
 	"\n" +
-	"\b_user_id\"G\n" +
-	"\x17ListAllSettingsResponse\x12,\n" +
-	"\bsettings\x18\x01 \x03(\v2\x10.p402.v1.SettingR\bsettings\"\xe2\x01\n" +
+	"\b_user_id\"J\n" +
+	"\x17ListAllSettingsResponse\x12/\n" +
+	"\bsettings\x18\x01 \x03(\v2\x13.degrees.v1.SettingR\bsettings\"\xe2\x01\n" +
 	"\x11GetSettingRequest\x12\x1c\n" +
 	"\tsubsystem\x18\x01 \x01(\tR\tsubsystem\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12,\n" +
@@ -1251,40 +1252,42 @@ const file_degrees_v1_settings_service_proto_rawDesc = "" +
 	"\x10_organization_idB\r\n" +
 	"\v_project_idB\n" +
 	"\n" +
-	"\b_user_id\"\xa2\x01\n" +
+	"\b_user_id\"\xa5\x01\n" +
 	"\x12GetSettingResponse\x12,\n" +
-	"\x05value\x18\x01 \x01(\v2\x16.google.protobuf.ValueR\x05value\x12<\n" +
-	"\x0eresolved_scope\x18\x02 \x01(\x0e2\x15.p402.v1.SettingScopeR\rresolvedScope\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\"\xd0\x01\n" +
+	"\x05value\x18\x01 \x01(\v2\x16.google.protobuf.ValueR\x05value\x12?\n" +
+	"\x0eresolved_scope\x18\x02 \x01(\x0e2\x18.degrees.v1.SettingScopeR\rresolvedScope\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\"\xd3\x01\n" +
 	"\x13GetSettingsResponse\x12\x1c\n" +
-	"\tsubsystem\x18\x01 \x01(\tR\tsubsystem\x12F\n" +
-	"\bsettings\x18\x02 \x03(\v2*.p402.v1.GetSettingsResponse.SettingsEntryR\bsettings\x1aS\n" +
+	"\tsubsystem\x18\x01 \x01(\tR\tsubsystem\x12I\n" +
+	"\bsettings\x18\x02 \x03(\v2-.degrees.v1.GetSettingsResponse.SettingsEntryR\bsettings\x1aS\n" +
 	"\rSettingsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12,\n" +
-	"\x05value\x18\x02 \x01(\v2\x16.google.protobuf.ValueR\x05value:\x028\x01\"Z\n" +
+	"\x05value\x18\x02 \x01(\v2\x16.google.protobuf.ValueR\x05value:\x028\x01\"]\n" +
 	"\x12SetSettingResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12*\n" +
-	"\asetting\x18\x02 \x01(\v2\x10.p402.v1.SettingR\asetting*\x9a\x01\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12-\n" +
+	"\asetting\x18\x02 \x01(\v2\x13.degrees.v1.SettingR\asetting*\x9a\x01\n" +
 	"\fSettingScope\x12\x1d\n" +
 	"\x19SETTING_SCOPE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14SETTING_SCOPE_SYSTEM\x10\x01\x12\x1e\n" +
 	"\x1aSETTING_SCOPE_ORGANIZATION\x10\x02\x12\x19\n" +
 	"\x15SETTING_SCOPE_PROJECT\x10\x03\x12\x16\n" +
-	"\x12SETTING_SCOPE_USER\x10\x042\xbc\f\n" +
-	"\x0fSettingsService\x12\x87\x01\n" +
-	"\x11GetSystemSettings\x12!.p402.v1.GetSystemSettingsRequest\x1a\x1c.p402.v1.GetSettingsResponse\"1\x82\xd3\xe4\x93\x02+\x12)/api/v1/admin/settings/system/{subsystem}\x12\x8d\x01\n" +
-	"\x10SetSystemSetting\x12 .p402.v1.SetSystemSettingRequest\x1a\x1b.p402.v1.SetSettingResponse\":\x82\xd3\xe4\x93\x024:\x01*\x1a//api/v1/admin/settings/system/{subsystem}/{key}\x12\xab\x01\n" +
-	"\x17GetOrganizationSettings\x12'.p402.v1.GetOrganizationSettingsRequest\x1a\x1c.p402.v1.GetSettingsResponse\"I\x82\xd3\xe4\x93\x02C\x12A/api/v1/admin/settings/organization/{organization_id}/{subsystem}\x12\xb1\x01\n" +
-	"\x16SetOrganizationSetting\x12&.p402.v1.SetOrganizationSettingRequest\x1a\x1b.p402.v1.SetSettingResponse\"R\x82\xd3\xe4\x93\x02L:\x01*\x1aG/api/v1/admin/settings/organization/{organization_id}/{subsystem}/{key}\x12\x97\x01\n" +
-	"\x12GetProjectSettings\x12\".p402.v1.GetProjectSettingsRequest\x1a\x1c.p402.v1.GetSettingsResponse\"?\x82\xd3\xe4\x93\x029\x127/api/v1/admin/settings/project/{project_id}/{subsystem}\x12\x9d\x01\n" +
-	"\x11SetProjectSetting\x12!.p402.v1.SetProjectSettingRequest\x1a\x1b.p402.v1.SetSettingResponse\"H\x82\xd3\xe4\x93\x02B:\x01*\x1a=/api/v1/admin/settings/project/{project_id}/{subsystem}/{key}\x12\x8b\x01\n" +
-	"\x0fGetUserSettings\x12\x1f.p402.v1.GetUserSettingsRequest\x1a\x1c.p402.v1.GetSettingsResponse\"9\x82\xd3\xe4\x93\x023\x121/api/v1/admin/settings/user/{user_id}/{subsystem}\x12\x91\x01\n" +
-	"\x0eSetUserSetting\x12\x1e.p402.v1.SetUserSettingRequest\x1a\x1b.p402.v1.SetSettingResponse\"B\x82\xd3\xe4\x93\x02<:\x01*\x1a7/api/v1/admin/settings/user/{user_id}/{subsystem}/{key}\x12s\n" +
-	"\rDeleteSetting\x12\x1d.p402.v1.DeleteSettingRequest\x1a\x1e.p402.v1.DeleteSettingResponse\"#\x82\xd3\xe4\x93\x02\x1d*\x1b/api/v1/admin/settings/{id}\x12t\n" +
-	"\x0fListAllSettings\x12\x1f.p402.v1.ListAllSettingsRequest\x1a .p402.v1.ListAllSettingsResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/admin/settings\x12f\n" +
+	"\x12SETTING_SCOPE_USER\x10\x042\xfe\f\n" +
+	"\x0fSettingsService\x12\x8d\x01\n" +
+	"\x11GetSystemSettings\x12$.degrees.v1.GetSystemSettingsRequest\x1a\x1f.degrees.v1.GetSettingsResponse\"1\x82\xd3\xe4\x93\x02+\x12)/api/v1/admin/settings/system/{subsystem}\x12\x93\x01\n" +
+	"\x10SetSystemSetting\x12#.degrees.v1.SetSystemSettingRequest\x1a\x1e.degrees.v1.SetSettingResponse\":\x82\xd3\xe4\x93\x024:\x01*\x1a//api/v1/admin/settings/system/{subsystem}/{key}\x12\xb1\x01\n" +
+	"\x17GetOrganizationSettings\x12*.degrees.v1.GetOrganizationSettingsRequest\x1a\x1f.degrees.v1.GetSettingsResponse\"I\x82\xd3\xe4\x93\x02C\x12A/api/v1/admin/settings/organization/{organization_id}/{subsystem}\x12\xb7\x01\n" +
+	"\x16SetOrganizationSetting\x12).degrees.v1.SetOrganizationSettingRequest\x1a\x1e.degrees.v1.SetSettingResponse\"R\x82\xd3\xe4\x93\x02L:\x01*\x1aG/api/v1/admin/settings/organization/{organization_id}/{subsystem}/{key}\x12\x9d\x01\n" +
+	"\x12GetProjectSettings\x12%.degrees.v1.GetProjectSettingsRequest\x1a\x1f.degrees.v1.GetSettingsResponse\"?\x82\xd3\xe4\x93\x029\x127/api/v1/admin/settings/project/{project_id}/{subsystem}\x12\xa3\x01\n" +
+	"\x11SetProjectSetting\x12$.degrees.v1.SetProjectSettingRequest\x1a\x1e.degrees.v1.SetSettingResponse\"H\x82\xd3\xe4\x93\x02B:\x01*\x1a=/api/v1/admin/settings/project/{project_id}/{subsystem}/{key}\x12\x91\x01\n" +
+	"\x0fGetUserSettings\x12\".degrees.v1.GetUserSettingsRequest\x1a\x1f.degrees.v1.GetSettingsResponse\"9\x82\xd3\xe4\x93\x023\x121/api/v1/admin/settings/user/{user_id}/{subsystem}\x12\x97\x01\n" +
+	"\x0eSetUserSetting\x12!.degrees.v1.SetUserSettingRequest\x1a\x1e.degrees.v1.SetSettingResponse\"B\x82\xd3\xe4\x93\x02<:\x01*\x1a7/api/v1/admin/settings/user/{user_id}/{subsystem}/{key}\x12y\n" +
+	"\rDeleteSetting\x12 .degrees.v1.DeleteSettingRequest\x1a!.degrees.v1.DeleteSettingResponse\"#\x82\xd3\xe4\x93\x02\x1d*\x1b/api/v1/admin/settings/{id}\x12z\n" +
+	"\x0fListAllSettings\x12\".degrees.v1.ListAllSettingsRequest\x1a#.degrees.v1.ListAllSettingsResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/admin/settings\x12l\n" +
 	"\n" +
-	"GetSetting\x12\x1a.p402.v1.GetSettingRequest\x1a\x1b.p402.v1.GetSettingResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/api/v1/settings/getB\xa0\x01\n" +
-	"\vcom.p402.v1B\x14SettingsServiceProtoP\x01Z>github.com/richardbowden/degrees/internal/pb/degrees/v1;p402v1\xa2\x02\x03PXX\xaa\x02\aP402.V1\xca\x02\aP402\\V1\xe2\x02\x13P402\\V1\\GPBMetadata\xea\x02\bP402::V1b\x06proto3"
+	"GetSetting\x12\x1d.degrees.v1.GetSettingRequest\x1a\x1e.degrees.v1.GetSettingResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/api/v1/settings/getB\xb2\x01\n" +
+	"\x0ecom.degrees.v1B\x14SettingsServiceProtoP\x01ZAgithub.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1\xa2\x02\x03DXX\xaa\x02\n" +
+	"Degrees.V1\xca\x02\n" +
+	"Degrees\\V1\xe2\x02\x16Degrees\\V1\\GPBMetadata\xea\x02\vDegrees::V1b\x06proto3"
 
 var (
 	file_degrees_v1_settings_service_proto_rawDescOnce sync.Once
@@ -1301,63 +1304,63 @@ func file_degrees_v1_settings_service_proto_rawDescGZIP() []byte {
 var file_degrees_v1_settings_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_degrees_v1_settings_service_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_degrees_v1_settings_service_proto_goTypes = []any{
-	(SettingScope)(0),                      // 0: p402.v1.SettingScope
-	(*Setting)(nil),                        // 1: p402.v1.Setting
-	(*GetSystemSettingsRequest)(nil),       // 2: p402.v1.GetSystemSettingsRequest
-	(*SetSystemSettingRequest)(nil),        // 3: p402.v1.SetSystemSettingRequest
-	(*GetOrganizationSettingsRequest)(nil), // 4: p402.v1.GetOrganizationSettingsRequest
-	(*SetOrganizationSettingRequest)(nil),  // 5: p402.v1.SetOrganizationSettingRequest
-	(*GetProjectSettingsRequest)(nil),      // 6: p402.v1.GetProjectSettingsRequest
-	(*SetProjectSettingRequest)(nil),       // 7: p402.v1.SetProjectSettingRequest
-	(*GetUserSettingsRequest)(nil),         // 8: p402.v1.GetUserSettingsRequest
-	(*SetUserSettingRequest)(nil),          // 9: p402.v1.SetUserSettingRequest
-	(*DeleteSettingRequest)(nil),           // 10: p402.v1.DeleteSettingRequest
-	(*DeleteSettingResponse)(nil),          // 11: p402.v1.DeleteSettingResponse
-	(*ListAllSettingsRequest)(nil),         // 12: p402.v1.ListAllSettingsRequest
-	(*ListAllSettingsResponse)(nil),        // 13: p402.v1.ListAllSettingsResponse
-	(*GetSettingRequest)(nil),              // 14: p402.v1.GetSettingRequest
-	(*GetSettingResponse)(nil),             // 15: p402.v1.GetSettingResponse
-	(*GetSettingsResponse)(nil),            // 16: p402.v1.GetSettingsResponse
-	(*SetSettingResponse)(nil),             // 17: p402.v1.SetSettingResponse
-	nil,                                    // 18: p402.v1.GetSettingsResponse.SettingsEntry
+	(SettingScope)(0),                      // 0: degrees.v1.SettingScope
+	(*Setting)(nil),                        // 1: degrees.v1.Setting
+	(*GetSystemSettingsRequest)(nil),       // 2: degrees.v1.GetSystemSettingsRequest
+	(*SetSystemSettingRequest)(nil),        // 3: degrees.v1.SetSystemSettingRequest
+	(*GetOrganizationSettingsRequest)(nil), // 4: degrees.v1.GetOrganizationSettingsRequest
+	(*SetOrganizationSettingRequest)(nil),  // 5: degrees.v1.SetOrganizationSettingRequest
+	(*GetProjectSettingsRequest)(nil),      // 6: degrees.v1.GetProjectSettingsRequest
+	(*SetProjectSettingRequest)(nil),       // 7: degrees.v1.SetProjectSettingRequest
+	(*GetUserSettingsRequest)(nil),         // 8: degrees.v1.GetUserSettingsRequest
+	(*SetUserSettingRequest)(nil),          // 9: degrees.v1.SetUserSettingRequest
+	(*DeleteSettingRequest)(nil),           // 10: degrees.v1.DeleteSettingRequest
+	(*DeleteSettingResponse)(nil),          // 11: degrees.v1.DeleteSettingResponse
+	(*ListAllSettingsRequest)(nil),         // 12: degrees.v1.ListAllSettingsRequest
+	(*ListAllSettingsResponse)(nil),        // 13: degrees.v1.ListAllSettingsResponse
+	(*GetSettingRequest)(nil),              // 14: degrees.v1.GetSettingRequest
+	(*GetSettingResponse)(nil),             // 15: degrees.v1.GetSettingResponse
+	(*GetSettingsResponse)(nil),            // 16: degrees.v1.GetSettingsResponse
+	(*SetSettingResponse)(nil),             // 17: degrees.v1.SetSettingResponse
+	nil,                                    // 18: degrees.v1.GetSettingsResponse.SettingsEntry
 	(*structpb.Value)(nil),                 // 19: google.protobuf.Value
 }
 var file_degrees_v1_settings_service_proto_depIdxs = []int32{
-	0,  // 0: p402.v1.Setting.scope:type_name -> p402.v1.SettingScope
-	19, // 1: p402.v1.Setting.value:type_name -> google.protobuf.Value
-	19, // 2: p402.v1.SetSystemSettingRequest.value:type_name -> google.protobuf.Value
-	19, // 3: p402.v1.SetOrganizationSettingRequest.value:type_name -> google.protobuf.Value
-	19, // 4: p402.v1.SetProjectSettingRequest.value:type_name -> google.protobuf.Value
-	19, // 5: p402.v1.SetUserSettingRequest.value:type_name -> google.protobuf.Value
-	0,  // 6: p402.v1.ListAllSettingsRequest.scope:type_name -> p402.v1.SettingScope
-	1,  // 7: p402.v1.ListAllSettingsResponse.settings:type_name -> p402.v1.Setting
-	19, // 8: p402.v1.GetSettingResponse.value:type_name -> google.protobuf.Value
-	0,  // 9: p402.v1.GetSettingResponse.resolved_scope:type_name -> p402.v1.SettingScope
-	18, // 10: p402.v1.GetSettingsResponse.settings:type_name -> p402.v1.GetSettingsResponse.SettingsEntry
-	1,  // 11: p402.v1.SetSettingResponse.setting:type_name -> p402.v1.Setting
-	19, // 12: p402.v1.GetSettingsResponse.SettingsEntry.value:type_name -> google.protobuf.Value
-	2,  // 13: p402.v1.SettingsService.GetSystemSettings:input_type -> p402.v1.GetSystemSettingsRequest
-	3,  // 14: p402.v1.SettingsService.SetSystemSetting:input_type -> p402.v1.SetSystemSettingRequest
-	4,  // 15: p402.v1.SettingsService.GetOrganizationSettings:input_type -> p402.v1.GetOrganizationSettingsRequest
-	5,  // 16: p402.v1.SettingsService.SetOrganizationSetting:input_type -> p402.v1.SetOrganizationSettingRequest
-	6,  // 17: p402.v1.SettingsService.GetProjectSettings:input_type -> p402.v1.GetProjectSettingsRequest
-	7,  // 18: p402.v1.SettingsService.SetProjectSetting:input_type -> p402.v1.SetProjectSettingRequest
-	8,  // 19: p402.v1.SettingsService.GetUserSettings:input_type -> p402.v1.GetUserSettingsRequest
-	9,  // 20: p402.v1.SettingsService.SetUserSetting:input_type -> p402.v1.SetUserSettingRequest
-	10, // 21: p402.v1.SettingsService.DeleteSetting:input_type -> p402.v1.DeleteSettingRequest
-	12, // 22: p402.v1.SettingsService.ListAllSettings:input_type -> p402.v1.ListAllSettingsRequest
-	14, // 23: p402.v1.SettingsService.GetSetting:input_type -> p402.v1.GetSettingRequest
-	16, // 24: p402.v1.SettingsService.GetSystemSettings:output_type -> p402.v1.GetSettingsResponse
-	17, // 25: p402.v1.SettingsService.SetSystemSetting:output_type -> p402.v1.SetSettingResponse
-	16, // 26: p402.v1.SettingsService.GetOrganizationSettings:output_type -> p402.v1.GetSettingsResponse
-	17, // 27: p402.v1.SettingsService.SetOrganizationSetting:output_type -> p402.v1.SetSettingResponse
-	16, // 28: p402.v1.SettingsService.GetProjectSettings:output_type -> p402.v1.GetSettingsResponse
-	17, // 29: p402.v1.SettingsService.SetProjectSetting:output_type -> p402.v1.SetSettingResponse
-	16, // 30: p402.v1.SettingsService.GetUserSettings:output_type -> p402.v1.GetSettingsResponse
-	17, // 31: p402.v1.SettingsService.SetUserSetting:output_type -> p402.v1.SetSettingResponse
-	11, // 32: p402.v1.SettingsService.DeleteSetting:output_type -> p402.v1.DeleteSettingResponse
-	13, // 33: p402.v1.SettingsService.ListAllSettings:output_type -> p402.v1.ListAllSettingsResponse
-	15, // 34: p402.v1.SettingsService.GetSetting:output_type -> p402.v1.GetSettingResponse
+	0,  // 0: degrees.v1.Setting.scope:type_name -> degrees.v1.SettingScope
+	19, // 1: degrees.v1.Setting.value:type_name -> google.protobuf.Value
+	19, // 2: degrees.v1.SetSystemSettingRequest.value:type_name -> google.protobuf.Value
+	19, // 3: degrees.v1.SetOrganizationSettingRequest.value:type_name -> google.protobuf.Value
+	19, // 4: degrees.v1.SetProjectSettingRequest.value:type_name -> google.protobuf.Value
+	19, // 5: degrees.v1.SetUserSettingRequest.value:type_name -> google.protobuf.Value
+	0,  // 6: degrees.v1.ListAllSettingsRequest.scope:type_name -> degrees.v1.SettingScope
+	1,  // 7: degrees.v1.ListAllSettingsResponse.settings:type_name -> degrees.v1.Setting
+	19, // 8: degrees.v1.GetSettingResponse.value:type_name -> google.protobuf.Value
+	0,  // 9: degrees.v1.GetSettingResponse.resolved_scope:type_name -> degrees.v1.SettingScope
+	18, // 10: degrees.v1.GetSettingsResponse.settings:type_name -> degrees.v1.GetSettingsResponse.SettingsEntry
+	1,  // 11: degrees.v1.SetSettingResponse.setting:type_name -> degrees.v1.Setting
+	19, // 12: degrees.v1.GetSettingsResponse.SettingsEntry.value:type_name -> google.protobuf.Value
+	2,  // 13: degrees.v1.SettingsService.GetSystemSettings:input_type -> degrees.v1.GetSystemSettingsRequest
+	3,  // 14: degrees.v1.SettingsService.SetSystemSetting:input_type -> degrees.v1.SetSystemSettingRequest
+	4,  // 15: degrees.v1.SettingsService.GetOrganizationSettings:input_type -> degrees.v1.GetOrganizationSettingsRequest
+	5,  // 16: degrees.v1.SettingsService.SetOrganizationSetting:input_type -> degrees.v1.SetOrganizationSettingRequest
+	6,  // 17: degrees.v1.SettingsService.GetProjectSettings:input_type -> degrees.v1.GetProjectSettingsRequest
+	7,  // 18: degrees.v1.SettingsService.SetProjectSetting:input_type -> degrees.v1.SetProjectSettingRequest
+	8,  // 19: degrees.v1.SettingsService.GetUserSettings:input_type -> degrees.v1.GetUserSettingsRequest
+	9,  // 20: degrees.v1.SettingsService.SetUserSetting:input_type -> degrees.v1.SetUserSettingRequest
+	10, // 21: degrees.v1.SettingsService.DeleteSetting:input_type -> degrees.v1.DeleteSettingRequest
+	12, // 22: degrees.v1.SettingsService.ListAllSettings:input_type -> degrees.v1.ListAllSettingsRequest
+	14, // 23: degrees.v1.SettingsService.GetSetting:input_type -> degrees.v1.GetSettingRequest
+	16, // 24: degrees.v1.SettingsService.GetSystemSettings:output_type -> degrees.v1.GetSettingsResponse
+	17, // 25: degrees.v1.SettingsService.SetSystemSetting:output_type -> degrees.v1.SetSettingResponse
+	16, // 26: degrees.v1.SettingsService.GetOrganizationSettings:output_type -> degrees.v1.GetSettingsResponse
+	17, // 27: degrees.v1.SettingsService.SetOrganizationSetting:output_type -> degrees.v1.SetSettingResponse
+	16, // 28: degrees.v1.SettingsService.GetProjectSettings:output_type -> degrees.v1.GetSettingsResponse
+	17, // 29: degrees.v1.SettingsService.SetProjectSetting:output_type -> degrees.v1.SetSettingResponse
+	16, // 30: degrees.v1.SettingsService.GetUserSettings:output_type -> degrees.v1.GetSettingsResponse
+	17, // 31: degrees.v1.SettingsService.SetUserSetting:output_type -> degrees.v1.SetSettingResponse
+	11, // 32: degrees.v1.SettingsService.DeleteSetting:output_type -> degrees.v1.DeleteSettingResponse
+	13, // 33: degrees.v1.SettingsService.ListAllSettings:output_type -> degrees.v1.ListAllSettingsResponse
+	15, // 34: degrees.v1.SettingsService.GetSetting:output_type -> degrees.v1.GetSettingResponse
 	24, // [24:35] is the sub-list for method output_type
 	13, // [13:24] is the sub-list for method input_type
 	13, // [13:13] is the sub-list for extension type_name

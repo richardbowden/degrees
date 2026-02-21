@@ -2,11 +2,11 @@
 // source: degrees/v1/auth_service.proto
 
 /*
-Package p402v1 is a reverse proxy.
+Package degreesv1 is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package p402v1
+package degreesv1
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
-	extP402v1 "github.com/richardbowden/degrees/internal/pb/degrees/v1"
+	extDegreesv1 "github.com/richardbowden/degrees/internal/pb/degrees/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
@@ -36,9 +36,9 @@ var (
 	_ = metadata.Join
 )
 
-func request_AuthService_Register_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthService_Register_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.RegisterRequest
+		protoReq extDegreesv1.RegisterRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -51,9 +51,9 @@ func request_AuthService_Register_0(ctx context.Context, marshaler runtime.Marsh
 	return msg, metadata, err
 }
 
-func local_request_AuthService_Register_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthService_Register_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.RegisterRequest
+		protoReq extDegreesv1.RegisterRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -63,9 +63,9 @@ func local_request_AuthService_Register_0(ctx context.Context, marshaler runtime
 	return msg, metadata, err
 }
 
-func request_AuthService_VerifyEmail_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthService_VerifyEmail_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.VerifyEmailRequest
+		protoReq extDegreesv1.VerifyEmailRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -78,9 +78,9 @@ func request_AuthService_VerifyEmail_0(ctx context.Context, marshaler runtime.Ma
 	return msg, metadata, err
 }
 
-func local_request_AuthService_VerifyEmail_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthService_VerifyEmail_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.VerifyEmailRequest
+		protoReq extDegreesv1.VerifyEmailRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -90,9 +90,9 @@ func local_request_AuthService_VerifyEmail_0(ctx context.Context, marshaler runt
 	return msg, metadata, err
 }
 
-func request_AuthService_Login_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthService_Login_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.LoginRequest
+		protoReq extDegreesv1.LoginRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -105,9 +105,9 @@ func request_AuthService_Login_0(ctx context.Context, marshaler runtime.Marshale
 	return msg, metadata, err
 }
 
-func local_request_AuthService_Login_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthService_Login_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.LoginRequest
+		protoReq extDegreesv1.LoginRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -117,9 +117,9 @@ func local_request_AuthService_Login_0(ctx context.Context, marshaler runtime.Ma
 	return msg, metadata, err
 }
 
-func request_AuthService_Logout_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthService_Logout_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.LogoutRequest
+		protoReq extDegreesv1.LogoutRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -132,9 +132,9 @@ func request_AuthService_Logout_0(ctx context.Context, marshaler runtime.Marshal
 	return msg, metadata, err
 }
 
-func local_request_AuthService_Logout_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthService_Logout_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.LogoutRequest
+		protoReq extDegreesv1.LogoutRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -144,9 +144,9 @@ func local_request_AuthService_Logout_0(ctx context.Context, marshaler runtime.M
 	return msg, metadata, err
 }
 
-func request_AuthService_ChangePassword_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthService_ChangePassword_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ChangePasswordRequest
+		protoReq extDegreesv1.ChangePasswordRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -159,9 +159,9 @@ func request_AuthService_ChangePassword_0(ctx context.Context, marshaler runtime
 	return msg, metadata, err
 }
 
-func local_request_AuthService_ChangePassword_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthService_ChangePassword_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ChangePasswordRequest
+		protoReq extDegreesv1.ChangePasswordRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -171,9 +171,9 @@ func local_request_AuthService_ChangePassword_0(ctx context.Context, marshaler r
 	return msg, metadata, err
 }
 
-func request_AuthService_ResetPassword_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthService_ResetPassword_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ResetPasswordRequest
+		protoReq extDegreesv1.ResetPasswordRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -186,9 +186,9 @@ func request_AuthService_ResetPassword_0(ctx context.Context, marshaler runtime.
 	return msg, metadata, err
 }
 
-func local_request_AuthService_ResetPassword_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthService_ResetPassword_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ResetPasswordRequest
+		protoReq extDegreesv1.ResetPasswordRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -198,9 +198,9 @@ func local_request_AuthService_ResetPassword_0(ctx context.Context, marshaler ru
 	return msg, metadata, err
 }
 
-func request_AuthService_CompletePasswordReset_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthService_CompletePasswordReset_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.CompletePasswordResetRequest
+		protoReq extDegreesv1.CompletePasswordResetRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -213,9 +213,9 @@ func request_AuthService_CompletePasswordReset_0(ctx context.Context, marshaler 
 	return msg, metadata, err
 }
 
-func local_request_AuthService_CompletePasswordReset_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthService_CompletePasswordReset_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.CompletePasswordResetRequest
+		protoReq extDegreesv1.CompletePasswordResetRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -230,14 +230,14 @@ func local_request_AuthService_CompletePasswordReset_0(ctx context.Context, mars
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAuthServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extP402v1.AuthServiceServer) error {
+func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extDegreesv1.AuthServiceServer) error {
 	mux.Handle(http.MethodPost, pattern_AuthService_Register_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.AuthService/Register", runtime.WithHTTPPathPattern("/api/v1/auth/register"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.AuthService/Register", runtime.WithHTTPPathPattern("/api/v1/auth/register"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -257,7 +257,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.AuthService/VerifyEmail", runtime.WithHTTPPathPattern("/api/v1/auth/verify-email"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.AuthService/VerifyEmail", runtime.WithHTTPPathPattern("/api/v1/auth/verify-email"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -277,7 +277,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.AuthService/Login", runtime.WithHTTPPathPattern("/api/v1/auth/login"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.AuthService/Login", runtime.WithHTTPPathPattern("/api/v1/auth/login"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -297,7 +297,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.AuthService/Logout", runtime.WithHTTPPathPattern("/api/v1/auth/logout"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.AuthService/Logout", runtime.WithHTTPPathPattern("/api/v1/auth/logout"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -317,7 +317,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.AuthService/ChangePassword", runtime.WithHTTPPathPattern("/api/v1/user/change-password"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.AuthService/ChangePassword", runtime.WithHTTPPathPattern("/api/v1/user/change-password"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -337,7 +337,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.AuthService/ResetPassword", runtime.WithHTTPPathPattern("/api/v1/auth/reset-password"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.AuthService/ResetPassword", runtime.WithHTTPPathPattern("/api/v1/auth/reset-password"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -357,7 +357,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.AuthService/CompletePasswordReset", runtime.WithHTTPPathPattern("/api/v1/auth/complete-password-reset"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.AuthService/CompletePasswordReset", runtime.WithHTTPPathPattern("/api/v1/auth/complete-password-reset"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -402,20 +402,20 @@ func RegisterAuthServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.Se
 // RegisterAuthServiceHandler registers the http handlers for service AuthService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
 func RegisterAuthServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterAuthServiceHandlerClient(ctx, mux, extP402v1.NewAuthServiceClient(conn))
+	return RegisterAuthServiceHandlerClient(ctx, mux, extDegreesv1.NewAuthServiceClient(conn))
 }
 
 // RegisterAuthServiceHandlerClient registers the http handlers for service AuthService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "extP402v1.AuthServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "extP402v1.AuthServiceClient"
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "extDegreesv1.AuthServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "extDegreesv1.AuthServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "extP402v1.AuthServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extP402v1.AuthServiceClient) error {
+// "extDegreesv1.AuthServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extDegreesv1.AuthServiceClient) error {
 	mux.Handle(http.MethodPost, pattern_AuthService_Register_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.AuthService/Register", runtime.WithHTTPPathPattern("/api/v1/auth/register"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.AuthService/Register", runtime.WithHTTPPathPattern("/api/v1/auth/register"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -432,7 +432,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.AuthService/VerifyEmail", runtime.WithHTTPPathPattern("/api/v1/auth/verify-email"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.AuthService/VerifyEmail", runtime.WithHTTPPathPattern("/api/v1/auth/verify-email"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -449,7 +449,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.AuthService/Login", runtime.WithHTTPPathPattern("/api/v1/auth/login"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.AuthService/Login", runtime.WithHTTPPathPattern("/api/v1/auth/login"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -466,7 +466,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.AuthService/Logout", runtime.WithHTTPPathPattern("/api/v1/auth/logout"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.AuthService/Logout", runtime.WithHTTPPathPattern("/api/v1/auth/logout"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -483,7 +483,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.AuthService/ChangePassword", runtime.WithHTTPPathPattern("/api/v1/user/change-password"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.AuthService/ChangePassword", runtime.WithHTTPPathPattern("/api/v1/user/change-password"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -500,7 +500,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.AuthService/ResetPassword", runtime.WithHTTPPathPattern("/api/v1/auth/reset-password"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.AuthService/ResetPassword", runtime.WithHTTPPathPattern("/api/v1/auth/reset-password"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -517,7 +517,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.AuthService/CompletePasswordReset", runtime.WithHTTPPathPattern("/api/v1/auth/complete-password-reset"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.AuthService/CompletePasswordReset", runtime.WithHTTPPathPattern("/api/v1/auth/complete-password-reset"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

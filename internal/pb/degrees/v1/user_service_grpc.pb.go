@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: degrees/v1/user_service.proto
 
-package p402v1
+package degreesv1
 
 import (
 	context "context"
@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_GetUser_FullMethodName      = "/p402.v1.UserService/GetUser"
-	UserService_UpdateUser_FullMethodName   = "/p402.v1.UserService/UpdateUser"
-	UserService_EnableUser_FullMethodName   = "/p402.v1.UserService/EnableUser"
-	UserService_DisableUser_FullMethodName  = "/p402.v1.UserService/DisableUser"
-	UserService_SetUserSysop_FullMethodName = "/p402.v1.UserService/SetUserSysop"
-	UserService_ListUsers_FullMethodName    = "/p402.v1.UserService/ListUsers"
+	UserService_GetUser_FullMethodName      = "/degrees.v1.UserService/GetUser"
+	UserService_UpdateUser_FullMethodName   = "/degrees.v1.UserService/UpdateUser"
+	UserService_EnableUser_FullMethodName   = "/degrees.v1.UserService/EnableUser"
+	UserService_DisableUser_FullMethodName  = "/degrees.v1.UserService/DisableUser"
+	UserService_SetUserSysop_FullMethodName = "/degrees.v1.UserService/SetUserSysop"
+	UserService_ListUsers_FullMethodName    = "/degrees.v1.UserService/ListUsers"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -288,7 +288,7 @@ func _UserService_ListUsers_Handler(srv interface{}, ctx context.Context, dec fu
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "p402.v1.UserService",
+	ServiceName: "degrees.v1.UserService",
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

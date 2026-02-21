@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: degrees/v1/auth_service.proto
 
-package p402v1
+package degreesv1
 
 import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
@@ -763,7 +763,8 @@ var File_degrees_v1_auth_service_proto protoreflect.FileDescriptor
 
 const file_degrees_v1_auth_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1ddegrees/v1/auth_service.proto\x12\ap402.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17degrees/v1/common.proto\"\xe4\x01\n" +
+	"\x1ddegrees/v1/auth_service.proto\x12\n" +
+	"degrees.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17degrees/v1/common.proto\"\xe4\x01\n" +
 	"\x0fRegisterRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1d\n" +
 	"\n" +
@@ -778,16 +779,16 @@ const file_degrees_v1_auth_service_proto_rawDesc = "" +
 	"\amessage\x18\x01 \x01(\tR\amessage\x12\x1b\n" +
 	"\tsignup_id\x18\x02 \x01(\tR\bsignupId\"*\n" +
 	"\x12VerifyEmailRequest\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token\"R\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\"U\n" +
 	"\x13VerifyEmailResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\x12!\n" +
-	"\x04user\x18\x02 \x01(\v2\r.p402.v1.UserR\x04user\"@\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\x12$\n" +
+	"\x04user\x18\x02 \x01(\v2\x10.degrees.v1.UserR\x04user\"@\n" +
 	"\fLoginRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"q\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"t\n" +
 	"\rLoginResponse\x12#\n" +
-	"\rsession_token\x18\x01 \x01(\tR\fsessionToken\x12!\n" +
-	"\x04user\x18\x02 \x01(\v2\r.p402.v1.UserR\x04user\x12\x18\n" +
+	"\rsession_token\x18\x01 \x01(\tR\fsessionToken\x12$\n" +
+	"\x04user\x18\x02 \x01(\v2\x10.degrees.v1.UserR\x04user\x12\x18\n" +
 	"\amessage\x18\x03 \x01(\tR\amessage\"4\n" +
 	"\rLogoutRequest\x12#\n" +
 	"\rsession_token\x18\x01 \x01(\tR\fsessionToken\"*\n" +
@@ -808,16 +809,18 @@ const file_degrees_v1_auth_service_proto_rawDesc = "" +
 	"\fnew_password\x18\x02 \x01(\tR\vnewPassword\x120\n" +
 	"\x14new_password_confirm\x18\x03 \x01(\tR\x12newPasswordConfirm\"9\n" +
 	"\x1dCompletePasswordResetResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2\xa0\x06\n" +
-	"\vAuthService\x12a\n" +
-	"\bRegister\x12\x18.p402.v1.RegisterRequest\x1a\x19.p402.v1.RegisterResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/api/v1/auth/register\x12n\n" +
-	"\vVerifyEmail\x12\x1b.p402.v1.VerifyEmailRequest\x1a\x1c.p402.v1.VerifyEmailResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/api/v1/auth/verify-email\x12U\n" +
-	"\x05Login\x12\x15.p402.v1.LoginRequest\x1a\x16.p402.v1.LoginResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/auth/login\x12Y\n" +
-	"\x06Logout\x12\x16.p402.v1.LogoutRequest\x1a\x17.p402.v1.LogoutResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/api/v1/auth/logout\x12z\n" +
-	"\x0eChangePassword\x12\x1e.p402.v1.ChangePasswordRequest\x1a\x1f.p402.v1.ChangePasswordResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/api/v1/user/change-password\x12v\n" +
-	"\rResetPassword\x12\x1d.p402.v1.ResetPasswordRequest\x1a\x1e.p402.v1.ResetPasswordResponse\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/api/v1/auth/reset-password\x12\x97\x01\n" +
-	"\x15CompletePasswordReset\x12%.p402.v1.CompletePasswordResetRequest\x1a&.p402.v1.CompletePasswordResetResponse\"/\x82\xd3\xe4\x93\x02):\x01*\"$/api/v1/auth/complete-password-resetB\x9c\x01\n" +
-	"\vcom.p402.v1B\x10AuthServiceProtoP\x01Z>github.com/richardbowden/degrees/internal/pb/degrees/v1;p402v1\xa2\x02\x03PXX\xaa\x02\aP402.V1\xca\x02\aP402\\V1\xe2\x02\x13P402\\V1\\GPBMetadata\xea\x02\bP402::V1b\x06proto3"
+	"\amessage\x18\x01 \x01(\tR\amessage2\xcb\x06\n" +
+	"\vAuthService\x12g\n" +
+	"\bRegister\x12\x1b.degrees.v1.RegisterRequest\x1a\x1c.degrees.v1.RegisterResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/api/v1/auth/register\x12t\n" +
+	"\vVerifyEmail\x12\x1e.degrees.v1.VerifyEmailRequest\x1a\x1f.degrees.v1.VerifyEmailResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/api/v1/auth/verify-email\x12[\n" +
+	"\x05Login\x12\x18.degrees.v1.LoginRequest\x1a\x19.degrees.v1.LoginResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/auth/login\x12_\n" +
+	"\x06Logout\x12\x19.degrees.v1.LogoutRequest\x1a\x1a.degrees.v1.LogoutResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/api/v1/auth/logout\x12\x80\x01\n" +
+	"\x0eChangePassword\x12!.degrees.v1.ChangePasswordRequest\x1a\".degrees.v1.ChangePasswordResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/api/v1/user/change-password\x12|\n" +
+	"\rResetPassword\x12 .degrees.v1.ResetPasswordRequest\x1a!.degrees.v1.ResetPasswordResponse\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/api/v1/auth/reset-password\x12\x9d\x01\n" +
+	"\x15CompletePasswordReset\x12(.degrees.v1.CompletePasswordResetRequest\x1a).degrees.v1.CompletePasswordResetResponse\"/\x82\xd3\xe4\x93\x02):\x01*\"$/api/v1/auth/complete-password-resetB\xae\x01\n" +
+	"\x0ecom.degrees.v1B\x10AuthServiceProtoP\x01ZAgithub.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1\xa2\x02\x03DXX\xaa\x02\n" +
+	"Degrees.V1\xca\x02\n" +
+	"Degrees\\V1\xe2\x02\x16Degrees\\V1\\GPBMetadata\xea\x02\vDegrees::V1b\x06proto3"
 
 var (
 	file_degrees_v1_auth_service_proto_rawDescOnce sync.Once
@@ -833,39 +836,39 @@ func file_degrees_v1_auth_service_proto_rawDescGZIP() []byte {
 
 var file_degrees_v1_auth_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_degrees_v1_auth_service_proto_goTypes = []any{
-	(*RegisterRequest)(nil),               // 0: p402.v1.RegisterRequest
-	(*RegisterResponse)(nil),              // 1: p402.v1.RegisterResponse
-	(*VerifyEmailRequest)(nil),            // 2: p402.v1.VerifyEmailRequest
-	(*VerifyEmailResponse)(nil),           // 3: p402.v1.VerifyEmailResponse
-	(*LoginRequest)(nil),                  // 4: p402.v1.LoginRequest
-	(*LoginResponse)(nil),                 // 5: p402.v1.LoginResponse
-	(*LogoutRequest)(nil),                 // 6: p402.v1.LogoutRequest
-	(*LogoutResponse)(nil),                // 7: p402.v1.LogoutResponse
-	(*ChangePasswordRequest)(nil),         // 8: p402.v1.ChangePasswordRequest
-	(*ChangePasswordResponse)(nil),        // 9: p402.v1.ChangePasswordResponse
-	(*ResetPasswordRequest)(nil),          // 10: p402.v1.ResetPasswordRequest
-	(*ResetPasswordResponse)(nil),         // 11: p402.v1.ResetPasswordResponse
-	(*CompletePasswordResetRequest)(nil),  // 12: p402.v1.CompletePasswordResetRequest
-	(*CompletePasswordResetResponse)(nil), // 13: p402.v1.CompletePasswordResetResponse
-	(*User)(nil),                          // 14: p402.v1.User
+	(*RegisterRequest)(nil),               // 0: degrees.v1.RegisterRequest
+	(*RegisterResponse)(nil),              // 1: degrees.v1.RegisterResponse
+	(*VerifyEmailRequest)(nil),            // 2: degrees.v1.VerifyEmailRequest
+	(*VerifyEmailResponse)(nil),           // 3: degrees.v1.VerifyEmailResponse
+	(*LoginRequest)(nil),                  // 4: degrees.v1.LoginRequest
+	(*LoginResponse)(nil),                 // 5: degrees.v1.LoginResponse
+	(*LogoutRequest)(nil),                 // 6: degrees.v1.LogoutRequest
+	(*LogoutResponse)(nil),                // 7: degrees.v1.LogoutResponse
+	(*ChangePasswordRequest)(nil),         // 8: degrees.v1.ChangePasswordRequest
+	(*ChangePasswordResponse)(nil),        // 9: degrees.v1.ChangePasswordResponse
+	(*ResetPasswordRequest)(nil),          // 10: degrees.v1.ResetPasswordRequest
+	(*ResetPasswordResponse)(nil),         // 11: degrees.v1.ResetPasswordResponse
+	(*CompletePasswordResetRequest)(nil),  // 12: degrees.v1.CompletePasswordResetRequest
+	(*CompletePasswordResetResponse)(nil), // 13: degrees.v1.CompletePasswordResetResponse
+	(*User)(nil),                          // 14: degrees.v1.User
 }
 var file_degrees_v1_auth_service_proto_depIdxs = []int32{
-	14, // 0: p402.v1.VerifyEmailResponse.user:type_name -> p402.v1.User
-	14, // 1: p402.v1.LoginResponse.user:type_name -> p402.v1.User
-	0,  // 2: p402.v1.AuthService.Register:input_type -> p402.v1.RegisterRequest
-	2,  // 3: p402.v1.AuthService.VerifyEmail:input_type -> p402.v1.VerifyEmailRequest
-	4,  // 4: p402.v1.AuthService.Login:input_type -> p402.v1.LoginRequest
-	6,  // 5: p402.v1.AuthService.Logout:input_type -> p402.v1.LogoutRequest
-	8,  // 6: p402.v1.AuthService.ChangePassword:input_type -> p402.v1.ChangePasswordRequest
-	10, // 7: p402.v1.AuthService.ResetPassword:input_type -> p402.v1.ResetPasswordRequest
-	12, // 8: p402.v1.AuthService.CompletePasswordReset:input_type -> p402.v1.CompletePasswordResetRequest
-	1,  // 9: p402.v1.AuthService.Register:output_type -> p402.v1.RegisterResponse
-	3,  // 10: p402.v1.AuthService.VerifyEmail:output_type -> p402.v1.VerifyEmailResponse
-	5,  // 11: p402.v1.AuthService.Login:output_type -> p402.v1.LoginResponse
-	7,  // 12: p402.v1.AuthService.Logout:output_type -> p402.v1.LogoutResponse
-	9,  // 13: p402.v1.AuthService.ChangePassword:output_type -> p402.v1.ChangePasswordResponse
-	11, // 14: p402.v1.AuthService.ResetPassword:output_type -> p402.v1.ResetPasswordResponse
-	13, // 15: p402.v1.AuthService.CompletePasswordReset:output_type -> p402.v1.CompletePasswordResetResponse
+	14, // 0: degrees.v1.VerifyEmailResponse.user:type_name -> degrees.v1.User
+	14, // 1: degrees.v1.LoginResponse.user:type_name -> degrees.v1.User
+	0,  // 2: degrees.v1.AuthService.Register:input_type -> degrees.v1.RegisterRequest
+	2,  // 3: degrees.v1.AuthService.VerifyEmail:input_type -> degrees.v1.VerifyEmailRequest
+	4,  // 4: degrees.v1.AuthService.Login:input_type -> degrees.v1.LoginRequest
+	6,  // 5: degrees.v1.AuthService.Logout:input_type -> degrees.v1.LogoutRequest
+	8,  // 6: degrees.v1.AuthService.ChangePassword:input_type -> degrees.v1.ChangePasswordRequest
+	10, // 7: degrees.v1.AuthService.ResetPassword:input_type -> degrees.v1.ResetPasswordRequest
+	12, // 8: degrees.v1.AuthService.CompletePasswordReset:input_type -> degrees.v1.CompletePasswordResetRequest
+	1,  // 9: degrees.v1.AuthService.Register:output_type -> degrees.v1.RegisterResponse
+	3,  // 10: degrees.v1.AuthService.VerifyEmail:output_type -> degrees.v1.VerifyEmailResponse
+	5,  // 11: degrees.v1.AuthService.Login:output_type -> degrees.v1.LoginResponse
+	7,  // 12: degrees.v1.AuthService.Logout:output_type -> degrees.v1.LogoutResponse
+	9,  // 13: degrees.v1.AuthService.ChangePassword:output_type -> degrees.v1.ChangePasswordResponse
+	11, // 14: degrees.v1.AuthService.ResetPassword:output_type -> degrees.v1.ResetPasswordResponse
+	13, // 15: degrees.v1.AuthService.CompletePasswordReset:output_type -> degrees.v1.CompletePasswordResetResponse
 	9,  // [9:16] is the sub-list for method output_type
 	2,  // [2:9] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name

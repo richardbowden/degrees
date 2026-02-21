@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: degrees/v1/auth_service.proto
 
-package p402v1
+package degreesv1
 
 import (
 	context "context"
@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthService_Register_FullMethodName              = "/p402.v1.AuthService/Register"
-	AuthService_VerifyEmail_FullMethodName           = "/p402.v1.AuthService/VerifyEmail"
-	AuthService_Login_FullMethodName                 = "/p402.v1.AuthService/Login"
-	AuthService_Logout_FullMethodName                = "/p402.v1.AuthService/Logout"
-	AuthService_ChangePassword_FullMethodName        = "/p402.v1.AuthService/ChangePassword"
-	AuthService_ResetPassword_FullMethodName         = "/p402.v1.AuthService/ResetPassword"
-	AuthService_CompletePasswordReset_FullMethodName = "/p402.v1.AuthService/CompletePasswordReset"
+	AuthService_Register_FullMethodName              = "/degrees.v1.AuthService/Register"
+	AuthService_VerifyEmail_FullMethodName           = "/degrees.v1.AuthService/VerifyEmail"
+	AuthService_Login_FullMethodName                 = "/degrees.v1.AuthService/Login"
+	AuthService_Logout_FullMethodName                = "/degrees.v1.AuthService/Logout"
+	AuthService_ChangePassword_FullMethodName        = "/degrees.v1.AuthService/ChangePassword"
+	AuthService_ResetPassword_FullMethodName         = "/degrees.v1.AuthService/ResetPassword"
+	AuthService_CompletePasswordReset_FullMethodName = "/degrees.v1.AuthService/CompletePasswordReset"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -324,7 +324,7 @@ func _AuthService_CompletePasswordReset_Handler(srv interface{}, ctx context.Con
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var AuthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "p402.v1.AuthService",
+	ServiceName: "degrees.v1.AuthService",
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

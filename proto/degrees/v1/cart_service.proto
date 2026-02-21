@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package degrees.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1";
+
+// ========================================
+// Messages
+// ========================================
+
+message CartItem {
+  int64 id = 1;
+  int64 service_id = 2;
+  int64 vehicle_id = 3;
+  int32 quantity = 4;
+  string service_name = 5;
+  int64 service_price = 6;
+  repeated int64 option_ids = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+message Cart {
+  int64 id = 1;
+  string session_token = 2;
+  repeated CartItem items = 3;
+  int64 subtotal = 4;
+  google.protobuf.Timestamp expires_at = 5;
+}
+
+// ========================================
+// Request/Response Messages
+// ========================================
+
+message GetCartRequest {}
+
+message GetCartResponse {
+  Cart cart = 1;
+}
+
+message AddCartItemRequest {
+  int64 service_id = 1;
+  int64 vehicle_id = 2;
+  int32 quantity = 3;
+  repeated int64 option_ids = 4;
+}
+
+message AddCartItemResponse {
+  Cart cart = 1;
+}
+
+message UpdateCartItemRequest {
+  int64 id = 1;
+  int32 quantity = 2;
+}
+
+message UpdateCartItemResponse {
+  Cart cart = 1;
+}
+
+message RemoveCartItemRequest {
+  int64 id = 1;
+}
+
+message RemoveCartItemResponse {
+  Cart cart = 1;
+}
+
+message ClearCartRequest {}
+
+message ClearCartResponse {
+  bool success = 1;
+}
+
+// ========================================
+// CartService
+// ========================================
+
+service CartService {
+  // Get the current cart
+  rpc GetCart(GetCartRequest) returns (GetCartResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cart"
+    };
+  }
+
+  // Add an item to the cart
+  rpc AddCartItem(AddCartItemRequest) returns (AddCartItemResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cart/items"
+      body: "*"
+    };
+  }
+
+  // Update cart item quantity
+  rpc UpdateCartItem(UpdateCartItemRequest) returns (UpdateCartItemResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/cart/items/{id}"
+      body: "*"
+    };
+  }
+
+  // Remove an item from the cart
+  rpc RemoveCartItem(RemoveCartItemRequest) returns (RemoveCartItemResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/cart/items/{id}"
+    };
+  }
+
+  // Clear all items from the cart
+  rpc ClearCart(ClearCartRequest) returns (ClearCartResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/cart"
+    };
+  }
+}

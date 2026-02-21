@@ -1,0 +1,220 @@
+syntax = "proto3";
+
+package degrees.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1";
+
+// ========================================
+// Messages
+// ========================================
+
+message Booking {
+  int64 id = 1;
+  int64 customer_id = 2;
+  int64 vehicle_id = 3;
+  string scheduled_date = 4;
+  string scheduled_time = 5;
+  int32 estimated_duration_mins = 6;
+  string status = 7;
+  string payment_status = 8;
+  int64 subtotal = 9;
+  int64 deposit_amount = 10;
+  int64 total_amount = 11;
+  string notes = 12;
+  repeated BookingServiceItem services = 13;
+  BookingCustomerInfo customer = 14;
+  BookingVehicleInfo vehicle = 15;
+  google.protobuf.Timestamp created_at = 16;
+  google.protobuf.Timestamp updated_at = 17;
+}
+
+message BookingCustomerInfo {
+  int64 user_id = 1;
+  string phone = 2;
+}
+
+message BookingVehicleInfo {
+  string make = 1;
+  string model = 2;
+  string rego = 3;
+}
+
+message BookingServiceItem {
+  int64 id = 1;
+  int64 service_id = 2;
+  string service_name = 3;
+  string service_slug = 4;
+  int64 price_at_booking = 5;
+  repeated BookingServiceOptionItem options = 6;
+}
+
+message BookingServiceOptionItem {
+  int64 id = 1;
+  int64 service_option_id = 2;
+  string option_name = 3;
+  int64 price_at_booking = 4;
+}
+
+message AvailableSlot {
+  string date = 1;
+  string time = 2;
+  int32 available_duration_mins = 3;
+}
+
+// ========================================
+// Request/Response Messages
+// ========================================
+
+message CreateBookingFromCartRequest {
+  int64 vehicle_id = 1;
+  string scheduled_date = 2;
+  string scheduled_time = 3;
+  string notes = 4;
+}
+
+message CreateBookingFromCartResponse {
+  Booking booking = 1;
+}
+
+message GetAvailableSlotsRequest {
+  string date = 1;
+  int32 duration_minutes = 2;
+}
+
+message GetAvailableSlotsResponse {
+  repeated AvailableSlot slots = 1;
+}
+
+message ListMyBookingsRequest {}
+
+message ListMyBookingsResponse {
+  repeated Booking bookings = 1;
+}
+
+message GetMyBookingRequest {
+  int64 id = 1;
+}
+
+message GetMyBookingResponse {
+  Booking booking = 1;
+}
+
+message CancelBookingRequest {
+  int64 id = 1;
+}
+
+message CancelBookingResponse {
+  Booking booking = 1;
+  string message = 2;
+}
+
+message ListAllBookingsRequest {
+  string date_from = 1;
+  string date_to = 2;
+}
+
+message ListAllBookingsResponse {
+  repeated Booking bookings = 1;
+}
+
+message GetBookingRequest {
+  int64 id = 1;
+}
+
+message GetBookingResponse {
+  Booking booking = 1;
+}
+
+message UpdateBookingStatusRequest {
+  int64 id = 1;
+  string status = 2;
+}
+
+message UpdateBookingStatusResponse {
+  Booking booking = 1;
+}
+
+message CompleteBookingRequest {
+  int64 id = 1;
+  string notes = 2;
+}
+
+message CompleteBookingResponse {
+  Booking booking = 1;
+}
+
+// ========================================
+// BookingService
+// ========================================
+
+service BookingService {
+  // Create a booking from the current cart
+  rpc CreateBookingFromCart(CreateBookingFromCartRequest) returns (CreateBookingFromCartResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/checkout"
+      body: "*"
+    };
+  }
+
+  // Get available time slots for a date
+  rpc GetAvailableSlots(GetAvailableSlotsRequest) returns (GetAvailableSlotsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/checkout/available-slots"
+    };
+  }
+
+  // List bookings for the authenticated user
+  rpc ListMyBookings(ListMyBookingsRequest) returns (ListMyBookingsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/me/bookings"
+    };
+  }
+
+  // Get a specific booking for the authenticated user
+  rpc GetMyBooking(GetMyBookingRequest) returns (GetMyBookingResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/me/bookings/{id}"
+    };
+  }
+
+  // Cancel a booking
+  rpc CancelBooking(CancelBookingRequest) returns (CancelBookingResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/me/bookings/{id}/cancel"
+      body: "*"
+    };
+  }
+
+  // List all bookings (admin)
+  rpc ListAllBookings(ListAllBookingsRequest) returns (ListAllBookingsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/bookings"
+    };
+  }
+
+  // Get any booking by ID (admin)
+  rpc GetBooking(GetBookingRequest) returns (GetBookingResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/bookings/{id}"
+    };
+  }
+
+  // Update booking status (admin)
+  rpc UpdateBookingStatus(UpdateBookingStatusRequest) returns (UpdateBookingStatusResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/bookings/{id}/status"
+      body: "*"
+    };
+  }
+
+  // Complete a booking (admin)
+  rpc CompleteBooking(CompleteBookingRequest) returns (CompleteBookingResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/bookings/{id}/complete"
+      body: "*"
+    };
+  }
+}

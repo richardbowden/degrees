@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package degrees.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1";
+
+// ========================================
+// Messages
+// ========================================
+
+message ServiceRecord {
+  int64 id = 1;
+  int64 booking_id = 2;
+  int64 customer_id = 3;
+  int64 vehicle_id = 4;
+  google.protobuf.Timestamp completed_date = 5;
+  repeated ServiceNote notes = 6;
+  repeated ProductUsed products = 7;
+  repeated ServicePhoto photos = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+message ServiceNote {
+  int64 id = 1;
+  int64 service_record_id = 2;
+  string note_type = 3;
+  string content = 4;
+  bool is_visible_to_customer = 5;
+  int64 created_by = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message ProductUsed {
+  int64 id = 1;
+  int64 service_record_id = 2;
+  string product_name = 3;
+  string notes = 4;
+}
+
+message ServicePhoto {
+  int64 id = 1;
+  int64 service_record_id = 2;
+  string photo_type = 3;
+  string url = 4;
+  string caption = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+// ========================================
+// Request/Response Messages
+// ========================================
+
+message ListMyHistoryRequest {}
+
+message ListMyHistoryResponse {
+  repeated ServiceRecord records = 1;
+}
+
+message GetServiceRecordRequest {
+  int64 id = 1;
+}
+
+message GetServiceRecordResponse {
+  ServiceRecord record = 1;
+}
+
+message ListCustomerHistoryRequest {
+  int64 id = 1;
+}
+
+message ListCustomerHistoryResponse {
+  repeated ServiceRecord records = 1;
+}
+
+message CreateServiceRecordRequest {
+  int64 booking_id = 1;
+  int64 customer_id = 2;
+  int64 vehicle_id = 3;
+  google.protobuf.Timestamp completed_date = 4;
+}
+
+message CreateServiceRecordResponse {
+  ServiceRecord record = 1;
+}
+
+message AddServiceNoteRequest {
+  int64 id = 1;
+  string note_type = 2;
+  string content = 3;
+  bool is_visible_to_customer = 4;
+}
+
+message AddServiceNoteResponse {
+  ServiceNote note = 1;
+}
+
+message AddProductUsedRequest {
+  int64 id = 1;
+  string product_name = 2;
+  string notes = 3;
+}
+
+message AddProductUsedResponse {
+  ProductUsed product = 1;
+}
+
+// ========================================
+// HistoryService
+// ========================================
+
+service HistoryService {
+  // List service history for the authenticated user
+  rpc ListMyHistory(ListMyHistoryRequest) returns (ListMyHistoryResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/me/history"
+    };
+  }
+
+  // Get a specific service record
+  rpc GetServiceRecord(GetServiceRecordRequest) returns (GetServiceRecordResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/me/history/{id}"
+    };
+  }
+
+  // List history for a specific customer (admin)
+  rpc ListCustomerHistory(ListCustomerHistoryRequest) returns (ListCustomerHistoryResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/customers/{id}/history"
+    };
+  }
+
+  // Create a service record (admin)
+  rpc CreateServiceRecord(CreateServiceRecordRequest) returns (CreateServiceRecordResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/records"
+      body: "*"
+    };
+  }
+
+  // Add a note to a service record (admin)
+  rpc AddServiceNote(AddServiceNoteRequest) returns (AddServiceNoteResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/records/{id}/notes"
+      body: "*"
+    };
+  }
+
+  // Add a product used to a service record (admin)
+  rpc AddProductUsed(AddProductUsedRequest) returns (AddProductUsedResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/records/{id}/products"
+      body: "*"
+    };
+  }
+}

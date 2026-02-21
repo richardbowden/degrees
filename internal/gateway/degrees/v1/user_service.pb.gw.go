@@ -2,11 +2,11 @@
 // source: degrees/v1/user_service.proto
 
 /*
-Package p402v1 is a reverse proxy.
+Package degreesv1 is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package p402v1
+package degreesv1
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
-	extP402v1 "github.com/richardbowden/degrees/internal/pb/degrees/v1"
+	extDegreesv1 "github.com/richardbowden/degrees/internal/pb/degrees/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
@@ -36,9 +36,9 @@ var (
 	_ = metadata.Join
 )
 
-func request_UserService_GetUser_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserService_GetUser_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetUserRequest
+		protoReq extDegreesv1.GetUserRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -57,9 +57,9 @@ func request_UserService_GetUser_0(ctx context.Context, marshaler runtime.Marsha
 	return msg, metadata, err
 }
 
-func local_request_UserService_GetUser_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserService_GetUser_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.GetUserRequest
+		protoReq extDegreesv1.GetUserRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -75,9 +75,9 @@ func local_request_UserService_GetUser_0(ctx context.Context, marshaler runtime.
 	return msg, metadata, err
 }
 
-func request_UserService_UpdateUser_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserService_UpdateUser_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.UpdateUserRequest
+		protoReq extDegreesv1.UpdateUserRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -99,9 +99,9 @@ func request_UserService_UpdateUser_0(ctx context.Context, marshaler runtime.Mar
 	return msg, metadata, err
 }
 
-func local_request_UserService_UpdateUser_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserService_UpdateUser_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.UpdateUserRequest
+		protoReq extDegreesv1.UpdateUserRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -120,9 +120,9 @@ func local_request_UserService_UpdateUser_0(ctx context.Context, marshaler runti
 	return msg, metadata, err
 }
 
-func request_UserService_EnableUser_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserService_EnableUser_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.EnableUserRequest
+		protoReq extDegreesv1.EnableUserRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -144,9 +144,9 @@ func request_UserService_EnableUser_0(ctx context.Context, marshaler runtime.Mar
 	return msg, metadata, err
 }
 
-func local_request_UserService_EnableUser_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserService_EnableUser_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.EnableUserRequest
+		protoReq extDegreesv1.EnableUserRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -165,9 +165,9 @@ func local_request_UserService_EnableUser_0(ctx context.Context, marshaler runti
 	return msg, metadata, err
 }
 
-func request_UserService_DisableUser_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserService_DisableUser_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.DisableUserRequest
+		protoReq extDegreesv1.DisableUserRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -189,9 +189,9 @@ func request_UserService_DisableUser_0(ctx context.Context, marshaler runtime.Ma
 	return msg, metadata, err
 }
 
-func local_request_UserService_DisableUser_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserService_DisableUser_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.DisableUserRequest
+		protoReq extDegreesv1.DisableUserRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -210,9 +210,9 @@ func local_request_UserService_DisableUser_0(ctx context.Context, marshaler runt
 	return msg, metadata, err
 }
 
-func request_UserService_SetUserSysop_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserService_SetUserSysop_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetUserSysopRequest
+		protoReq extDegreesv1.SetUserSysopRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -234,9 +234,9 @@ func request_UserService_SetUserSysop_0(ctx context.Context, marshaler runtime.M
 	return msg, metadata, err
 }
 
-func local_request_UserService_SetUserSysop_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserService_SetUserSysop_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.SetUserSysopRequest
+		protoReq extDegreesv1.SetUserSysopRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -255,9 +255,9 @@ func local_request_UserService_SetUserSysop_0(ctx context.Context, marshaler run
 	return msg, metadata, err
 }
 
-func request_UserService_ListUsers_0(ctx context.Context, marshaler runtime.Marshaler, client extP402v1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserService_ListUsers_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ListUsersRequest
+		protoReq extDegreesv1.ListUsersRequest
 		metadata runtime.ServerMetadata
 	)
 	if req.Body != nil {
@@ -267,9 +267,9 @@ func request_UserService_ListUsers_0(ctx context.Context, marshaler runtime.Mars
 	return msg, metadata, err
 }
 
-func local_request_UserService_ListUsers_0(ctx context.Context, marshaler runtime.Marshaler, server extP402v1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserService_ListUsers_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq extP402v1.ListUsersRequest
+		protoReq extDegreesv1.ListUsersRequest
 		metadata runtime.ServerMetadata
 	)
 	msg, err := server.ListUsers(ctx, &protoReq)
@@ -281,14 +281,14 @@ func local_request_UserService_ListUsers_0(ctx context.Context, marshaler runtim
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterUserServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extP402v1.UserServiceServer) error {
+func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extDegreesv1.UserServiceServer) error {
 	mux.Handle(http.MethodGet, pattern_UserService_GetUser_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.UserService/GetUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.UserService/GetUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -308,7 +308,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.UserService/UpdateUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.UserService/UpdateUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -328,7 +328,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.UserService/EnableUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/enable"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.UserService/EnableUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/enable"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -348,7 +348,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.UserService/DisableUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/disable"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.UserService/DisableUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/disable"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -368,7 +368,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.UserService/SetUserSysop", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/sysop"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.UserService/SetUserSysop", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/sysop"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -388,7 +388,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/p402.v1.UserService/ListUsers", runtime.WithHTTPPathPattern("/api/v1/admin/users"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.UserService/ListUsers", runtime.WithHTTPPathPattern("/api/v1/admin/users"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -433,20 +433,20 @@ func RegisterUserServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.Se
 // RegisterUserServiceHandler registers the http handlers for service UserService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
 func RegisterUserServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterUserServiceHandlerClient(ctx, mux, extP402v1.NewUserServiceClient(conn))
+	return RegisterUserServiceHandlerClient(ctx, mux, extDegreesv1.NewUserServiceClient(conn))
 }
 
 // RegisterUserServiceHandlerClient registers the http handlers for service UserService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "extP402v1.UserServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "extP402v1.UserServiceClient"
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "extDegreesv1.UserServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "extDegreesv1.UserServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "extP402v1.UserServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extP402v1.UserServiceClient) error {
+// "extDegreesv1.UserServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extDegreesv1.UserServiceClient) error {
 	mux.Handle(http.MethodGet, pattern_UserService_GetUser_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.UserService/GetUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.UserService/GetUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -463,7 +463,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.UserService/UpdateUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.UserService/UpdateUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -480,7 +480,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.UserService/EnableUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/enable"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.UserService/EnableUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/enable"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -497,7 +497,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.UserService/DisableUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/disable"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.UserService/DisableUser", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/disable"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -514,7 +514,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.UserService/SetUserSysop", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/sysop"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.UserService/SetUserSysop", runtime.WithHTTPPathPattern("/api/v1/user/{user_id}/sysop"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -531,7 +531,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/p402.v1.UserService/ListUsers", runtime.WithHTTPPathPattern("/api/v1/admin/users"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.UserService/ListUsers", runtime.WithHTTPPathPattern("/api/v1/admin/users"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
