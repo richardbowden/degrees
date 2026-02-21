@@ -8,6 +8,7 @@ import type { User } from '@/lib/types';
 export async function loginAction(prevState: { error?: string } | null, formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const redirectTo = formData.get('redirect') as string;
 
   try {
     // Backend returns camelCase (protobuf JSON): sessionToken
@@ -29,5 +30,5 @@ export async function loginAction(prevState: { error?: string } | null, formData
     return { error: error.detail || error.message || 'Login failed' };
   }
 
-  redirect('/account');
+  redirect(redirectTo && redirectTo.startsWith('/') ? redirectTo : '/account');
 }

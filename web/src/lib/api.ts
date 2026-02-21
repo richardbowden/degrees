@@ -40,6 +40,7 @@ export async function api<T = unknown>(path: string, opts?: {
     method: opts?.method ?? 'GET',
     headers,
     body: opts?.body ? JSON.stringify(opts.body) : undefined,
+    ...(!isServer && { credentials: 'include' as RequestCredentials }),
   });
 
   if (!res.ok) {

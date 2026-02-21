@@ -47,22 +47,34 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
   }
 
   async function handleAddVehicle(data: VehicleFormData) {
-    const res = await api<{ vehicle: Vehicle }>('/me/vehicles', {
-      method: 'POST',
-      body: data,
-    });
-    setVehicles(prev => [...prev, res.vehicle]);
-    setShowAddVehicle(false);
+    setVehicleError('');
+    try {
+      const res = await api<{ vehicle: Vehicle }>('/me/vehicles', {
+        method: 'POST',
+        body: data,
+      });
+      setVehicles(prev => [...prev, res.vehicle]);
+      setShowAddVehicle(false);
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setVehicleError(apiErr.detail || 'Failed to add vehicle.');
+    }
   }
 
   async function handleEditVehicle(data: VehicleFormData) {
     if (!editingVehicle) return;
-    const res = await api<{ vehicle: Vehicle }>(`/me/vehicles/${editingVehicle.id}`, {
-      method: 'PUT',
-      body: data,
-    });
-    setVehicles(prev => prev.map(v => v.id === editingVehicle.id ? res.vehicle : v));
-    setEditingVehicle(null);
+    setVehicleError('');
+    try {
+      const res = await api<{ vehicle: Vehicle }>(`/me/vehicles/${editingVehicle.id}`, {
+        method: 'PUT',
+        body: data,
+      });
+      setVehicles(prev => prev.map(v => v.id === editingVehicle.id ? res.vehicle : v));
+      setEditingVehicle(null);
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setVehicleError(apiErr.detail || 'Failed to update vehicle.');
+    }
   }
 
   async function handleDeleteVehicle(id: string) {

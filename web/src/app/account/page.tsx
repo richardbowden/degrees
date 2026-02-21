@@ -86,16 +86,22 @@ export default async function AccountDashboard() {
               View All Bookings
             </Link>
             <Link
+              href="/account/profile"
+              className="block text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Edit Profile & Vehicles
+            </Link>
+            <Link
+              href="/account/history"
+              className="block text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Service History
+            </Link>
+            <Link
               href="/services"
               className="block text-sm font-medium text-gray-700 hover:text-gray-900"
             >
               Browse Services
-            </Link>
-            <Link
-              href="/account/profile"
-              className="block text-sm font-medium text-gray-700 hover:text-gray-900"
-            >
-              Edit Profile
             </Link>
           </div>
         </div>

@@ -6,7 +6,8 @@ import { api, ApiError } from '@/lib/api';
 import { VehicleSelect } from '@/components/vehicle-select';
 import { BookingCalendar } from '@/components/booking-calendar';
 import { TimeSlotGrid } from '@/components/time-slot-grid';
-import type { Vehicle, AvailableSlot, Booking, Cart } from '@/lib/types';
+import { VehicleForm, VehicleFormData } from '@/components/vehicle-form';
+import type { Vehicle, AvailableSlot, Booking, Cart, DetailingService } from '@/lib/types';
 
 type Step = 'vehicle' | 'date' | 'time' | 'notes';
 
@@ -23,17 +24,26 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(true);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showAddVehicle, setShowAddVehicle] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [serviceDurations, setServiceDurations] = useState<Record<string, number>>({});
 
   useEffect(() => {
     async function load() {
       try {
-        const [vehiclesData, cartData] = await Promise.all([
+        const [vehiclesData, cartData, catalogueData] = await Promise.all([
           api<{ vehicles: Vehicle[] }>('/me/vehicles'),
           api<{ cart: Cart }>('/cart'),
+          api<{ services: DetailingService[] }>('/catalogue'),
         ]);
         setVehicles(vehiclesData.vehicles ?? []);
         setCart(cartData.cart);
+        const durations: Record<string, number> = {};
+        for (const svc of catalogueData.services ?? []) {
+          durations[svc.id] = svc.durationMinutes;
+        }
+        setServiceDurations(durations);
       } catch (err: unknown) {
         const apiErr = err as ApiError;
         setError(apiErr.detail || 'Failed to load checkout data');
@@ -44,7 +54,10 @@ export default function CheckoutPage() {
     load();
   }, []);
 
-  const totalDuration = cart?.items?.reduce((sum, item) => sum + 60 * Number(item.quantity), 0) ?? 60;
+  const totalDuration = cart?.items?.reduce((sum, item) => {
+    const duration = serviceDurations[item.serviceId] || 60;
+    return sum + duration * Number(item.quantity);
+  }, 0) ?? 60;
 
   const fetchSlots = useCallback(async (date: string) => {
     setSlotsLoading(true);
@@ -62,6 +75,23 @@ export default function CheckoutPage() {
       setSlotsLoading(false);
     }
   }, [totalDuration]);
+
+  async function handleAddVehicle(data: VehicleFormData) {
+    setError(null);
+    try {
+      const res = await api<{ vehicle: Vehicle }>('/me/vehicles', {
+        method: 'POST',
+        body: data,
+      });
+      setVehicles(prev => [...prev, res.vehicle]);
+      setShowAddVehicle(false);
+      setSelectedVehicle(res.vehicle.id);
+      setStep('date');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setError(apiErr.detail || 'Failed to add vehicle');
+    }
+  }
 
   function handleVehicleSelect(vehicleId: string) {
     setSelectedVehicle(vehicleId);
@@ -160,11 +190,27 @@ export default function CheckoutPage() {
       {step === 'vehicle' && (
         <div>
           <h2 className="text-lg font-semibold mb-4">Select Vehicle</h2>
-          <VehicleSelect
-            vehicles={vehicles}
-            selectedId={selectedVehicle}
-            onChange={handleVehicleSelect}
-          />
+          {showAddVehicle ? (
+            <VehicleForm
+              onSubmit={handleAddVehicle}
+              onCancel={() => setShowAddVehicle(false)}
+            />
+          ) : (
+            <>
+              <VehicleSelect
+                vehicles={vehicles}
+                selectedId={selectedVehicle}
+                onChange={handleVehicleSelect}
+              />
+              <button
+                type="button"
+                onClick={() => setShowAddVehicle(true)}
+                className="mt-4 text-sm font-medium text-gray-900 underline hover:text-gray-700"
+              >
+                + Add a new vehicle
+              </button>
+            </>
+          )}
         </div>
       )}
 

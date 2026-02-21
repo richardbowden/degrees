@@ -1,10 +1,16 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, use } from 'react';
 import Link from 'next/link';
 import { loginAction } from './actions';
 
-export default function LoginPage() {
+interface Props {
+  searchParams: Promise<{ redirect?: string }>;
+}
+
+export default function LoginPage({ searchParams }: Props) {
+  const params = use(searchParams);
+  const redirectTo = params.redirect ?? '';
   const [state, formAction, pending] = useActionState(loginAction, null);
 
   return (
@@ -13,6 +19,7 @@ export default function LoginPage() {
       <p className="text-gray-600 mb-8">Sign in to your 40 Degrees account.</p>
 
       <form action={formAction} className="space-y-4">
+        {redirectTo && <input type="hidden" name="redirect" value={redirectTo} />}
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email
@@ -54,12 +61,19 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <p className="mt-6 text-sm text-gray-600 text-center">
-        Don&apos;t have an account?{' '}
-        <Link href="/register" className="text-gray-900 font-medium hover:underline">
-          Create one
-        </Link>
-      </p>
+      <div className="mt-6 text-sm text-gray-600 text-center space-y-2">
+        <p>
+          <Link href="/forgot-password" className="text-gray-900 font-medium hover:underline">
+            Forgot your password?
+          </Link>
+        </p>
+        <p>
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="text-gray-900 font-medium hover:underline">
+            Create one
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { api } from '@/lib/api';
-import type { Booking } from '@/lib/types';
+import { api, ApiError } from '@/lib/api';
+import type { Booking, ServiceRecord, ServiceNote, ProductUsed } from '@/lib/types';
 import { formatPrice, formatDate, formatTime } from '@/lib/format';
 import { StatusBadge } from '@/components/status-badge';
 
@@ -18,6 +18,22 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
   const [showComplete, setShowComplete] = useState(false);
   const [completeLoading, setCompleteLoading] = useState(false);
   const [completeError, setCompleteError] = useState('');
+
+  // Service record state
+  const [serviceRecord, setServiceRecord] = useState<ServiceRecord | null>(null);
+  const [recordLoading, setRecordLoading] = useState(false);
+  const [recordError, setRecordError] = useState('');
+
+  // Add note form
+  const [noteContent, setNoteContent] = useState('');
+  const [noteType, setNoteType] = useState('general');
+  const [noteVisible, setNoteVisible] = useState(false);
+  const [noteLoading, setNoteLoading] = useState(false);
+
+  // Add product form
+  const [productName, setProductName] = useState('');
+  const [productNotes, setProductNotes] = useState('');
+  const [productLoading, setProductLoading] = useState(false);
 
   async function handleStatusUpdate() {
     if (newStatus === booking.status) return;
@@ -53,6 +69,83 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
       setCompleteError('Failed to complete booking');
     } finally {
       setCompleteLoading(false);
+    }
+  }
+
+  async function handleCreateRecord() {
+    setRecordLoading(true);
+    setRecordError('');
+    try {
+      const res = await api<{ record: ServiceRecord }>('/admin/records', {
+        method: 'POST',
+        body: {
+          bookingId: booking.id,
+          customerId: booking.customerId,
+          vehicleId: booking.vehicleId,
+        },
+        token,
+      });
+      setServiceRecord(res.record);
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setRecordError(apiErr.detail || 'Failed to create service record');
+    } finally {
+      setRecordLoading(false);
+    }
+  }
+
+  async function handleAddNote() {
+    if (!serviceRecord || !noteContent.trim()) return;
+    setNoteLoading(true);
+    setRecordError('');
+    try {
+      const res = await api<{ note: ServiceNote }>(`/admin/records/${serviceRecord.id}/notes`, {
+        method: 'POST',
+        body: {
+          noteType,
+          content: noteContent,
+          isVisibleToCustomer: noteVisible,
+        },
+        token,
+      });
+      setServiceRecord(prev => prev ? {
+        ...prev,
+        notes: [...(prev.notes ?? []), res.note],
+      } : prev);
+      setNoteContent('');
+      setNoteVisible(false);
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setRecordError(apiErr.detail || 'Failed to add note');
+    } finally {
+      setNoteLoading(false);
+    }
+  }
+
+  async function handleAddProduct() {
+    if (!serviceRecord || !productName.trim()) return;
+    setProductLoading(true);
+    setRecordError('');
+    try {
+      const res = await api<{ product: ProductUsed }>(`/admin/records/${serviceRecord.id}/products`, {
+        method: 'POST',
+        body: {
+          productName,
+          notes: productNotes,
+        },
+        token,
+      });
+      setServiceRecord(prev => prev ? {
+        ...prev,
+        products: [...(prev.products ?? []), res.product],
+      } : prev);
+      setProductName('');
+      setProductNotes('');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setRecordError(apiErr.detail || 'Failed to add product');
+    } finally {
+      setProductLoading(false);
     }
   }
 
@@ -174,6 +267,139 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
               <p className="text-sm text-gray-500">No services listed</p>
             )}
           </div>
+
+          {/* Service Record (shown after booking is completed) */}
+          {booking.status === 'completed' && (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Service Record</h2>
+              {recordError && <p className="text-sm text-red-600 mb-3">{recordError}</p>}
+
+              {!serviceRecord ? (
+                <div>
+                  <p className="text-sm text-gray-500 mb-3">
+                    Create a service record to log notes and products used.
+                  </p>
+                  <button
+                    onClick={handleCreateRecord}
+                    disabled={recordLoading}
+                    className="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+                  >
+                    {recordLoading ? 'Creating...' : 'Create Service Record'}
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {/* Notes list */}
+                  {serviceRecord.notes && serviceRecord.notes.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-700 mb-2">Notes</h3>
+                      <div className="space-y-2">
+                        {serviceRecord.notes.map(note => (
+                          <div key={note.id} className="border border-gray-100 rounded p-3 text-sm">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-medium text-gray-900 capitalize">{note.noteType}</span>
+                              {note.isVisibleToCustomer ? (
+                                <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">Customer visible</span>
+                              ) : (
+                                <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Internal</span>
+                              )}
+                            </div>
+                            <p className="text-gray-700 whitespace-pre-wrap">{note.content}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Add note form */}
+                  <div className="border-t border-gray-100 pt-4">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Add Note</h3>
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <select
+                          value={noteType}
+                          onChange={e => setNoteType(e.target.value)}
+                          className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                        >
+                          <option value="general">General</option>
+                          <option value="condition">Condition</option>
+                          <option value="recommendation">Recommendation</option>
+                        </select>
+                        <label className="flex items-center gap-1.5 text-sm text-gray-600">
+                          <input
+                            type="checkbox"
+                            checked={noteVisible}
+                            onChange={e => setNoteVisible(e.target.checked)}
+                            className="rounded border-gray-300"
+                          />
+                          Visible to customer
+                        </label>
+                      </div>
+                      <textarea
+                        value={noteContent}
+                        onChange={e => setNoteContent(e.target.value)}
+                        rows={2}
+                        placeholder="Enter note..."
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                      />
+                      <button
+                        onClick={handleAddNote}
+                        disabled={noteLoading || !noteContent.trim()}
+                        className="bg-gray-900 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+                      >
+                        {noteLoading ? 'Adding...' : 'Add Note'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Products list */}
+                  {serviceRecord.products && serviceRecord.products.length > 0 && (
+                    <div className="border-t border-gray-100 pt-4">
+                      <h3 className="text-sm font-medium text-gray-700 mb-2">Products Used</h3>
+                      <div className="space-y-2">
+                        {serviceRecord.products.map(product => (
+                          <div key={product.id} className="flex items-center justify-between text-sm border border-gray-100 rounded p-3">
+                            <span className="font-medium text-gray-900">{product.productName}</span>
+                            {product.notes && <span className="text-gray-500">{product.notes}</span>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Add product form */}
+                  <div className="border-t border-gray-100 pt-4">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Log Product Used</h3>
+                    <div className="space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          value={productName}
+                          onChange={e => setProductName(e.target.value)}
+                          placeholder="Product name (e.g. Bowden's Nanolicious)"
+                          className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                        />
+                        <input
+                          type="text"
+                          value={productNotes}
+                          onChange={e => setProductNotes(e.target.value)}
+                          placeholder="Notes (optional)"
+                          className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                        />
+                      </div>
+                      <button
+                        onClick={handleAddProduct}
+                        disabled={productLoading || !productName.trim()}
+                        className="bg-gray-900 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+                      >
+                        {productLoading ? 'Adding...' : 'Add Product'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Sidebar: Pricing & Actions */}

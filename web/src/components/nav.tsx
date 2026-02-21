@@ -1,9 +1,12 @@
-'use client';
-
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { CartIcon } from '@/components/cart-icon';
+import { logout } from '@/app/account/actions';
 
-export function Nav() {
+export async function Nav() {
+  const cookieStore = await cookies();
+  const isLoggedIn = !!cookieStore.get('session_token')?.value;
+
   return (
     <nav className="border-b border-gray-200 bg-white">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
@@ -15,9 +18,25 @@ export function Nav() {
             Services
           </Link>
           <CartIcon />
-          <Link href="/login" className="text-gray-700 hover:text-gray-900">
-            Login
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link href="/account" className="text-gray-700 hover:text-gray-900">
+                Account
+              </Link>
+              <form action={logout}>
+                <button
+                  type="submit"
+                  className="text-gray-700 hover:text-gray-900"
+                >
+                  Log Out
+                </button>
+              </form>
+            </>
+          ) : (
+            <Link href="/login" className="text-gray-700 hover:text-gray-900">
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </nav>
