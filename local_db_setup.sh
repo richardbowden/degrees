@@ -7,9 +7,9 @@ PG_SUPERUSER="postgres"  # an existing superuser to run these commands
 PG_DATABASE="postgres"  # the database you want to grant connect privileges to
 
 # New user details
-NEW_USERNAME="p402"
+NEW_USERNAME="degrees"
 NEW_USER_PASSWORD="letmein"
-DB_NAME="p402"
+DB_NAME="degrees"
 
 psql -c "CREATE DATABASE $DB_NAME;"
 
