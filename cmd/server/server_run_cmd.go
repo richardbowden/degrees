@@ -23,7 +23,7 @@ import (
 	ac "github.com/richardbowden/degrees/internal/accesscontrol"
 	"github.com/richardbowden/degrees/internal/dbpg"
 	fastmail "github.com/richardbowden/degrees/internal/email/genericsmtp"
-	gw "github.com/richardbowden/degrees/internal/gateway/p402/v1"
+	gw "github.com/richardbowden/degrees/internal/gateway/degrees/v1"
 	grpcsvr "github.com/richardbowden/degrees/internal/grpc"
 	"github.com/richardbowden/degrees/internal/health"
 	notification "github.com/richardbowden/degrees/internal/notifications"

@@ -4,9 +4,9 @@ package p402.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
-import "p402/v1/common.proto";
+import "degrees/v1/common.proto";
 
-option go_package = "github.com/typewriterco/p402/internal/pb/p402/v1;p402v1";
+option go_package = "github.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1";
 
 // ========================================
 // Request/Response Messages

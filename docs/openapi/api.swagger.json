@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "p402/v1/common.proto",
+    "title": "degrees/v1/common.proto",
     "version": "version not set"
   },
   "tags": [
