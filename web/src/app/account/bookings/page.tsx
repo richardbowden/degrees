@@ -1,0 +1,75 @@
+import { cookies } from 'next/headers';
+import Link from 'next/link';
+import { api } from '@/lib/api';
+import type { Booking } from '@/lib/types';
+import { StatusBadge } from '@/components/status-badge';
+import { formatDate, formatTime, formatPrice } from '@/lib/format';
+
+export default async function BookingsPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('session_token')?.value!;
+
+  const { bookings } = await api<{ bookings: Booking[] }>('/me/bookings', { token });
+
+  const sorted = [...bookings].sort(
+    (a, b) => b.scheduledDate.localeCompare(a.scheduledDate) || b.scheduledTime.localeCompare(a.scheduledTime)
+  );
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">Bookings</h1>
+
+      {sorted.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500 mb-4">You don't have any bookings yet.</p>
+          <Link
+            href="/services"
+            className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800"
+          >
+            Browse Services
+          </Link>
+        </div>
+      ) : (
+        <div className="border border-gray-200 rounded-lg overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="text-left px-4 py-3 font-medium text-gray-700">Date</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-700">Time</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-700">Services</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-700">Status</th>
+                <th className="text-right px-4 py-3 font-medium text-gray-700">Total</th>
+                <th className="px-4 py-3"></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {sorted.map(booking => (
+                <tr key={booking.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 text-gray-900">{formatDate(booking.scheduledDate)}</td>
+                  <td className="px-4 py-3 text-gray-600">{formatTime(booking.scheduledTime)}</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    {booking.services?.map(s => s.serviceName).join(', ') || '-'}
+                  </td>
+                  <td className="px-4 py-3">
+                    <StatusBadge status={booking.status} />
+                  </td>
+                  <td className="px-4 py-3 text-right text-gray-900 font-medium">
+                    {formatPrice(booking.totalAmount)}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Link
+                      href={`/account/bookings/${booking.id}`}
+                      className="text-gray-600 hover:text-gray-900 font-medium"
+                    >
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}

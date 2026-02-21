@@ -1,7 +1,7 @@
 # 40 Degrees Frontend
 
 ## Stack
-Next.js 14+ App Router, TypeScript, Tailwind CSS.
+Next.js 15+ App Router, TypeScript, Tailwind CSS.
 
 ## API
 Backend REST API at http://localhost:8080/api/v1 (Go gRPC gateway).
