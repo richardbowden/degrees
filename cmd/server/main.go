@@ -88,7 +88,19 @@ func run(args []string) {
 						},
 					},
 				},
-			}, {
+			},
+			{
+				Name:  "seed",
+				Usage: "Seed the database with initial data",
+				Subcommands: []*cli.Command{
+					{
+						Name:   "run",
+						Usage:  "Run all seed data (schedule, catalogue, test user)",
+						Action: seedRun,
+					},
+				},
+			},
+			{
 				Name: "db",
 				Subcommands: []*cli.Command{
 					{
