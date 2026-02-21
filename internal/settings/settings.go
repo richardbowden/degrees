@@ -9,7 +9,7 @@ import (
 	"strconv"
 
 	"github.com/rs/zerolog/log"
-	"github.com/typewriterco/p402/internal/dbpg"
+	"github.com/richardbowden/degrees/internal/dbpg"
 )
 
 type Settings interface {

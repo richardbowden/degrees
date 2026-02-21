@@ -9,10 +9,10 @@ import (
 
 	"github.com/go-chi/httplog"
 	"github.com/jackc/pgx/v5/pgtype"
-	notification "github.com/typewriterco/p402/internal/notifications"
-	"github.com/typewriterco/p402/internal/problems"
-	"github.com/typewriterco/p402/internal/dbpg"
-	"github.com/typewriterco/p402/internal/settings"
+	notification "github.com/richardbowden/degrees/internal/notifications"
+	"github.com/richardbowden/degrees/internal/problems"
+	"github.com/richardbowden/degrees/internal/dbpg"
+	"github.com/richardbowden/degrees/internal/settings"
 )
 
 type SignUp struct {

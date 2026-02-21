@@ -7,7 +7,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/typewriterco/p402/internal/dbpg"
+	"github.com/richardbowden/degrees/internal/dbpg"
 )
 
 type Template struct {

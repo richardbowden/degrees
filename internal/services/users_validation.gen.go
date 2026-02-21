@@ -6,7 +6,7 @@ package services
 import (
     "crypto/subtle"
 
-    valgen "github.com/typewriterco/p402/internal/valgen"
+    valgen "github.com/richardbowden/degrees/internal/valgen"
 )
 
 func (v NewUser) Validate() error {

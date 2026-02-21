@@ -3,7 +3,7 @@ package thttp
 import (
 	"net/http"
 
-	"github.com/typewriterco/p402/internal/httpjson"
+	"github.com/richardbowden/degrees/internal/httpjson"
 )
 
 // DecodeJSONBody wraps the shared httpjson decoder for backward compatibility

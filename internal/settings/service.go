@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/typewriterco/p402/internal/dbpg"
-	"github.com/typewriterco/p402/internal/problems"
+	"github.com/richardbowden/degrees/internal/dbpg"
+	"github.com/richardbowden/degrees/internal/problems"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/rs/zerolog"

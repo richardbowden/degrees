@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/go-chi/httplog"
-	"github.com/typewriterco/p402/internal/dbpg"
-	"github.com/typewriterco/p402/internal/services"
+	"github.com/richardbowden/degrees/internal/dbpg"
+	"github.com/richardbowden/degrees/internal/services"
 )
 
 type Users struct {

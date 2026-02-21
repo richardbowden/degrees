@@ -5,7 +5,7 @@ import (
 
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
-	"github.com/typewriterco/p402/internal/dbpg"
+	"github.com/richardbowden/degrees/internal/dbpg"
 )
 
 const QueueMaintenance = "maintenance"

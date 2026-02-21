@@ -1,4 +1,4 @@
-module github.com/typewriterco/p402
+module github.com/richardbowden/degrees
 
 go 1.25.0
 

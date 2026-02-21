@@ -6,7 +6,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/typewriterco/p402/internal/problems"
+	"github.com/richardbowden/degrees/internal/problems"
 )
 
 type UserState string

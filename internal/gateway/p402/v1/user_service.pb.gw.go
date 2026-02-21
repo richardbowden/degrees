@@ -16,7 +16,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
-	extP402v1 "github.com/typewriterco/p402/internal/pb/p402/v1"
+	extP402v1 "github.com/richardbowden/degrees/internal/pb/p402/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"

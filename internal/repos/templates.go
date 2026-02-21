@@ -1,6 +1,6 @@
 package repos
 
-import "github.com/typewriterco/p402/internal/dbpg"
+import "github.com/richardbowden/degrees/internal/dbpg"
 
 type Templates struct {
 	store dbpg.Storer

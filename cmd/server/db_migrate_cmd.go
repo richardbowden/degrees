@@ -10,9 +10,9 @@ import (
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivermigrate"
 
-	"github.com/typewriterco/p402/internal/dbpg"
-	migrator "github.com/typewriterco/p402/internal/migrations"
-	"github.com/typewriterco/p402/sql/schema"
+	"github.com/richardbowden/degrees/internal/dbpg"
+	migrator "github.com/richardbowden/degrees/internal/migrations"
+	"github.com/richardbowden/degrees/sql/schema"
 	"github.com/urfave/cli/v2"
 )
 

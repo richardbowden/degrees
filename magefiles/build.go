@@ -12,8 +12,8 @@ import (
 
 var (
 	Default        = Debug
-	debugBinName   = "p402-debug"
-	releaseBinName = "p402-release"
+	debugBinName   = "degrees-debug"
+	releaseBinName = "degrees-release"
 )
 
 var (

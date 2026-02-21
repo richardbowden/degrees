@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/rs/zerolog/log"
-	"github.com/typewriterco/p402/internal/settings"
+	"github.com/richardbowden/degrees/internal/settings"
 )
 
 type Client struct {

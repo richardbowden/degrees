@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/rs/zerolog/log"
-	"github.com/typewriterco/p402/internal/services"
+	"github.com/richardbowden/degrees/internal/services"
 )
 
 // Context keys for user information

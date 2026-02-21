@@ -20,8 +20,8 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/zerolog/log"
 
-	"github.com/typewriterco/p402/internal/config"
-	"github.com/typewriterco/p402/internal/health"
+	"github.com/richardbowden/degrees/internal/config"
+	"github.com/richardbowden/degrees/internal/health"
 )
 
 var (

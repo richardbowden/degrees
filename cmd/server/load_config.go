@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/typewriterco/p402/internal/config"
+	"github.com/richardbowden/degrees/internal/config"
 	"github.com/urfave/cli/v2"
 )
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/typewriterco/p402/internal/accesscontrol"
-	"github.com/typewriterco/p402/internal/problems"
+	"github.com/richardbowden/degrees/internal/accesscontrol"
+	"github.com/richardbowden/degrees/internal/problems"
 )
 
 const (

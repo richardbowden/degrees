@@ -11,8 +11,8 @@ import (
 	"github.com/go-chi/httplog"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/richardbowden/passwordHash"
-	"github.com/typewriterco/p402/internal/dbpg"
-	"github.com/typewriterco/p402/internal/problems"
+	"github.com/richardbowden/degrees/internal/dbpg"
+	"github.com/richardbowden/degrees/internal/problems"
 )
 
 type AuthN struct {

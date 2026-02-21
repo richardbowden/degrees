@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	notification "github.com/typewriterco/p402/internal/notifications"
-	pb "github.com/typewriterco/p402/internal/pb/p402/v1"
-	"github.com/typewriterco/p402/internal/services"
+	notification "github.com/richardbowden/degrees/internal/notifications"
+	pb "github.com/richardbowden/degrees/internal/pb/p402/v1"
+	"github.com/richardbowden/degrees/internal/services"
 )
 
 // AuthServiceServer implements the gRPC AuthService interface

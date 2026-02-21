@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
-	fastmail "github.com/typewriterco/p402/internal/email/genericsmtp"
-	pb "github.com/typewriterco/p402/internal/pb/p402/v1"
-	"github.com/typewriterco/p402/internal/services"
+	fastmail "github.com/richardbowden/degrees/internal/email/genericsmtp"
+	pb "github.com/richardbowden/degrees/internal/pb/p402/v1"
+	"github.com/richardbowden/degrees/internal/services"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/typewriterco/p402/internal/problems"
+	"github.com/richardbowden/degrees/internal/problems"
 )
 
 // ToGRPCError converts a problems.Problem to a gRPC status error

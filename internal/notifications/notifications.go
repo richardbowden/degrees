@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/go-chi/httplog"
-	"github.com/typewriterco/p402/internal/riverqueue"
-	"github.com/typewriterco/p402/internal/templater"
-	"github.com/typewriterco/p402/internal/workers"
+	"github.com/richardbowden/degrees/internal/riverqueue"
+	"github.com/richardbowden/degrees/internal/templater"
+	"github.com/richardbowden/degrees/internal/workers"
 )
 
 type Notifier struct {

@@ -3,8 +3,8 @@ package repos
 import (
 	"context"
 
-	"github.com/typewriterco/p402/internal/dbpg"
-	"github.com/typewriterco/p402/internal/settings"
+	"github.com/richardbowden/degrees/internal/dbpg"
+	"github.com/richardbowden/degrees/internal/settings"
 )
 
 type Settings struct {

@@ -17,8 +17,8 @@ import (
 	"github.com/rs/zerolog"
 	log "github.com/rs/zerolog/log"
 
-	fgafs "github.com/typewriterco/p402/fga"
-	"github.com/typewriterco/p402/internal/settings"
+	fgafs "github.com/richardbowden/degrees/fga"
+	"github.com/richardbowden/degrees/internal/settings"
 )
 
 const (
