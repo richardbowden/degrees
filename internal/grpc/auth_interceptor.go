@@ -24,13 +24,28 @@ const (
 
 // Public endpoints that don't require authentication
 var publicEndpoints = map[string]bool{
-	"/p402.v1.AuthService/Register":               true,
-	"/p402.v1.AuthService/Login":                  true,
-	"/p402.v1.AuthService/VerifyEmail":            true,
-	"/p402.v1.AuthService/ResetPassword":          true,
-	"/p402.v1.AuthService/CompletePasswordReset":  true,
+	"/degrees.v1.AuthService/Register":               true,
+	"/degrees.v1.AuthService/Login":                  true,
+	"/degrees.v1.AuthService/VerifyEmail":            true,
+	"/degrees.v1.AuthService/ResetPassword":          true,
+	"/degrees.v1.AuthService/CompletePasswordReset":  true,
 	"/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo": true,
 	"/grpc.reflection.v1.ServerReflection/ServerReflectionInfo":       true,
+
+	// Catalogue public read endpoints
+	"/degrees.v1.CatalogueService/ListCategories": true,
+	"/degrees.v1.CatalogueService/ListServices":   true,
+	"/degrees.v1.CatalogueService/GetService":     true,
+
+	// Cart endpoints (supports guest sessions via session token)
+	"/degrees.v1.CartService/GetCart":        true,
+	"/degrees.v1.CartService/AddCartItem":    true,
+	"/degrees.v1.CartService/UpdateCartItem": true,
+	"/degrees.v1.CartService/RemoveCartItem": true,
+	"/degrees.v1.CartService/ClearCart":      true,
+
+	// Booking public endpoint
+	"/degrees.v1.BookingService/GetAvailableSlots": true,
 }
 
 // AuthInterceptor creates a gRPC unary interceptor for authentication

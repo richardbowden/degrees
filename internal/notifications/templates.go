@@ -6,6 +6,7 @@ const (
 	TPL_WELCOME_EMAIL               TemplateType = "system-welcome-email"
 	TPL_SYSTEM_VERIFY_EMAIL_ADDRESS TemplateType = "system-verify-email-address"
 	TPL_SYSTEM_PASSWORD_RESET       TemplateType = "system-password-reset"
+	TPL_BOOKING_CONFIRMATION        TemplateType = "booking-confirmation"
 )
 
 func (s TemplateType) String() string {

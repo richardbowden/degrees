@@ -206,12 +206,23 @@ func serverRun(ctx *cli.Context) error {
 	// Schedule session cleanup to run hourly (and once on start)
 	riverqueue.AddPeriodicJob(rq, 1*time.Hour, workers.SessionCleanupArgs{})
 
+	n := notification.NewNotifier(rq, tpler, config.DefaultFromEmail)
+
+	// Booking confirmation worker
+	bookingConfirmationWorker := workers.NewBookingConfirmationWorker(n)
+	bookingWkrConfig := riverqueue.WorkerConfig{
+		Name:       "booking_confirmation",
+		Queue:      "booking",
+		MaxWorkers: 2,
+	}
+	if err := riverqueue.Register(rq, bookingWkrConfig, bookingConfirmationWorker); err != nil {
+		log.Fatal().Err(err).Msg("failed to register booking confirmation worker")
+	}
+
 	err = rq.Start(context.Background())
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to start river queuing")
 	}
-
-	n := notification.NewNotifier(rq, tpler, config.DefaultFromEmail)
 
 	signUpSvc := services.NewSignUp(userSvc, authNService, authzClient, settingsService)
 	signUpSvc.Notifier = n
@@ -245,6 +256,47 @@ func serverRun(ctx *cli.Context) error {
 
 	smtpGrpcSvc := grpcsvr.NewSMTPServiceServer(smtpClient, authNService)
 	pb.RegisterSMTPServiceServer(grpcServer, smtpGrpcSvc)
+
+	// Catalogue service
+	catalogueRepo := repos.NewCatalogueRepo(ds)
+	catalogueSvc := services.NewCatalogueService(catalogueRepo, authzClient)
+	catalogueGrpcSvc := grpcsvr.NewCatalogueServiceServer(catalogueSvc)
+	pb.RegisterCatalogueServiceServer(grpcServer, catalogueGrpcSvc)
+
+	// Cart service
+	cartRepo := repos.NewCartRepo(ds)
+	cartSvc := services.NewCartService(cartRepo)
+	cartGrpcSvc := grpcsvr.NewCartServiceServer(cartSvc)
+	pb.RegisterCartServiceServer(grpcServer, cartGrpcSvc)
+
+	// Customer service
+	customerRepo := repos.NewCustomerRepo(ds)
+	customerSvc := services.NewCustomerService(customerRepo, authzClient)
+	customerGrpcSvc := grpcsvr.NewCustomerServiceServer(customerSvc)
+	pb.RegisterCustomerServiceServer(grpcServer, customerGrpcSvc)
+
+	// History service
+	historyRepo := repos.NewHistoryRepo(ds)
+	historySvc := services.NewHistoryService(historyRepo, authzClient, customerRepo)
+	historyGrpcSvc := grpcsvr.NewHistoryServiceServer(historySvc)
+	pb.RegisterHistoryServiceServer(grpcServer, historyGrpcSvc)
+
+	// Schedule service
+	scheduleRepo := repos.NewScheduleRepo(ds)
+	scheduleSvc := services.NewScheduleService(scheduleRepo)
+	scheduleGrpcSvc := grpcsvr.NewScheduleServer(scheduleSvc)
+	pb.RegisterScheduleServiceServer(grpcServer, scheduleGrpcSvc)
+
+	// Booking service
+	bookingRepo := repos.NewBookingRepo(ds)
+	bookingSvc := services.NewBookingService(bookingRepo)
+	bookingGrpcSvc := grpcsvr.NewBookingServer(bookingSvc, scheduleSvc)
+	pb.RegisterBookingServiceServer(grpcServer, bookingGrpcSvc)
+
+	// Payment service
+	paymentSvc := services.NewPaymentService(bookingRepo, nil, config.BaseURL)
+	paymentGrpcSvc := grpcsvr.NewPaymentServer(paymentSvc)
+	pb.RegisterPaymentServiceServer(grpcServer, paymentGrpcSvc)
 
 	// Enable gRPC reflection for grpcurl/grpcui
 	reflection.Register(grpcServer)
@@ -293,6 +345,41 @@ func serverRun(ctx *cli.Context) error {
 	err = gw.RegisterSMTPServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to register SMTPService gateway")
+	}
+
+	err = gw.RegisterCatalogueServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to register CatalogueService gateway")
+	}
+
+	err = gw.RegisterCartServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to register CartService gateway")
+	}
+
+	err = gw.RegisterCustomerServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to register CustomerService gateway")
+	}
+
+	err = gw.RegisterHistoryServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to register HistoryService gateway")
+	}
+
+	err = gw.RegisterBookingServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to register BookingService gateway")
+	}
+
+	err = gw.RegisterPaymentServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to register PaymentService gateway")
+	}
+
+	err = gw.RegisterScheduleServiceHandlerFromEndpoint(gwCtx, gwmux, grpcEndpoint, opts)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to register ScheduleService gateway")
 	}
 
 	// ========================================

@@ -65,3 +65,19 @@ type PasswordResetData struct {
 	ResetLink string
 	Email     string
 }
+
+type BookingConfirmationData struct {
+	BookingDate   string
+	BookingTime   string
+	DepositAmount int64
+	TotalAmount   int64
+}
+
+func (n *Notifier) SendBookingConfirmation(ctx context.Context, to string, bookingDate string, bookingTime string, depositAmount int64, totalAmount int64) error {
+	return n.SendEmail(ctx, TPL_BOOKING_CONFIRMATION, []string{to}, "Booking Confirmation - 40 Degrees Car Detailing", BookingConfirmationData{
+		BookingDate:   bookingDate,
+		BookingTime:   bookingTime,
+		DepositAmount: depositAmount,
+		TotalAmount:   totalAmount,
+	})
+}
