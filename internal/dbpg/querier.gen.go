@@ -9,25 +9,56 @@ import (
 )
 
 type Querier interface {
+	AddCartItem(ctx context.Context, arg AddCartItemParams) (CartItem, error)
+	AddCartItemOption(ctx context.Context, arg AddCartItemOptionParams) (CartItemOption, error)
+	ClearCart(ctx context.Context, arg ClearCartParams) error
+	CreateBlackout(ctx context.Context, arg CreateBlackoutParams) (ScheduleBlackout, error)
+	CreateBooking(ctx context.Context, arg CreateBookingParams) (Booking, error)
+	CreateBookingService(ctx context.Context, arg CreateBookingServiceParams) (BookingService, error)
+	CreateBookingServiceOption(ctx context.Context, arg CreateBookingServiceOptionParams) (BookingServiceOption, error)
+	CreateCartSession(ctx context.Context, arg CreateCartSessionParams) (CartSession, error)
+	CreateCategory(ctx context.Context, arg CreateCategoryParams) (ServiceCategory, error)
+	CreateCustomerProfile(ctx context.Context, arg CreateCustomerProfileParams) (CustomerProfile, error)
 	CreatePasswordResetToken(ctx context.Context, arg CreatePasswordResetTokenParams) error
+	CreateService(ctx context.Context, arg CreateServiceParams) (Service, error)
+	CreateServiceNote(ctx context.Context, arg CreateServiceNoteParams) (ServiceNote, error)
+	CreateServiceOption(ctx context.Context, arg CreateServiceOptionParams) (ServiceOption, error)
+	CreateServicePhoto(ctx context.Context, arg CreateServicePhotoParams) (ServicePhoto, error)
+	CreateServiceProductUsed(ctx context.Context, arg CreateServiceProductUsedParams) (ServiceProductsUsed, error)
+	CreateServiceRecord(ctx context.Context, arg CreateServiceRecordParams) (ServiceRecord, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateSetting(ctx context.Context, arg CreateSettingParams) error
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	// First create the email, then create the user in separate operations
 	CreateUserEmail(ctx context.Context, arg CreateUserEmailParams) (UserEmail, error)
+	CreateVehicle(ctx context.Context, arg CreateVehicleParams) (Vehicle, error)
 	CreateVerificationToken(ctx context.Context, arg CreateVerificationTokenParams) error
+	DeleteBlackout(ctx context.Context, arg DeleteBlackoutParams) error
 	DeleteExpiredPasswordResetTokens(ctx context.Context) error
 	DeleteExpiredSessions(ctx context.Context) error
 	DeletePasswordResetToken(ctx context.Context, arg DeletePasswordResetTokenParams) error
+	DeleteService(ctx context.Context, arg DeleteServiceParams) (Service, error)
+	DeleteServiceOption(ctx context.Context, arg DeleteServiceOptionParams) (ServiceOption, error)
 	DeleteSession(ctx context.Context, arg DeleteSessionParams) error
 	// Delete a specific setting by ID
 	DeleteSetting(ctx context.Context, arg DeleteSettingParams) error
 	DeleteToken(ctx context.Context, arg DeleteTokenParams) error
 	DeleteUserPasswordResetTokens(ctx context.Context, arg DeleteUserPasswordResetTokensParams) error
 	DeleteUserSessions(ctx context.Context, arg DeleteUserSessionsParams) error
+	DeleteVehicle(ctx context.Context, arg DeleteVehicleParams) error
 	EmailExists(ctx context.Context, arg EmailExistsParams) (bool, error)
+	GetBookingByID(ctx context.Context, arg GetBookingByIDParams) (GetBookingByIDRow, error)
+	GetCartBySessionToken(ctx context.Context, arg GetCartBySessionTokenParams) (CartSession, error)
+	GetCartByUserID(ctx context.Context, arg GetCartByUserIDParams) (CartSession, error)
+	GetCategoryBySlug(ctx context.Context, arg GetCategoryBySlugParams) (ServiceCategory, error)
+	GetCustomerProfileByUserID(ctx context.Context, arg GetCustomerProfileByUserIDParams) (CustomerProfile, error)
 	GetNotificationTemplateByName(ctx context.Context, arg GetNotificationTemplateByNameParams) (string, error)
 	GetPasswordResetToken(ctx context.Context, arg GetPasswordResetTokenParams) (PasswordResetToken, error)
+	GetScheduleConfig(ctx context.Context) ([]ScheduleConfig, error)
+	GetScheduleConfigForDay(ctx context.Context, arg GetScheduleConfigForDayParams) (ScheduleConfig, error)
+	GetServiceByID(ctx context.Context, arg GetServiceByIDParams) (Service, error)
+	GetServiceBySlug(ctx context.Context, arg GetServiceBySlugParams) (GetServiceBySlugRow, error)
+	GetServiceRecordByID(ctx context.Context, arg GetServiceRecordByIDParams) (ServiceRecord, error)
 	GetSessionByToken(ctx context.Context, arg GetSessionByTokenParams) (Session, error)
 	GetSetting(ctx context.Context, arg GetSettingParams) ([]byte, error)
 	// Get a specific setting by ID
@@ -44,28 +75,59 @@ type Querier interface {
 	GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) (User, error)
 	GetUserById(ctx context.Context, arg GetUserByIdParams) (User, error)
 	GetUserByUsername(ctx context.Context, arg GetUserByUsernameParams) (User, error)
+	GetVehicleByID(ctx context.Context, arg GetVehicleByIDParams) (Vehicle, error)
+	IsDateBlackedOut(ctx context.Context, arg IsDateBlackedOutParams) (bool, error)
 	IsFirstUser(ctx context.Context) (bool, error)
 	// List all settings (for admin interface)
 	ListAllSettings(ctx context.Context) ([]Setting, error)
 	ListAllUsers(ctx context.Context) ([]User, error)
+	ListBlackoutDates(ctx context.Context) ([]ScheduleBlackout, error)
+	ListBookingServiceOptions(ctx context.Context, arg ListBookingServiceOptionsParams) ([]ListBookingServiceOptionsRow, error)
+	ListBookingServices(ctx context.Context, arg ListBookingServicesParams) ([]ListBookingServicesRow, error)
+	ListBookingsByCustomer(ctx context.Context, arg ListBookingsByCustomerParams) ([]Booking, error)
+	ListBookingsByDateRange(ctx context.Context, arg ListBookingsByDateRangeParams) ([]Booking, error)
+	ListBookingsForDate(ctx context.Context, arg ListBookingsForDateParams) ([]Booking, error)
+	ListCartItems(ctx context.Context, arg ListCartItemsParams) ([]ListCartItemsRow, error)
+	ListCategories(ctx context.Context) ([]ServiceCategory, error)
+	ListCustomers(ctx context.Context, arg ListCustomersParams) ([]CustomerProfile, error)
 	// List settings for a specific organization (including system defaults)
 	ListOrganizationSettings(ctx context.Context, arg ListOrganizationSettingsParams) ([]Setting, error)
 	// List settings for a specific project (including org and system defaults)
 	// Note: Pass both project_id and org_id as parameters
 	ListProjectSettings(ctx context.Context, arg ListProjectSettingsParams) ([]Setting, error)
+	ListServiceNotes(ctx context.Context, arg ListServiceNotesParams) ([]ServiceNote, error)
+	ListServiceOptions(ctx context.Context, arg ListServiceOptionsParams) ([]ServiceOption, error)
+	ListServicePhotos(ctx context.Context, arg ListServicePhotosParams) ([]ServicePhoto, error)
+	ListServiceProductsUsed(ctx context.Context, arg ListServiceProductsUsedParams) ([]ServiceProductsUsed, error)
+	ListServiceRecordsByBooking(ctx context.Context, arg ListServiceRecordsByBookingParams) ([]ServiceRecord, error)
+	ListServiceRecordsByCustomer(ctx context.Context, arg ListServiceRecordsByCustomerParams) ([]ServiceRecord, error)
+	ListServices(ctx context.Context) ([]Service, error)
+	ListServicesByCategory(ctx context.Context, arg ListServicesByCategoryParams) ([]Service, error)
 	// -- name: ListSystemNotificationTemplates :many
 	// select name from notification_template;
 	ListSystemNotificationTemplates(ctx context.Context) ([]ListSystemNotificationTemplatesRow, error)
 	// List all system-level settings
 	ListSystemSettings(ctx context.Context) ([]Setting, error)
 	ListTemplates(ctx context.Context) ([]Template, error)
+	ListVehiclesByCustomer(ctx context.Context, arg ListVehiclesByCustomerParams) ([]Vehicle, error)
+	RemoveCartItem(ctx context.Context, arg RemoveCartItemParams) error
+	RemoveCartItemOption(ctx context.Context, arg RemoveCartItemOptionParams) error
 	SaveTemplate(ctx context.Context, arg SaveTemplateParams) error
+	UpdateBookingPaymentStatus(ctx context.Context, arg UpdateBookingPaymentStatusParams) (Booking, error)
+	UpdateBookingStatus(ctx context.Context, arg UpdateBookingStatusParams) (Booking, error)
+	UpdateCartItemQuantity(ctx context.Context, arg UpdateCartItemQuantityParams) (CartItem, error)
+	UpdateCategory(ctx context.Context, arg UpdateCategoryParams) (ServiceCategory, error)
+	UpdateCustomerProfile(ctx context.Context, arg UpdateCustomerProfileParams) (CustomerProfile, error)
+	UpdateScheduleConfig(ctx context.Context, arg UpdateScheduleConfigParams) (ScheduleConfig, error)
+	UpdateService(ctx context.Context, arg UpdateServiceParams) (Service, error)
+	UpdateServiceOption(ctx context.Context, arg UpdateServiceOptionParams) (ServiceOption, error)
 	UpdateSessionActivity(ctx context.Context, arg UpdateSessionActivityParams) error
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserEnabled(ctx context.Context, arg UpdateUserEnabledParams) (User, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
 	UpdateUserSignUpStage(ctx context.Context, arg UpdateUserSignUpStageParams) (User, error)
 	UpdateUserSysop(ctx context.Context, arg UpdateUserSysopParams) (User, error)
+	UpdateVehicle(ctx context.Context, arg UpdateVehicleParams) (Vehicle, error)
 	// Create or update an organization-level setting
 	UpsertOrganizationSetting(ctx context.Context, arg UpsertOrganizationSettingParams) (Setting, error)
 	// Create or update a project-level setting
