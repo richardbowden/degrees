@@ -21,8 +21,8 @@ export default async function AdminBookingDetailPage({ params }: { params: Promi
   if (error || !booking) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Booking Detail</h1>
-        <p className="text-red-600 text-sm">{error || 'Booking not found'}</p>
+        <h1 className="text-2xl font-bold text-white mb-4">Booking Detail</h1>
+        <p className="text-red-400 text-sm">{error || 'Booking not found'}</p>
       </div>
     );
   }

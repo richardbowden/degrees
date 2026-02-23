@@ -17,49 +17,49 @@ export default async function BookingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Bookings</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Bookings</h1>
 
       {sorted.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 mb-4">You don't have any bookings yet.</p>
+          <p className="text-text-muted mb-4">You don't have any bookings yet.</p>
           <Link
             href="/services"
-            className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800"
+            className="btn-brand inline-block px-4 py-2 text-sm font-medium rounded-md"
           >
             Browse Services
           </Link>
         </div>
       ) : (
-        <div className="border border-gray-200 rounded-lg overflow-hidden">
+        <div className="border border-border-subtle rounded-lg overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50">
+            <thead className="bg-white/5">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-gray-700">Date</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-700">Time</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-700">Services</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-700">Status</th>
-                <th className="text-right px-4 py-3 font-medium text-gray-700">Total</th>
+                <th className="text-left px-4 py-3 font-medium text-text-secondary">Date</th>
+                <th className="text-left px-4 py-3 font-medium text-text-secondary">Time</th>
+                <th className="text-left px-4 py-3 font-medium text-text-secondary">Services</th>
+                <th className="text-left px-4 py-3 font-medium text-text-secondary">Status</th>
+                <th className="text-right px-4 py-3 font-medium text-text-secondary">Total</th>
                 <th className="px-4 py-3"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-border-subtle">
               {sorted.map(booking => (
-                <tr key={booking.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-gray-900">{formatDate(booking.scheduledDate)}</td>
-                  <td className="px-4 py-3 text-gray-600">{formatTime(booking.scheduledTime)}</td>
-                  <td className="px-4 py-3 text-gray-600">
+                <tr key={booking.id} className="hover:bg-white/5">
+                  <td className="px-4 py-3 text-white">{formatDate(booking.scheduledDate)}</td>
+                  <td className="px-4 py-3 text-text-secondary">{formatTime(booking.scheduledTime)}</td>
+                  <td className="px-4 py-3 text-text-secondary">
                     {booking.services?.map(s => s.serviceName).join(', ') || '-'}
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={booking.status} />
                   </td>
-                  <td className="px-4 py-3 text-right text-gray-900 font-medium">
+                  <td className="px-4 py-3 text-right text-white font-medium">
                     {formatPrice(booking.totalAmount)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/account/bookings/${booking.id}`}
-                      className="text-gray-600 hover:text-gray-900 font-medium"
+                      className="text-text-secondary hover:text-white font-medium"
                     >
                       View
                     </Link>

@@ -17,8 +17,8 @@ export default function ResetPasswordPage({ searchParams }: Props) {
     return (
       <div className="max-w-md mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">Invalid Link</h1>
-        <p className="text-gray-600 mb-6">No reset token provided.</p>
-        <Link href="/forgot-password" className="text-gray-900 font-medium hover:underline">
+        <p className="text-text-secondary mb-6">No reset token provided.</p>
+        <Link href="/forgot-password" className="text-brand-400 font-medium hover:underline">
           Request a new reset link
         </Link>
       </div>
@@ -28,14 +28,14 @@ export default function ResetPasswordPage({ searchParams }: Props) {
   if (state?.success) {
     return (
       <div className="max-w-md mx-auto px-4 py-16 text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <span className="text-green-600 text-2xl">&#10003;</span>
+        <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <span className="text-green-400 text-2xl">&#10003;</span>
         </div>
         <h1 className="text-2xl font-bold mb-4">Password Reset</h1>
-        <p className="text-gray-600 mb-6">{state.success}</p>
+        <p className="text-text-secondary mb-6">{state.success}</p>
         <Link
           href="/login"
-          className="inline-block bg-gray-900 text-white px-6 py-2.5 rounded font-semibold hover:bg-gray-800"
+          className="inline-block btn-brand px-6 py-2.5"
         >
           Sign In
         </Link>
@@ -46,13 +46,13 @@ export default function ResetPasswordPage({ searchParams }: Props) {
   return (
     <div className="max-w-md mx-auto px-4 py-16">
       <h1 className="text-2xl font-bold mb-2">Set New Password</h1>
-      <p className="text-gray-600 mb-8">Enter your new password below.</p>
+      <p className="text-text-secondary mb-8">Enter your new password below.</p>
 
       <form action={formAction} className="space-y-4">
         <input type="hidden" name="token" value={token} />
 
         <div>
-          <label htmlFor="new_password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="new_password" className="block text-sm font-medium text-text-secondary mb-1">
             New Password
           </label>
           <input
@@ -61,12 +61,12 @@ export default function ResetPasswordPage({ searchParams }: Props) {
             type="password"
             required
             autoComplete="new-password"
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 
         <div>
-          <label htmlFor="new_password_confirm" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="new_password_confirm" className="block text-sm font-medium text-text-secondary mb-1">
             Confirm New Password
           </label>
           <input
@@ -75,18 +75,18 @@ export default function ResetPasswordPage({ searchParams }: Props) {
             type="password"
             required
             autoComplete="new-password"
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 
         {state?.error && (
-          <p className="text-red-600 text-sm">{state.error}</p>
+          <p className="text-red-400 text-sm">{state.error}</p>
         )}
 
         <button
           type="submit"
           disabled={pending}
-          className="w-full bg-gray-900 text-white py-2.5 rounded font-semibold hover:bg-gray-800 disabled:opacity-50"
+          className="w-full btn-brand py-2.5"
         >
           {pending ? 'Resetting...' : 'Reset Password'}
         </button>

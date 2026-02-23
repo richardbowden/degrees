@@ -68,8 +68,8 @@ export function CustomersClient({ token }: { token: string }) {
       })
     : customers;
 
-  if (loading) return <p className="text-sm text-gray-500">Loading customers...</p>;
-  if (error && customers.length === 0) return <p className="text-red-600 text-sm">{error}</p>;
+  if (loading) return <p className="text-sm text-text-muted">Loading customers...</p>;
+  if (error && customers.length === 0) return <p className="text-red-400 text-sm">{error}</p>;
 
   return (
     <div>
@@ -79,33 +79,33 @@ export function CustomersClient({ token }: { token: string }) {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search by phone, suburb, address..."
-          className="w-full max-w-md border border-gray-300 rounded-md px-3 py-2 text-sm"
+          className="w-full max-w-md bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white"
         />
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-gray-500">No customers found.</p>
+        <p className="text-sm text-text-muted">No customers found.</p>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="glass-card overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-white/5 border-b border-border-subtle">
               <tr>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Phone</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Address</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Suburb</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Postcode</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase"></th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Phone</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Address</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Suburb</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Postcode</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase"></th>
               </tr>
             </thead>
             <tbody>
               {filtered.map(c => (
-                <tr key={c.id} className="border-b border-gray-100 hover:bg-gray-50">
+                <tr key={c.id} className="border-b border-white/5 hover:bg-white/5">
                   <td className="py-3 px-4 text-sm">{c.phone || 'N/A'}</td>
-                  <td className="py-3 px-4 text-sm text-gray-600">{c.address || 'N/A'}</td>
-                  <td className="py-3 px-4 text-sm text-gray-600">{c.suburb || 'N/A'}</td>
-                  <td className="py-3 px-4 text-sm text-gray-600">{c.postcode || 'N/A'}</td>
+                  <td className="py-3 px-4 text-sm text-text-secondary">{c.address || 'N/A'}</td>
+                  <td className="py-3 px-4 text-sm text-text-secondary">{c.suburb || 'N/A'}</td>
+                  <td className="py-3 px-4 text-sm text-text-secondary">{c.postcode || 'N/A'}</td>
                   <td className="py-3 px-4 text-sm">
-                    <Link href={`/admin/customers/${c.id}`} className="text-blue-600 hover:underline">
+                    <Link href={`/admin/customers/${c.id}`} className="text-brand-400 hover:underline">
                       View
                     </Link>
                   </td>
@@ -121,7 +121,7 @@ export function CustomersClient({ token }: { token: string }) {
           <button
             onClick={loadMore}
             disabled={loadingMore}
-            className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50"
+            className="bg-white/5 border border-border-subtle text-text-secondary px-4 py-2 rounded-md text-sm hover:bg-white/10 disabled:opacity-50"
           >
             {loadingMore ? 'Loading...' : 'Load More'}
           </button>

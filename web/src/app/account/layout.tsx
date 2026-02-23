@@ -31,28 +31,28 @@ export default async function AccountLayout({ children }: { children: React.Reac
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-64 bg-gray-50 border-r border-gray-200 p-6">
+      <aside className="w-64 bg-surface-raised border-r border-border-subtle p-6">
         <div className="mb-8">
-          <p className="text-sm text-gray-500">Signed in as</p>
-          <p className="font-medium text-gray-900 truncate">{user.firstName} {user.surname}</p>
-          <p className="text-sm text-gray-500 truncate">{user.email}</p>
+          <p className="text-sm text-text-muted">Signed in as</p>
+          <p className="font-medium text-white truncate">{user.firstName} {user.surname}</p>
+          <p className="text-sm text-text-muted truncate">{user.email}</p>
         </div>
         <nav className="space-y-1">
           {navItems.map(item => (
             <Link
               key={item.href}
               href={item.href}
-              className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900"
+              className="block px-3 py-2 rounded-md text-sm font-medium text-text-secondary hover:bg-white/5 hover:text-white"
             >
               {item.label}
             </Link>
           ))}
         </nav>
-        <div className="mt-8 pt-8 border-t border-gray-200">
+        <div className="mt-8 pt-8 border-t border-border-subtle">
           <form action={logout}>
             <button
               type="submit"
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50"
+              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-400 hover:bg-white/5"
             >
               Log Out
             </button>

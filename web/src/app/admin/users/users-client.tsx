@@ -40,42 +40,42 @@ export function UsersClient({ token }: { token: string }) {
   }
 
   if (loading) {
-    return <p className="text-gray-500 text-sm">Loading users...</p>;
+    return <p className="text-text-muted text-sm">Loading users...</p>;
   }
 
   if (error && users.length === 0) {
-    return <p className="text-red-600 text-sm">{error}</p>;
+    return <p className="text-red-400 text-sm">{error}</p>;
   }
 
   return (
     <>
-      {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+      <div className="glass-card overflow-hidden">
         <table className="w-full text-left">
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-white/5 border-b border-border-subtle">
             <tr>
-              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Name</th>
-              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Email</th>
-              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Joined</th>
-              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Status</th>
-              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Role</th>
-              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase"></th>
+              <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Name</th>
+              <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Email</th>
+              <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Joined</th>
+              <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Status</th>
+              <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Role</th>
+              <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-border-subtle">
             {users.map(user => (
               <tr key={user.id}>
-                <td className="py-3 px-4 text-sm font-medium text-gray-900">
+                <td className="py-3 px-4 text-sm font-medium text-white">
                   {user.firstName} {user.surname}
                 </td>
-                <td className="py-3 px-4 text-sm text-gray-600">{user.email}</td>
-                <td className="py-3 px-4 text-sm text-gray-600">{formatDate(user.createdOn)}</td>
+                <td className="py-3 px-4 text-sm text-text-secondary">{user.email}</td>
+                <td className="py-3 px-4 text-sm text-text-secondary">{formatDate(user.createdOn)}</td>
                 <td className="py-3 px-4">
                   <span
                     className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${
                       user.enabled
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-red-100 text-red-700'
+                        ? 'bg-green-500/20 text-green-400'
+                        : 'bg-red-500/20 text-red-400'
                     }`}
                   >
                     {user.enabled ? 'Active' : 'Disabled'}
@@ -83,7 +83,7 @@ export function UsersClient({ token }: { token: string }) {
                 </td>
                 <td className="py-3 px-4">
                   {user.sysop && (
-                    <span className="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                    <span className="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-purple-500/20 text-purple-400">
                       Admin
                     </span>
                   )}
@@ -94,8 +94,8 @@ export function UsersClient({ token }: { token: string }) {
                     disabled={actionLoading === user.id}
                     className={`text-sm font-medium disabled:opacity-50 ${
                       user.enabled
-                        ? 'text-red-600 hover:text-red-800'
-                        : 'text-green-600 hover:text-green-800'
+                        ? 'text-red-400 hover:text-red-500'
+                        : 'text-green-400 hover:text-green-500'
                     }`}
                   >
                     {actionLoading === user.id

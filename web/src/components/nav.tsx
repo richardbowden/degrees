@@ -8,32 +8,32 @@ export async function Nav() {
   const isLoggedIn = !!cookieStore.get('session_token')?.value;
 
   return (
-    <nav className="border-b border-gray-200 bg-white">
+    <nav className="sticky top-0 z-50 bg-surface/95 backdrop-blur-lg border-b border-border-subtle">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
-        <Link href="/" className="text-xl font-bold text-gray-900">
+        <Link href="/" className="text-xl font-bold text-brand-gradient">
           40 Degrees
         </Link>
         <div className="flex items-center gap-6">
-          <Link href="/services" className="text-gray-700 hover:text-gray-900">
+          <Link href="/services" className="text-text-secondary hover:text-white transition-colors">
             Services
           </Link>
           <CartIcon />
           {isLoggedIn ? (
             <>
-              <Link href="/account" className="text-gray-700 hover:text-gray-900">
+              <Link href="/account" className="text-text-secondary hover:text-white transition-colors">
                 Account
               </Link>
               <form action={logout}>
                 <button
                   type="submit"
-                  className="text-gray-700 hover:text-gray-900"
+                  className="text-text-secondary hover:text-white transition-colors"
                 >
                   Log Out
                 </button>
               </form>
             </>
           ) : (
-            <Link href="/login" className="text-gray-700 hover:text-gray-900">
+            <Link href="/login" className="text-text-secondary hover:text-white transition-colors">
               Login
             </Link>
           )}

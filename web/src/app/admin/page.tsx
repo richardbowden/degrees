@@ -28,31 +28,31 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">Dashboard</h1>
-      <p className="text-sm text-gray-500 mb-6">Today&apos;s bookings &mdash; {today}</p>
+      <h1 className="text-2xl font-bold text-white mb-1">Dashboard</h1>
+      <p className="text-sm text-text-muted mb-6">Today&apos;s bookings &mdash; {today}</p>
 
-      {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 p-5">
-        <p className="text-3xl font-bold text-gray-900">{bookings.length}</p>
-        <p className="text-sm text-gray-500 mt-1">
+      <div className="glass-card mb-6 p-5">
+        <p className="text-3xl font-bold text-white">{bookings.length}</p>
+        <p className="text-sm text-text-muted mt-1">
           {bookings.length === 1 ? 'booking' : 'bookings'} today
         </p>
       </div>
 
       {bookings.length > 0 ? (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="glass-card overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-white/5 border-b border-border-subtle">
               <tr>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Time</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Customer</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Vehicle</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Services</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Total</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Payment</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase"></th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Time</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Customer</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Vehicle</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Services</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Total</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Status</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Payment</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase"></th>
               </tr>
             </thead>
             <tbody>
@@ -61,7 +61,7 @@ export default async function AdminDashboard() {
           </table>
         </div>
       ) : (
-        !error && <p className="text-sm text-gray-500">No bookings scheduled for today.</p>
+        !error && <p className="text-sm text-text-muted">No bookings scheduled for today.</p>
       )}
     </div>
   );

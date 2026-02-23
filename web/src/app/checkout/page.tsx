@@ -134,7 +134,7 @@ export default function CheckoutPage() {
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500">Loading checkout...</p>
+        <p className="text-text-muted">Loading checkout...</p>
       </div>
     );
   }
@@ -160,16 +160,16 @@ export default function CheckoutPage() {
               onClick={() => i <= stepIndex && setStep(s.key)}
               disabled={i > stepIndex}
               className={`flex items-center gap-2 text-sm font-medium ${
-                i <= stepIndex ? 'text-gray-900' : 'text-gray-400'
+                i <= stepIndex ? 'text-white' : 'text-text-muted'
               }`}
             >
               <span
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                   i < stepIndex
-                    ? 'bg-green-600 text-white'
+                    ? 'bg-green-500 text-white'
                     : i === stepIndex
-                      ? 'bg-gray-900 text-white'
-                      : 'bg-gray-200 text-gray-500'
+                      ? 'bg-brand-500 text-white'
+                      : 'bg-white/10 text-text-muted'
                 }`}
               >
                 {i < stepIndex ? '\u2713' : s.number}
@@ -177,14 +177,14 @@ export default function CheckoutPage() {
               <span className="hidden sm:inline">{s.label}</span>
             </button>
             {i < steps.length - 1 && (
-              <div className="w-8 h-px bg-gray-300 mx-2" />
+              <div className="w-8 h-px bg-border-subtle mx-2" />
             )}
           </div>
         ))}
       </div>
 
       {error && (
-        <p className="text-red-600 text-sm mb-4">{error}</p>
+        <p className="text-red-400 text-sm mb-4">{error}</p>
       )}
 
       {step === 'vehicle' && (
@@ -205,7 +205,7 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={() => setShowAddVehicle(true)}
-                className="mt-4 text-sm font-medium text-gray-900 underline hover:text-gray-700"
+                className="mt-4 text-sm font-medium text-brand-400 underline hover:text-brand-500"
               >
                 + Add a new vehicle
               </button>
@@ -228,7 +228,7 @@ export default function CheckoutPage() {
         <div>
           <h2 className="text-lg font-semibold mb-4">Pick a Time</h2>
           {slotsLoading ? (
-            <p className="text-gray-500 text-sm">Loading available slots...</p>
+            <p className="text-text-muted text-sm">Loading available slots...</p>
           ) : (
             <TimeSlotGrid
               slots={slots}
@@ -247,13 +247,13 @@ export default function CheckoutPage() {
             onChange={e => setNotes(e.target.value)}
             rows={4}
             placeholder="Parking instructions, specific concerns, etc."
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 mb-6"
+            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500 mb-6"
           />
           <button
             type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="w-full bg-gray-900 text-white py-3 rounded font-semibold hover:bg-gray-800 disabled:opacity-50"
+            className="w-full btn-brand py-3"
           >
             {submitting ? 'Creating booking...' : 'Create Booking'}
           </button>

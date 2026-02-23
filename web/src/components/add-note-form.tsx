@@ -43,19 +43,19 @@ export function AddNoteForm({ recordId, token, onAdded }: AddNoteFormProps) {
         <select
           value={noteType}
           onChange={e => setNoteType(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+          className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
         >
           <option value="observation">Observation</option>
           <option value="recommendation">Recommendation</option>
           <option value="damage">Damage</option>
           <option value="follow_up">Follow Up</option>
         </select>
-        <label className="flex items-center gap-1.5 text-sm text-gray-600">
+        <label className="flex items-center gap-1.5 text-sm text-text-secondary">
           <input
             type="checkbox"
             checked={isVisible}
             onChange={e => setIsVisible(e.target.checked)}
-            className="rounded border-gray-300"
+            className="rounded border-border-subtle"
           />
           Visible to customer
         </label>
@@ -65,13 +65,13 @@ export function AddNoteForm({ recordId, token, onAdded }: AddNoteFormProps) {
         onChange={e => setContent(e.target.value)}
         rows={3}
         placeholder="Add a note..."
-        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+        className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white"
       />
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-400">{error}</p>}
       <button
         type="submit"
         disabled={loading || !content.trim()}
-        className="bg-gray-900 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+        className="btn-brand px-4 py-1.5 rounded-md text-sm font-medium disabled:opacity-50"
       >
         {loading ? 'Adding...' : 'Add Note'}
       </button>

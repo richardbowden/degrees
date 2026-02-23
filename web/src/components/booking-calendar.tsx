@@ -63,7 +63,7 @@ export function BookingCalendar({ selectedDate, onSelect }: BookingCalendarProps
         <button
           type="button"
           onClick={prevMonth}
-          className="px-2 py-1 text-gray-600 hover:text-gray-900"
+          className="px-2 py-1 text-text-secondary hover:text-white"
           aria-label="Previous month"
         >
           &larr;
@@ -74,13 +74,13 @@ export function BookingCalendar({ selectedDate, onSelect }: BookingCalendarProps
         <button
           type="button"
           onClick={nextMonth}
-          className="px-2 py-1 text-gray-600 hover:text-gray-900"
+          className="px-2 py-1 text-text-secondary hover:text-white"
           aria-label="Next month"
         >
           &rarr;
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 mb-1">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs text-text-muted mb-1">
         {DAY_LABELS.map(d => (
           <div key={d} className="py-1">{d}</div>
         ))}
@@ -102,10 +102,10 @@ export function BookingCalendar({ selectedDate, onSelect }: BookingCalendarProps
               onClick={() => onSelect(dateStr)}
               className={`py-2 rounded text-sm ${
                 isSelected
-                  ? 'bg-gray-900 text-white font-semibold'
+                  ? 'bg-brand-500 text-white font-semibold'
                   : isPast
-                    ? 'text-gray-300 cursor-not-allowed'
-                    : 'hover:bg-gray-100 text-gray-700'
+                    ? 'text-white/20 cursor-not-allowed'
+                    : 'hover:bg-white/5 text-text-secondary'
               }`}
             >
               {day}

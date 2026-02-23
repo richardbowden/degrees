@@ -34,7 +34,7 @@ export default async function ServicesPage({ searchParams }: Props) {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-2">Our Services</h1>
-      <p className="text-gray-600 mb-8">
+      <p className="text-text-secondary mb-8">
         Premium mobile car detailing across Perth, using Bowden&apos;s Own products.
       </p>
 
@@ -44,8 +44,8 @@ export default async function ServicesPage({ searchParams }: Props) {
             href="/services"
             className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
               !selectedCategory
-                ? 'bg-gray-900 text-white border-gray-900'
-                : 'border-gray-300 text-gray-700 hover:border-gray-500'
+                ? 'bg-brand-500 text-white border-brand-500'
+                : 'border-border-subtle text-text-secondary hover:border-brand-400'
             }`}
           >
             All
@@ -56,8 +56,8 @@ export default async function ServicesPage({ searchParams }: Props) {
               href={`/services?category=${cat.slug}`}
               className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
                 selectedCategory === cat.slug
-                  ? 'bg-gray-900 text-white border-gray-900'
-                  : 'border-gray-300 text-gray-700 hover:border-gray-500'
+                  ? 'bg-brand-500 text-white border-brand-500'
+                  : 'border-border-subtle text-text-secondary hover:border-brand-400'
               }`}
             >
               {cat.name}
@@ -67,7 +67,7 @@ export default async function ServicesPage({ searchParams }: Props) {
       )}
 
       {services.length === 0 ? (
-        <p className="text-gray-500">No services found.</p>
+        <p className="text-text-muted">No services found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map(service => (

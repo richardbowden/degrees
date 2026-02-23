@@ -11,7 +11,7 @@ interface TimeSlotGridProps {
 
 export function TimeSlotGrid({ slots, selectedTime, onSelect }: TimeSlotGridProps) {
   if (slots.length === 0) {
-    return <p className="text-sm text-gray-500">No available time slots for this date.</p>;
+    return <p className="text-sm text-text-muted">No available time slots for this date.</p>;
   }
 
   return (
@@ -25,8 +25,8 @@ export function TimeSlotGrid({ slots, selectedTime, onSelect }: TimeSlotGridProp
             onClick={() => onSelect(slot.time)}
             className={`px-3 py-2 rounded text-sm border ${
               isSelected
-                ? 'bg-gray-900 text-white border-gray-900'
-                : 'border-gray-300 text-gray-700 hover:border-gray-500'
+                ? 'bg-brand-500 text-white border-brand-500'
+                : 'border-border-subtle text-text-secondary hover:border-brand-400'
             }`}
           >
             {formatTime(slot.time)}

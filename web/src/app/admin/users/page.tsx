@@ -7,7 +7,7 @@ export default async function AdminUsersPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Users</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Users</h1>
       <UsersClient token={token} />
     </div>
   );

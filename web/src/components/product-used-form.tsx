@@ -45,7 +45,7 @@ export function ProductUsedForm({ recordId, token, onAdded }: ProductUsedFormPro
           value={productName}
           onChange={e => setProductName(e.target.value)}
           placeholder="Product name (e.g. Bowden's Auto Body Gel)"
-          className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+          className="flex-1 bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
         />
       </div>
       <input
@@ -53,13 +53,13 @@ export function ProductUsedForm({ recordId, token, onAdded }: ProductUsedFormPro
         value={notes}
         onChange={e => setNotes(e.target.value)}
         placeholder="Usage notes (optional)"
-        className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+        className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
       />
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-400">{error}</p>}
       <button
         type="submit"
         disabled={loading || !productName.trim()}
-        className="bg-gray-900 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+        className="btn-brand px-4 py-1.5 rounded-md text-sm font-medium disabled:opacity-50"
       >
         {loading ? 'Adding...' : 'Add Product'}
       </button>

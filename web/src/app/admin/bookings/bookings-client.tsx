@@ -59,29 +59,29 @@ export function BookingsClient({ token }: { token: string }) {
     <div>
       <div className="flex flex-wrap gap-4 items-end mb-6">
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">From</label>
+          <label className="block text-xs font-medium text-text-muted mb-1">From</label>
           <input
             type="date"
             value={dateFrom}
             onChange={e => setDateFrom(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+            className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">To</label>
+          <label className="block text-xs font-medium text-text-muted mb-1">To</label>
           <input
             type="date"
             value={dateTo}
             onChange={e => setDateTo(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+            className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
+          <label className="block text-xs font-medium text-text-muted mb-1">Status</label>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+            className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
           >
             {STATUSES.map(s => (
               <option key={s} value={s}>{s === 'all' ? 'All Statuses' : s.replace('_', ' ')}</option>
@@ -90,49 +90,49 @@ export function BookingsClient({ token }: { token: string }) {
         </div>
       </div>
 
-      {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
       {loading ? (
-        <p className="text-sm text-gray-500">Loading bookings...</p>
+        <p className="text-sm text-text-muted">Loading bookings...</p>
       ) : filtered.length === 0 ? (
-        <p className="text-sm text-gray-500">No bookings found for this period.</p>
+        <p className="text-sm text-text-muted">No bookings found for this period.</p>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="glass-card overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-white/5 border-b border-border-subtle">
               <tr>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Date</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Time</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Customer</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Vehicle</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Services</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Total</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase">Payment</th>
-                <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase"></th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Date</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Time</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Customer</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Vehicle</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Services</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Total</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Status</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Payment</th>
+                <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase"></th>
               </tr>
             </thead>
             <tbody>
               {filtered.map(b => (
-                <tr key={b.id} className="border-b border-gray-100 hover:bg-gray-50">
+                <tr key={b.id} className="border-b border-white/5 hover:bg-white/5">
                   <td className="py-3 px-4 text-sm">{formatDate(b.scheduledDate)}</td>
                   <td className="py-3 px-4 text-sm">{formatTime(b.scheduledTime)}</td>
                   <td className="py-3 px-4 text-sm font-medium">
-                    <Link href={`/admin/bookings/${b.id}`} className="text-blue-600 hover:text-blue-800">
+                    <Link href={`/admin/bookings/${b.id}`} className="text-brand-400 hover:text-brand-500">
                       {b.customer?.name ?? 'Unknown'}
                     </Link>
                   </td>
-                  <td className="py-3 px-4 text-sm text-gray-600">
+                  <td className="py-3 px-4 text-sm text-text-secondary">
                     {b.vehicle ? `${b.vehicle.year} ${b.vehicle.make} ${b.vehicle.model}` : 'N/A'}
                   </td>
-                  <td className="py-3 px-4 text-sm text-gray-600">
+                  <td className="py-3 px-4 text-sm text-text-secondary">
                     {b.services?.map(s => s.serviceName).join(', ') ?? 'N/A'}
                   </td>
                   <td className="py-3 px-4 text-sm">{formatPrice(b.totalAmount)}</td>
                   <td className="py-3 px-4"><StatusBadge status={b.status} /></td>
                   <td className="py-3 px-4"><StatusBadge status={b.paymentStatus} /></td>
                   <td className="py-3 px-4 text-sm">
-                    <Link href={`/admin/bookings/${b.id}`} className="text-blue-600 hover:underline">
+                    <Link href={`/admin/bookings/${b.id}`} className="text-brand-400 hover:underline">
                       View
                     </Link>
                   </td>

@@ -18,22 +18,22 @@ export default async function HistoryDetailPage({ params }: { params: Promise<{ 
     <div>
       <Link
         href="/account/history"
-        className="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block"
+        className="text-sm text-text-muted hover:text-text-secondary mb-4 inline-block"
       >
         &larr; Back to History
       </Link>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Service Record</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Service Record</h1>
 
       <div className="space-y-6">
-        <div className="border border-gray-200 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">Completed</h2>
-          <p className="text-sm text-gray-700">{formatDate(record.completedDate)}</p>
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-semibold text-white mb-2">Completed</h2>
+          <p className="text-sm text-text-secondary">{formatDate(record.completedDate)}</p>
         </div>
 
         {visibleNotes.length > 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Notes</h2>
+            <h2 className="text-lg font-semibold text-white mb-4">Notes</h2>
             <div className="space-y-3">
               {visibleNotes.map(note => (
                 <NoteCard key={note.id} note={note} />
@@ -44,20 +44,20 @@ export default async function HistoryDetailPage({ params }: { params: Promise<{ 
 
         {record.products && record.products.length > 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Products Used</h2>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <h2 className="text-lg font-semibold text-white mb-4">Products Used</h2>
+            <div className="border border-border-subtle rounded-lg overflow-hidden">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50">
+                <thead className="bg-white/5">
                   <tr>
-                    <th className="text-left px-4 py-3 font-medium text-gray-700">Product</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-700">Notes</th>
+                    <th className="text-left px-4 py-3 font-medium text-text-secondary">Product</th>
+                    <th className="text-left px-4 py-3 font-medium text-text-secondary">Notes</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-border-subtle">
                   {record.products.map(product => (
                     <tr key={product.id}>
-                      <td className="px-4 py-3 text-gray-900 font-medium">{product.productName}</td>
-                      <td className="px-4 py-3 text-gray-600">{product.notes || '-'}</td>
+                      <td className="px-4 py-3 text-white font-medium">{product.productName}</td>
+                      <td className="px-4 py-3 text-text-secondary">{product.notes || '-'}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -40,20 +40,20 @@ export default function VerifyEmailPage({ searchParams }: Props) {
       {status === 'loading' && (
         <>
           <h1 className="text-2xl font-bold mb-4">Verifying Email</h1>
-          <p className="text-gray-500">Please wait...</p>
+          <p className="text-text-muted">Please wait...</p>
         </>
       )}
 
       {status === 'success' && (
         <>
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-green-600 text-2xl">&#10003;</span>
+          <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-green-400 text-2xl">&#10003;</span>
           </div>
           <h1 className="text-2xl font-bold mb-4">Email Verified</h1>
-          <p className="text-gray-600 mb-6">{message}</p>
+          <p className="text-text-secondary mb-6">{message}</p>
           <Link
             href="/login"
-            className="inline-block bg-gray-900 text-white px-6 py-2.5 rounded font-semibold hover:bg-gray-800"
+            className="inline-block btn-brand px-6 py-2.5"
           >
             Sign In
           </Link>
@@ -62,14 +62,14 @@ export default function VerifyEmailPage({ searchParams }: Props) {
 
       {status === 'error' && (
         <>
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-red-600 text-2xl">&#10007;</span>
+          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-red-400 text-2xl">&#10007;</span>
           </div>
           <h1 className="text-2xl font-bold mb-4">Verification Failed</h1>
-          <p className="text-gray-600 mb-6">{message}</p>
+          <p className="text-text-secondary mb-6">{message}</p>
           <Link
             href="/register"
-            className="text-gray-900 font-medium hover:underline"
+            className="text-brand-400 font-medium hover:underline"
           >
             Try registering again
           </Link>

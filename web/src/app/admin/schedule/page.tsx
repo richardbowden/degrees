@@ -7,7 +7,7 @@ export default async function AdminSchedulePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Schedule</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Schedule</h1>
       <ScheduleClient token={token} />
     </div>
   );

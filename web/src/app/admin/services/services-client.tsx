@@ -204,16 +204,16 @@ export function ServicesClient({ token }: { token: string }) {
   }));
   const uncategorized = services.filter(s => !categories.some(c => c.id === s.categoryId));
 
-  if (loading) return <p className="text-sm text-gray-500">Loading services...</p>;
-  if (error && services.length === 0) return <p className="text-red-600 text-sm">{error}</p>;
+  if (loading) return <p className="text-sm text-text-muted">Loading services...</p>;
+  if (error && services.length === 0) return <p className="text-red-400 text-sm">{error}</p>;
 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <p className="text-sm text-gray-500">{services.length} services across {categories.length} categories</p>
+        <p className="text-sm text-text-muted">{services.length} services across {categories.length} categories</p>
         <button
           onClick={openAddForm}
-          className="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800"
+          className="btn-brand px-4 py-2 rounded-md text-sm font-medium"
         >
           Add Service
         </button>
@@ -221,18 +221,18 @@ export function ServicesClient({ token }: { token: string }) {
 
       {/* Service Form */}
       {showForm && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="glass-card p-5 mb-6">
+          <h2 className="text-lg font-semibold text-white mb-4">
             {editingId ? 'Edit Service' : 'Add Service'}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
+                <label className="block text-xs font-medium text-text-muted mb-1">Category</label>
                 <select
                   value={form.categoryId}
                   onChange={e => updateForm('categoryId', e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                   required
                 >
                   <option value="">Select category</option>
@@ -242,100 +242,100 @@ export function ServicesClient({ token }: { token: string }) {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Name</label>
+                <label className="block text-xs font-medium text-text-muted mb-1">Name</label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={e => updateForm('name', e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Slug</label>
+                <label className="block text-xs font-medium text-text-muted mb-1">Slug</label>
                 <input
                   type="text"
                   value={form.slug}
                   onChange={e => updateForm('slug', e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Short Description</label>
+                <label className="block text-xs font-medium text-text-muted mb-1">Short Description</label>
                 <input
                   type="text"
                   value={form.shortDesc}
                   onChange={e => updateForm('shortDesc', e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Base Price (AUD)</label>
+                <label className="block text-xs font-medium text-text-muted mb-1">Base Price (AUD)</label>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
                   value={form.basePriceDollars}
                   onChange={e => updateForm('basePriceDollars', e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Duration (minutes)</label>
+                <label className="block text-xs font-medium text-text-muted mb-1">Duration (minutes)</label>
                 <input
                   type="number"
                   min="0"
                   value={form.durationMinutes}
                   onChange={e => updateForm('durationMinutes', e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Sort Order</label>
+                <label className="block text-xs font-medium text-text-muted mb-1">Sort Order</label>
                 <input
                   type="number"
                   value={form.sortOrder}
                   onChange={e => updateForm('sortOrder', e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                 />
               </div>
               <div className="flex items-end">
-                <label className="flex items-center gap-2 text-sm text-gray-700">
+                <label className="flex items-center gap-2 text-sm text-text-secondary">
                   <input
                     type="checkbox"
                     checked={form.isActive}
                     onChange={e => updateForm('isActive', e.target.checked)}
-                    className="rounded border-gray-300"
+                    className="rounded border-border-subtle"
                   />
                   Active
                 </label>
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Description</label>
+              <label className="block text-xs font-medium text-text-muted mb-1">Description</label>
               <textarea
                 value={form.description}
                 onChange={e => updateForm('description', e.target.value)}
                 rows={3}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white"
               />
             </div>
-            {formError && <p className="text-sm text-red-600">{formError}</p>}
+            {formError && <p className="text-sm text-red-400">{formError}</p>}
             <div className="flex gap-2">
               <button
                 type="submit"
                 disabled={formLoading}
-                className="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+                className="btn-brand px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50"
               >
                 {formLoading ? 'Saving...' : editingId ? 'Update Service' : 'Create Service'}
               </button>
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-white/5"
               >
                 Cancel
               </button>
@@ -347,36 +347,36 @@ export function ServicesClient({ token }: { token: string }) {
       {/* Services grouped by category */}
       {grouped.map(({ category, services: catServices }) => (
         <div key={category.id} className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">{category.name}</h2>
+          <h2 className="text-lg font-semibold text-white mb-3">{category.name}</h2>
           {catServices.length === 0 ? (
-            <p className="text-sm text-gray-500">No services in this category.</p>
+            <p className="text-sm text-text-muted">No services in this category.</p>
           ) : (
             <div className="space-y-3">
               {catServices.map(svc => (
-                <div key={svc.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <div key={svc.id} className="glass-card p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-900">{svc.name}</h3>
+                        <h3 className="font-medium text-white">{svc.name}</h3>
                         {!svc.isActive && (
-                          <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Inactive</span>
+                          <span className="text-xs bg-white/10 text-text-muted px-1.5 py-0.5 rounded">Inactive</span>
                         )}
                       </div>
-                      {svc.shortDesc && <p className="text-sm text-gray-500 mt-0.5">{svc.shortDesc}</p>}
-                      <div className="flex gap-4 mt-2 text-sm text-gray-600">
+                      {svc.shortDesc && <p className="text-sm text-text-muted mt-0.5">{svc.shortDesc}</p>}
+                      <div className="flex gap-4 mt-2 text-sm text-text-secondary">
                         <span>{formatPrice(svc.basePrice)}</span>
                         <span>{svc.durationMinutes} mins</span>
                       </div>
 
                       {/* Options */}
                       {svc.options && svc.options.length > 0 && (
-                        <div className="mt-3 pl-4 border-l-2 border-gray-100">
-                          <p className="text-xs font-medium text-gray-500 mb-1">Options</p>
+                        <div className="mt-3 pl-4 border-l-2 border-white/10">
+                          <p className="text-xs font-medium text-text-muted mb-1">Options</p>
                           {svc.options.map((opt: DetailingServiceOption) => (
-                            <div key={opt.id} className="flex items-center gap-3 text-sm text-gray-600 py-0.5">
+                            <div key={opt.id} className="flex items-center gap-3 text-sm text-text-secondary py-0.5">
                               <span>{opt.name}</span>
-                              <span className="text-gray-400">+{formatPrice(opt.price)}</span>
-                              {!opt.isActive && <span className="text-xs text-gray-400">(inactive)</span>}
+                              <span className="text-text-muted">+{formatPrice(opt.price)}</span>
+                              {!opt.isActive && <span className="text-xs text-text-muted">(inactive)</span>}
                             </div>
                           ))}
                         </div>
@@ -384,14 +384,14 @@ export function ServicesClient({ token }: { token: string }) {
 
                       {/* Add Option Form */}
                       {showOptionFor === svc.id && (
-                        <form onSubmit={(e) => handleAddOption(svc.id, e)} className="mt-3 p-3 bg-gray-50 rounded-md space-y-3">
+                        <form onSubmit={(e) => handleAddOption(svc.id, e)} className="mt-3 p-3 bg-white/5 rounded-md space-y-3">
                           <div className="grid grid-cols-2 gap-3">
                             <input
                               type="text"
                               value={optionForm.name}
                               onChange={e => setOptionForm(prev => ({ ...prev, name: e.target.value }))}
                               placeholder="Option name"
-                              className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                              className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                               required
                             />
                             <input
@@ -401,7 +401,7 @@ export function ServicesClient({ token }: { token: string }) {
                               value={optionForm.priceDollars}
                               onChange={e => setOptionForm(prev => ({ ...prev, priceDollars: e.target.value }))}
                               placeholder="Price (AUD)"
-                              className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                              className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                               required
                             />
                           </div>
@@ -410,7 +410,7 @@ export function ServicesClient({ token }: { token: string }) {
                             value={optionForm.description}
                             onChange={e => setOptionForm(prev => ({ ...prev, description: e.target.value }))}
                             placeholder="Description"
-                            className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                            className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                           />
                           <div className="flex gap-3 items-center">
                             <input
@@ -418,31 +418,31 @@ export function ServicesClient({ token }: { token: string }) {
                               value={optionForm.sortOrder}
                               onChange={e => setOptionForm(prev => ({ ...prev, sortOrder: e.target.value }))}
                               placeholder="Sort"
-                              className="w-20 border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                              className="w-20 bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                             />
-                            <label className="flex items-center gap-1.5 text-sm text-gray-600">
+                            <label className="flex items-center gap-1.5 text-sm text-text-secondary">
                               <input
                                 type="checkbox"
                                 checked={optionForm.isActive}
                                 onChange={e => setOptionForm(prev => ({ ...prev, isActive: e.target.checked }))}
-                                className="rounded border-gray-300"
+                                className="rounded border-border-subtle"
                               />
                               Active
                             </label>
                           </div>
-                          {optionError && <p className="text-sm text-red-600">{optionError}</p>}
+                          {optionError && <p className="text-sm text-red-400">{optionError}</p>}
                           <div className="flex gap-2">
                             <button
                               type="submit"
                               disabled={optionLoading}
-                              className="bg-gray-900 text-white px-3 py-1.5 rounded-md text-sm hover:bg-gray-800 disabled:opacity-50"
+                              className="btn-brand px-3 py-1.5 rounded-md text-sm disabled:opacity-50"
                             >
                               {optionLoading ? 'Adding...' : 'Add Option'}
                             </button>
                             <button
                               type="button"
                               onClick={() => { setShowOptionFor(null); setOptionForm(EMPTY_OPTION); setOptionError(''); }}
-                              className="px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
+                              className="px-3 py-1.5 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-white/5"
                             >
                               Cancel
                             </button>
@@ -455,20 +455,20 @@ export function ServicesClient({ token }: { token: string }) {
                     <div className="flex gap-2 ml-4 flex-shrink-0">
                       <button
                         onClick={() => { setShowOptionFor(svc.id); setOptionForm(EMPTY_OPTION); setOptionError(''); }}
-                        className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1 border border-gray-200 rounded"
+                        className="text-xs text-text-muted hover:text-white px-2 py-1 border border-border-subtle rounded"
                       >
                         + Option
                       </button>
                       <button
                         onClick={() => openEditForm(svc)}
-                        className="text-xs text-blue-600 hover:text-blue-800 px-2 py-1 border border-gray-200 rounded"
+                        className="text-xs text-brand-400 hover:text-brand-500 px-2 py-1 border border-border-subtle rounded"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(svc.id)}
                         disabled={deletingId === svc.id}
-                        className="text-xs text-red-600 hover:text-red-800 px-2 py-1 border border-gray-200 rounded disabled:opacity-50"
+                        className="text-xs text-red-400 hover:text-red-500 px-2 py-1 border border-border-subtle rounded disabled:opacity-50"
                       >
                         {deletingId === svc.id ? '...' : 'Delete'}
                       </button>
@@ -483,18 +483,18 @@ export function ServicesClient({ token }: { token: string }) {
 
       {uncategorized.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">Uncategorized</h2>
+          <h2 className="text-lg font-semibold text-white mb-3">Uncategorized</h2>
           <div className="space-y-3">
             {uncategorized.map(svc => (
-              <div key={svc.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+              <div key={svc.id} className="glass-card p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-medium text-gray-900">{svc.name}</h3>
-                    <p className="text-sm text-gray-500">{formatPrice(svc.basePrice)} - {svc.durationMinutes} mins</p>
+                    <h3 className="font-medium text-white">{svc.name}</h3>
+                    <p className="text-sm text-text-muted">{formatPrice(svc.basePrice)} - {svc.durationMinutes} mins</p>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={() => openEditForm(svc)} className="text-xs text-blue-600 hover:text-blue-800 px-2 py-1 border border-gray-200 rounded">Edit</button>
-                    <button onClick={() => handleDelete(svc.id)} disabled={deletingId === svc.id} className="text-xs text-red-600 hover:text-red-800 px-2 py-1 border border-gray-200 rounded disabled:opacity-50">
+                    <button onClick={() => openEditForm(svc)} className="text-xs text-brand-400 hover:text-brand-500 px-2 py-1 border border-border-subtle rounded">Edit</button>
+                    <button onClick={() => handleDelete(svc.id)} disabled={deletingId === svc.id} className="text-xs text-red-400 hover:text-red-500 px-2 py-1 border border-border-subtle rounded disabled:opacity-50">
                       {deletingId === svc.id ? '...' : 'Delete'}
                     </button>
                   </div>

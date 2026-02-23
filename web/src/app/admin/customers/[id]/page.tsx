@@ -28,8 +28,8 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
   if (error || !profile) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Customer Detail</h1>
-        <p className="text-red-600 text-sm">{error || 'Customer not found'}</p>
+        <h1 className="text-2xl font-bold text-white mb-4">Customer Detail</h1>
+        <p className="text-red-400 text-sm">{error || 'Customer not found'}</p>
       </div>
     );
   }

@@ -22,11 +22,11 @@ export default async function HistoryPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Service History</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Service History</h1>
 
       {sorted.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500">No service history yet.</p>
+          <p className="text-text-muted">No service history yet.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -36,26 +36,26 @@ export default async function HistoryPage() {
               <Link
                 key={record.id}
                 href={`/account/history/${record.id}`}
-                className="block border border-gray-200 rounded-lg p-4 hover:bg-gray-50"
+                className="block border border-border-subtle rounded-lg p-4 hover:bg-white/5"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-white">
                       {formatDate(record.completedDate)}
                     </p>
                     {booking?.vehicle && (
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-text-muted mt-1">
                         {booking.vehicle.year} {booking.vehicle.make} {booking.vehicle.model}
                         {booking.vehicle.rego && ` (${booking.vehicle.rego})`}
                       </p>
                     )}
                     {booking?.services && booking.services.length > 0 && (
-                      <p className="text-sm text-gray-400 mt-0.5">
+                      <p className="text-sm text-text-muted mt-0.5">
                         {booking.services.map(s => s.serviceName).join(', ')}
                       </p>
                     )}
                   </div>
-                  <span className="text-gray-400">&rarr;</span>
+                  <span className="text-text-muted">&rarr;</span>
                 </div>
               </Link>
             );

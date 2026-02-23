@@ -39,7 +39,7 @@ export default function DepositPage({ searchParams }: Props) {
   if (!bookingId) {
     return (
       <div className="max-w-md mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500">No booking ID provided.</p>
+        <p className="text-text-muted">No booking ID provided.</p>
       </div>
     );
   }
@@ -47,30 +47,30 @@ export default function DepositPage({ searchParams }: Props) {
   return (
     <div className="max-w-md mx-auto px-4 py-16">
       <h1 className="text-2xl font-bold mb-4">Pay Deposit</h1>
-      <p className="text-gray-600 mb-6">
+      <p className="text-text-secondary mb-6">
         A 30% deposit is required to confirm your booking.
       </p>
 
-      <div className="border border-gray-200 rounded-lg p-6 mb-6">
-        <p className="text-sm text-gray-500">Booking</p>
+      <div className="glass-card p-6 mb-6">
+        <p className="text-sm text-text-muted">Booking</p>
         <p className="font-mono text-sm mb-4">{bookingId}</p>
         {depositAmount !== null && (
           <div>
-            <p className="text-sm text-gray-500">Deposit Amount</p>
-            <p className="text-xl font-bold">{formatPrice(depositAmount)}</p>
+            <p className="text-sm text-text-muted">Deposit Amount</p>
+            <p className="text-xl font-bold text-brand-400">{formatPrice(depositAmount)}</p>
           </div>
         )}
       </div>
 
       {error && (
-        <p className="text-red-600 text-sm mb-4">{error}</p>
+        <p className="text-red-400 text-sm mb-4">{error}</p>
       )}
 
       <button
         type="button"
         onClick={handlePayDeposit}
         disabled={loading}
-        className="w-full bg-gray-900 text-white py-3 rounded font-semibold hover:bg-gray-800 disabled:opacity-50"
+        className="w-full btn-brand py-3"
       >
         {loading ? 'Processing...' : 'Pay Deposit'}
       </button>

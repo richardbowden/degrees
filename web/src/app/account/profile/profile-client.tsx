@@ -92,18 +92,18 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
     }
   }
 
-  const inputClass = 'w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900';
+  const inputClass = 'w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500';
 
   return (
     <div className="space-y-10">
       {/* Profile form */}
       <section>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact Details</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Contact Details</h2>
         <form onSubmit={saveProfile} className="max-w-lg space-y-4">
-          {profileMessage && <p className="text-sm text-green-600">{profileMessage}</p>}
-          {profileError && <p className="text-sm text-red-600">{profileError}</p>}
+          {profileMessage && <p className="text-sm text-green-400">{profileMessage}</p>}
+          {profileError && <p className="text-sm text-red-400">{profileError}</p>}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1">Phone</label>
             <input
               type="tel"
               value={phone}
@@ -112,7 +112,7 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1">Address</label>
             <input
               type="text"
               value={address}
@@ -122,7 +122,7 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Suburb</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1">Suburb</label>
               <input
                 type="text"
                 value={suburb}
@@ -131,7 +131,7 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Postcode</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1">Postcode</label>
               <input
                 type="text"
                 value={postcode}
@@ -143,7 +143,7 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
           <button
             type="submit"
             disabled={saving}
-            className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800 disabled:opacity-50"
+            className="btn-brand px-4 py-2 text-sm font-medium rounded-md disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save Profile'}
           </button>
@@ -153,22 +153,22 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
       {/* Vehicles */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Vehicles</h2>
+          <h2 className="text-lg font-semibold text-white">Vehicles</h2>
           {!showAddVehicle && !editingVehicle && (
             <button
               onClick={() => setShowAddVehicle(true)}
-              className="px-3 py-1.5 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800"
+              className="btn-brand px-3 py-1.5 text-sm font-medium rounded-md"
             >
               Add Vehicle
             </button>
           )}
         </div>
 
-        {vehicleError && <p className="text-sm text-red-600 mb-4">{vehicleError}</p>}
+        {vehicleError && <p className="text-sm text-red-400 mb-4">{vehicleError}</p>}
 
         {showAddVehicle && (
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">New Vehicle</h3>
+            <h3 className="text-sm font-medium text-text-secondary mb-3">New Vehicle</h3>
             <VehicleForm
               onSubmit={handleAddVehicle}
               onCancel={() => setShowAddVehicle(false)}
@@ -178,7 +178,7 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
 
         {editingVehicle && (
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Edit Vehicle</h3>
+            <h3 className="text-sm font-medium text-text-secondary mb-3">Edit Vehicle</h3>
             <VehicleForm
               vehicle={editingVehicle}
               onSubmit={handleEditVehicle}
@@ -188,43 +188,43 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
         )}
 
         {vehicles.length === 0 && !showAddVehicle ? (
-          <p className="text-gray-500 text-sm">No vehicles added yet.</p>
+          <p className="text-text-muted text-sm">No vehicles added yet.</p>
         ) : (
           <div className="space-y-3">
             {vehicles.map(vehicle => (
               <div
                 key={vehicle.id}
-                className="border border-gray-200 rounded-lg p-4 flex items-center justify-between"
+                className="border border-border-subtle rounded-lg p-4 flex items-center justify-between"
               >
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-white">
                     {vehicle.year} {vehicle.make} {vehicle.model}
                     {vehicle.isPrimary && (
-                      <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                      <span className="ml-2 text-xs bg-white/10 text-text-secondary px-2 py-0.5 rounded-full">
                         Primary
                       </span>
                     )}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-text-muted">
                     {vehicle.colour}
                     {vehicle.rego && ` \u00B7 ${vehicle.rego}`}
                     {vehicle.paintType && ` \u00B7 ${vehicle.paintType}`}
                   </p>
                   {vehicle.conditionNotes && (
-                    <p className="text-xs text-gray-400 mt-1">{vehicle.conditionNotes}</p>
+                    <p className="text-xs text-text-muted mt-1">{vehicle.conditionNotes}</p>
                   )}
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => { setEditingVehicle(vehicle); setShowAddVehicle(false); }}
-                    className="text-sm text-gray-600 hover:text-gray-900"
+                    className="text-sm text-text-secondary hover:text-white"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteVehicle(vehicle.id)}
                     disabled={vehicleLoading === vehicle.id}
-                    className="text-sm text-red-600 hover:text-red-800 disabled:opacity-50"
+                    className="text-sm text-red-400 hover:text-red-300 disabled:opacity-50"
                   >
                     {vehicleLoading === vehicle.id ? 'Deleting...' : 'Delete'}
                   </button>

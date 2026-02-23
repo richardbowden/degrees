@@ -51,12 +51,12 @@ export function AddToCart({ service }: { service: DetailingService }) {
       />
 
       <div className="flex items-center gap-4">
-        <label className="text-sm font-medium text-gray-700">Quantity</label>
-        <div className="flex items-center border border-gray-300 rounded">
+        <label className="text-sm font-medium text-text-secondary">Quantity</label>
+        <div className="flex items-center border border-border-subtle rounded">
           <button
             type="button"
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+            className="px-3 py-1 text-text-secondary hover:bg-white/5"
           >
             -
           </button>
@@ -64,30 +64,30 @@ export function AddToCart({ service }: { service: DetailingService }) {
           <button
             type="button"
             onClick={() => setQuantity(quantity + 1)}
-            className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+            className="px-3 py-1 text-text-secondary hover:bg-white/5"
           >
             +
           </button>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-4">
+      <div className="border-t border-border-subtle pt-4">
         <div className="flex items-center justify-between mb-4">
           <span className="text-lg font-semibold">Total</span>
-          <span className="text-lg font-bold">{formatPrice(total)}</span>
+          <span className="text-lg font-bold text-brand-400">{formatPrice(total)}</span>
         </div>
 
         {error && (
-          <p className="text-red-600 text-sm mb-3">{error}</p>
+          <p className="text-red-400 text-sm mb-3">{error}</p>
         )}
 
         {success ? (
-          <p className="text-green-600 font-medium">Added to cart. Redirecting...</p>
+          <p className="text-green-400 font-medium">Added to cart. Redirecting...</p>
         ) : (
           <button
             onClick={handleAdd}
             disabled={loading}
-            className="w-full bg-gray-900 text-white py-3 rounded font-semibold hover:bg-gray-800 disabled:opacity-50"
+            className="w-full btn-brand py-3"
           >
             {loading ? 'Adding...' : 'Add to Cart'}
           </button>

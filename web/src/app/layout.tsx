@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Nav } from '@/components/nav';
 import { Footer } from '@/components/footer';
+import { BokehBackground } from '@/components/bokeh-background';
 
 export const metadata: Metadata = {
   title: '40 Degrees Car Detailing',
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-white text-gray-900">
+      <body className="min-h-screen flex flex-col bg-surface text-white">
+        <BokehBackground />
         <Nav />
-        <main className="flex-1">{children}</main>
+        <main className="relative z-10 flex-1">{children}</main>
         <Footer />
       </body>
     </html>

@@ -11,8 +11,8 @@ export default function ForgotPasswordPage() {
     return (
       <div className="max-w-md mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">Check Your Email</h1>
-        <p className="text-gray-600 mb-6">{state.success}</p>
-        <Link href="/login" className="text-gray-900 font-medium hover:underline">
+        <p className="text-text-secondary mb-6">{state.success}</p>
+        <Link href="/login" className="text-brand-400 font-medium hover:underline">
           Back to login
         </Link>
       </div>
@@ -22,13 +22,13 @@ export default function ForgotPasswordPage() {
   return (
     <div className="max-w-md mx-auto px-4 py-16">
       <h1 className="text-2xl font-bold mb-2">Reset Password</h1>
-      <p className="text-gray-600 mb-8">
+      <p className="text-text-secondary mb-8">
         Enter your email and we&apos;ll send you a link to reset your password.
       </p>
 
       <form action={formAction} className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-1">
             Email
           </label>
           <input
@@ -37,25 +37,25 @@ export default function ForgotPasswordPage() {
             type="email"
             required
             autoComplete="email"
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 
         {state?.error && (
-          <p className="text-red-600 text-sm">{state.error}</p>
+          <p className="text-red-400 text-sm">{state.error}</p>
         )}
 
         <button
           type="submit"
           disabled={pending}
-          className="w-full bg-gray-900 text-white py-2.5 rounded font-semibold hover:bg-gray-800 disabled:opacity-50"
+          className="w-full btn-brand py-2.5"
         >
           {pending ? 'Sending...' : 'Send Reset Link'}
         </button>
       </form>
 
-      <p className="mt-6 text-sm text-gray-600 text-center">
-        <Link href="/login" className="text-gray-900 font-medium hover:underline">
+      <p className="mt-6 text-sm text-text-secondary text-center">
+        <Link href="/login" className="text-brand-400 font-medium hover:underline">
           Back to login
         </Link>
       </p>

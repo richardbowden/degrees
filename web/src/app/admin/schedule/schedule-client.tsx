@@ -115,75 +115,75 @@ export function ScheduleClient({ token }: { token: string }) {
     }
   }
 
-  if (loading) return <p className="text-sm text-gray-500">Loading schedule...</p>;
-  if (error && days.length === 0) return <p className="text-red-600 text-sm">{error}</p>;
+  if (loading) return <p className="text-sm text-text-muted">Loading schedule...</p>;
+  if (error && days.length === 0) return <p className="text-red-400 text-sm">{error}</p>;
 
   return (
     <div className="space-y-8">
       {/* Business Hours */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Business Hours</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Business Hours</h2>
         <div className="space-y-3">
           {days.map((day, index) => (
-            <div key={day.id || day.dayOfWeek} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <div key={day.id || day.dayOfWeek} className="glass-card p-4">
               <div className="flex flex-wrap items-center gap-4">
                 <div className="w-28">
-                  <p className="font-medium text-sm text-gray-900">{DAY_NAMES[day.dayOfWeek]}</p>
+                  <p className="font-medium text-sm text-white">{DAY_NAMES[day.dayOfWeek]}</p>
                 </div>
 
-                <label className="flex items-center gap-1.5 text-sm text-gray-700">
+                <label className="flex items-center gap-1.5 text-sm text-text-secondary">
                   <input
                     type="checkbox"
                     checked={day.isOpen}
                     onChange={e => updateDay(index, 'isOpen', e.target.checked)}
-                    className="rounded border-gray-300"
+                    className="rounded border-border-subtle"
                   />
                   Open
                 </label>
 
                 <div className="flex items-center gap-2">
-                  <label className="text-xs text-gray-500">From</label>
+                  <label className="text-xs text-text-muted">From</label>
                   <input
                     type="time"
                     value={day.openTime}
                     onChange={e => updateDay(index, 'openTime', e.target.value)}
                     disabled={!day.isOpen}
-                    className="border border-gray-300 rounded-md px-2 py-1 text-sm disabled:opacity-50"
+                    className="bg-white/5 border border-border-subtle rounded-md px-2 py-1 text-sm text-white disabled:opacity-50"
                   />
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <label className="text-xs text-gray-500">To</label>
+                  <label className="text-xs text-text-muted">To</label>
                   <input
                     type="time"
                     value={day.closeTime}
                     onChange={e => updateDay(index, 'closeTime', e.target.value)}
                     disabled={!day.isOpen}
-                    className="border border-gray-300 rounded-md px-2 py-1 text-sm disabled:opacity-50"
+                    className="bg-white/5 border border-border-subtle rounded-md px-2 py-1 text-sm text-white disabled:opacity-50"
                   />
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <label className="text-xs text-gray-500">Buffer (mins)</label>
+                  <label className="text-xs text-text-muted">Buffer (mins)</label>
                   <input
                     type="number"
                     min="0"
                     value={day.bufferMinutes}
                     onChange={e => updateDay(index, 'bufferMinutes', parseInt(e.target.value || '0', 10))}
                     disabled={!day.isOpen}
-                    className="w-20 border border-gray-300 rounded-md px-2 py-1 text-sm disabled:opacity-50"
+                    className="w-20 bg-white/5 border border-border-subtle rounded-md px-2 py-1 text-sm text-white disabled:opacity-50"
                   />
                 </div>
 
                 <button
                   onClick={() => saveDay(day, index)}
                   disabled={savingDay === day.dayOfWeek}
-                  className="bg-gray-900 text-white px-3 py-1 rounded-md text-sm hover:bg-gray-800 disabled:opacity-50"
+                  className="btn-brand px-3 py-1 rounded-md text-sm disabled:opacity-50"
                 >
                   {savingDay === day.dayOfWeek ? 'Saving...' : 'Save'}
                 </button>
               </div>
-              {dayErrors[index] && <p className="text-sm text-red-600 mt-2">{dayErrors[index]}</p>}
+              {dayErrors[index] && <p className="text-sm text-red-400 mt-2">{dayErrors[index]}</p>}
             </div>
           ))}
         </div>
@@ -191,29 +191,29 @@ export function ScheduleClient({ token }: { token: string }) {
 
       {/* Blackout Dates */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Blackout Dates</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Blackout Dates</h2>
 
         {/* Existing blackouts */}
         {blackouts.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 overflow-hidden">
+          <div className="glass-card mb-4 overflow-hidden">
             <table className="w-full text-left">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-white/5 border-b border-border-subtle">
                 <tr>
-                  <th className="py-2 px-4 text-xs font-medium text-gray-500 uppercase">Date</th>
-                  <th className="py-2 px-4 text-xs font-medium text-gray-500 uppercase">Reason</th>
-                  <th className="py-2 px-4 text-xs font-medium text-gray-500 uppercase"></th>
+                  <th className="py-2 px-4 text-xs font-medium text-text-muted uppercase">Date</th>
+                  <th className="py-2 px-4 text-xs font-medium text-text-muted uppercase">Reason</th>
+                  <th className="py-2 px-4 text-xs font-medium text-text-muted uppercase"></th>
                 </tr>
               </thead>
               <tbody>
                 {blackouts.map(b => (
-                  <tr key={b.id} className="border-b border-gray-100">
+                  <tr key={b.id} className="border-b border-white/5">
                     <td className="py-2 px-4 text-sm">{b.date}</td>
-                    <td className="py-2 px-4 text-sm text-gray-600">{b.reason || '-'}</td>
+                    <td className="py-2 px-4 text-sm text-text-secondary">{b.reason || '-'}</td>
                     <td className="py-2 px-4 text-sm">
                       <button
                         onClick={() => handleDeleteBlackout(b.id)}
                         disabled={deletingBlackout === b.id}
-                        className="text-red-600 hover:text-red-800 text-xs disabled:opacity-50"
+                        className="text-red-400 hover:text-red-500 text-xs disabled:opacity-50"
                       >
                         {deletingBlackout === b.id ? '...' : 'Remove'}
                       </button>
@@ -225,39 +225,39 @@ export function ScheduleClient({ token }: { token: string }) {
           </div>
         )}
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Add Blackout Date</h3>
+        <div className="glass-card p-5">
+          <h3 className="text-sm font-semibold text-white mb-3">Add Blackout Date</h3>
           <form onSubmit={handleAddBlackout} className="flex flex-wrap items-end gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Date</label>
+              <label className="block text-xs font-medium text-text-muted mb-1">Date</label>
               <input
                 type="date"
                 value={blackoutDate}
                 onChange={e => setBlackoutDate(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
                 required
               />
             </div>
             <div className="flex-1 min-w-48">
-              <label className="block text-xs font-medium text-gray-500 mb-1">Reason</label>
+              <label className="block text-xs font-medium text-text-muted mb-1">Reason</label>
               <input
                 type="text"
                 value={blackoutReason}
                 onChange={e => setBlackoutReason(e.target.value)}
                 placeholder="e.g. Public holiday"
-                className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm"
+                className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
               />
             </div>
             <button
               type="submit"
               disabled={blackoutLoading || !blackoutDate}
-              className="bg-gray-900 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+              className="btn-brand px-4 py-1.5 rounded-md text-sm font-medium disabled:opacity-50"
             >
               {blackoutLoading ? 'Adding...' : 'Add Blackout'}
             </button>
           </form>
-          {blackoutError && <p className="text-sm text-red-600 mt-2">{blackoutError}</p>}
-          {blackoutSuccess && <p className="text-sm text-green-600 mt-2">{blackoutSuccess}</p>}
+          {blackoutError && <p className="text-sm text-red-400 mt-2">{blackoutError}</p>}
+          {blackoutSuccess && <p className="text-sm text-green-400 mt-2">{blackoutSuccess}</p>}
         </div>
       </div>
     </div>

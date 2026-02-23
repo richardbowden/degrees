@@ -19,84 +19,84 @@ export default async function BookingDetailPage({ params }: { params: Promise<{ 
     <div>
       <Link
         href="/account/bookings"
-        className="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block"
+        className="text-sm text-text-muted hover:text-text-secondary mb-4 inline-block"
       >
         &larr; Back to Bookings
       </Link>
 
       <div className="flex items-center gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Booking</h1>
+        <h1 className="text-2xl font-bold text-white">Booking</h1>
         <StatusBadge status={booking.status} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Schedule & Vehicle */}
-        <div className="border border-gray-200 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Details</h2>
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">Details</h2>
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <dt className="text-gray-500">Date</dt>
-              <dd className="text-gray-900 font-medium">{formatDate(booking.scheduledDate)}</dd>
+              <dt className="text-text-muted">Date</dt>
+              <dd className="text-white font-medium">{formatDate(booking.scheduledDate)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-gray-500">Time</dt>
-              <dd className="text-gray-900">{formatTime(booking.scheduledTime)}</dd>
+              <dt className="text-text-muted">Time</dt>
+              <dd className="text-white">{formatTime(booking.scheduledTime)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-gray-500">Duration</dt>
-              <dd className="text-gray-900">{booking.estimatedDurationMins} minutes</dd>
+              <dt className="text-text-muted">Duration</dt>
+              <dd className="text-white">{booking.estimatedDurationMins} minutes</dd>
             </div>
             {booking.vehicle && (
               <div className="flex justify-between">
-                <dt className="text-gray-500">Vehicle</dt>
-                <dd className="text-gray-900">
+                <dt className="text-text-muted">Vehicle</dt>
+                <dd className="text-white">
                   {booking.vehicle.year} {booking.vehicle.make} {booking.vehicle.model}
                   {booking.vehicle.rego && ` (${booking.vehicle.rego})`}
                 </dd>
               </div>
             )}
             <div className="flex justify-between">
-              <dt className="text-gray-500">Payment Status</dt>
+              <dt className="text-text-muted">Payment Status</dt>
               <dd><StatusBadge status={booking.paymentStatus} /></dd>
             </div>
           </dl>
         </div>
 
         {/* Payment */}
-        <div className="border border-gray-200 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment</h2>
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">Payment</h2>
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <dt className="text-gray-500">Subtotal</dt>
-              <dd className="text-gray-900">{formatPrice(booking.subtotal)}</dd>
+              <dt className="text-text-muted">Subtotal</dt>
+              <dd className="text-white">{formatPrice(booking.subtotal)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-gray-500">Deposit</dt>
-              <dd className="text-gray-900">{formatPrice(booking.depositAmount)}</dd>
+              <dt className="text-text-muted">Deposit</dt>
+              <dd className="text-white">{formatPrice(booking.depositAmount)}</dd>
             </div>
-            <div className="flex justify-between border-t border-gray-200 pt-3">
-              <dt className="text-gray-900 font-medium">Total</dt>
-              <dd className="text-gray-900 font-bold">{formatPrice(booking.totalAmount)}</dd>
+            <div className="flex justify-between border-t border-border-subtle pt-3">
+              <dt className="text-white font-medium">Total</dt>
+              <dd className="text-white font-bold">{formatPrice(booking.totalAmount)}</dd>
             </div>
           </dl>
         </div>
 
         {/* Services */}
         {booking.services && booking.services.length > 0 && (
-          <div className="border border-gray-200 rounded-lg p-6 lg:col-span-2">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Services</h2>
+          <div className="glass-card p-6 lg:col-span-2">
+            <h2 className="text-lg font-semibold text-white mb-4">Services</h2>
             <div className="space-y-3">
               {booking.services.map(service => (
                 <div key={service.serviceId} className="flex items-center justify-between text-sm">
                   <div>
-                    <p className="text-gray-900 font-medium">{service.serviceName}</p>
+                    <p className="text-white font-medium">{service.serviceName}</p>
                     {service.options && service.options.length > 0 && (
-                      <p className="text-gray-500 text-xs mt-0.5">
+                      <p className="text-text-muted text-xs mt-0.5">
                         Options: {service.options.join(', ')}
                       </p>
                     )}
                   </div>
-                  <span className="text-gray-900">{formatPrice(service.price)}</span>
+                  <span className="text-white">{formatPrice(service.price)}</span>
                 </div>
               ))}
             </div>
@@ -105,9 +105,9 @@ export default async function BookingDetailPage({ params }: { params: Promise<{ 
 
         {/* Notes */}
         {booking.notes && (
-          <div className="border border-gray-200 rounded-lg p-6 lg:col-span-2">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Notes</h2>
-            <p className="text-sm text-gray-700 whitespace-pre-wrap">{booking.notes}</p>
+          <div className="glass-card p-6 lg:col-span-2">
+            <h2 className="text-lg font-semibold text-white mb-4">Notes</h2>
+            <p className="text-sm text-text-secondary whitespace-pre-wrap">{booking.notes}</p>
           </div>
         )}
       </div>

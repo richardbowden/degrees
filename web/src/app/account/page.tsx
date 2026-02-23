@@ -24,51 +24,51 @@ export default async function AccountDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
+      <h1 className="text-2xl font-bold text-white mb-6">
         Welcome back, {user.firstName}
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="border border-gray-200 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Next Booking</h2>
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">Next Booking</h2>
           {upcomingBooking ? (
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-white">
                   {formatDate(upcomingBooking.scheduledDate)}
                 </span>
-                <span className="text-gray-500">
+                <span className="text-text-muted">
                   {formatTime(upcomingBooking.scheduledTime)}
                 </span>
                 <StatusBadge status={upcomingBooking.status} />
               </div>
               {upcomingBooking.vehicle && (
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="text-sm text-text-secondary mb-2">
                   {upcomingBooking.vehicle.year} {upcomingBooking.vehicle.make} {upcomingBooking.vehicle.model}
                   {upcomingBooking.vehicle.rego && ` (${upcomingBooking.vehicle.rego})`}
                 </p>
               )}
               {upcomingBooking.services && upcomingBooking.services.length > 0 && (
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-text-secondary mb-3">
                   {upcomingBooking.services.map(s => s.serviceName).join(', ')}
                 </p>
               )}
-              <p className="text-sm font-medium text-gray-900 mb-3">
+              <p className="text-sm font-medium text-white mb-3">
                 Total: {formatPrice(upcomingBooking.totalAmount)}
               </p>
               <Link
                 href={`/account/bookings/${upcomingBooking.id}`}
-                className="text-sm font-medium text-gray-900 underline hover:text-gray-700"
+                className="text-sm font-medium text-brand-400 underline hover:text-brand-400"
               >
                 View Details
               </Link>
             </div>
           ) : (
             <div>
-              <p className="text-gray-500 mb-3">No upcoming bookings</p>
+              <p className="text-text-muted mb-3">No upcoming bookings</p>
               <Link
                 href="/services"
-                className="text-sm font-medium text-gray-900 underline hover:text-gray-700"
+                className="text-sm font-medium text-brand-400 underline hover:text-brand-400"
               >
                 Browse Services
               </Link>
@@ -76,30 +76,30 @@ export default async function AccountDashboard() {
           )}
         </div>
 
-        <div className="border border-gray-200 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Links</h2>
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">Quick Links</h2>
           <div className="space-y-3">
             <Link
               href="/account/bookings"
-              className="block text-sm font-medium text-gray-700 hover:text-gray-900"
+              className="block text-sm font-medium text-text-secondary hover:text-white"
             >
               View All Bookings
             </Link>
             <Link
               href="/account/profile"
-              className="block text-sm font-medium text-gray-700 hover:text-gray-900"
+              className="block text-sm font-medium text-text-secondary hover:text-white"
             >
               Edit Profile & Vehicles
             </Link>
             <Link
               href="/account/history"
-              className="block text-sm font-medium text-gray-700 hover:text-gray-900"
+              className="block text-sm font-medium text-text-secondary hover:text-white"
             >
               Service History
             </Link>
             <Link
               href="/services"
-              className="block text-sm font-medium text-gray-700 hover:text-gray-900"
+              className="block text-sm font-medium text-text-secondary hover:text-white"
             >
               Browse Services
             </Link>

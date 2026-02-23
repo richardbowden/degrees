@@ -7,7 +7,7 @@ export default async function AdminBookingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Bookings</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Bookings</h1>
       <BookingsClient token={token} />
     </div>
   );

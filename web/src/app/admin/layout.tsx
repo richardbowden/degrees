@@ -33,29 +33,29 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-64 bg-gray-900 text-white p-6 flex-shrink-0">
+      <aside className="w-64 bg-surface-raised text-white p-6 flex-shrink-0">
         <div className="mb-8">
           <h1 className="text-lg font-bold">40 Degrees</h1>
-          <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
+          <p className="text-xs text-text-muted mt-1">Admin Panel</p>
         </div>
         <nav className="space-y-1">
           {NAV_ITEMS.map(item => (
             <Link
               key={item.href}
               href={item.href}
-              className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+              className="block px-3 py-2 rounded-md text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-colors"
             >
               {item.label}
             </Link>
           ))}
         </nav>
         <div className="mt-auto pt-8">
-          <Link href="/" className="text-xs text-gray-500 hover:text-gray-300">
+          <Link href="/" className="text-xs text-text-muted hover:text-white">
             Back to site
           </Link>
         </div>
       </aside>
-      <div className="flex-1 p-8 bg-gray-50 min-h-screen">{children}</div>
+      <div className="flex-1 p-8 min-h-screen">{children}</div>
     </div>
   );
 }

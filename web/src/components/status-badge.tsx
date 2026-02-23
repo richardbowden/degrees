@@ -1,13 +1,13 @@
 const statusStyles: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  confirmed: 'bg-blue-100 text-blue-800',
-  in_progress: 'bg-indigo-100 text-indigo-800',
-  completed: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
-  deposit_paid: 'bg-emerald-100 text-emerald-800',
-  paid: 'bg-green-100 text-green-800',
-  partial: 'bg-yellow-100 text-yellow-800',
-  refunded: 'bg-gray-100 text-gray-800',
+  pending: 'bg-yellow-500/20 text-yellow-400',
+  confirmed: 'bg-blue-500/20 text-blue-400',
+  in_progress: 'bg-indigo-500/20 text-indigo-400',
+  completed: 'bg-green-500/20 text-green-400',
+  cancelled: 'bg-red-500/20 text-red-400',
+  deposit_paid: 'bg-emerald-500/20 text-emerald-400',
+  paid: 'bg-green-500/20 text-green-400',
+  partial: 'bg-yellow-500/20 text-yellow-400',
+  refunded: 'bg-gray-500/20 text-gray-400',
 };
 
 const statusLabels: Record<string, string> = {
@@ -23,7 +23,7 @@ const statusLabels: Record<string, string> = {
 };
 
 export function StatusBadge({ status }: { status: string }) {
-  const style = statusStyles[status] ?? 'bg-gray-100 text-gray-800';
+  const style = statusStyles[status] ?? 'bg-gray-500/20 text-gray-400';
   const label = statusLabels[status] ?? status;
   return (
     <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium ${style}`}>
