@@ -89,7 +89,13 @@ export default async function AccountDashboard() {
               href="/account/profile"
               className="block text-sm font-medium text-text-secondary hover:text-white"
             >
-              Edit Profile & Vehicles
+              Edit Profile
+            </Link>
+            <Link
+              href="/account/vehicles"
+              className="block text-sm font-medium text-text-secondary hover:text-white"
+            >
+              My Vehicles
             </Link>
             <Link
               href="/account/history"

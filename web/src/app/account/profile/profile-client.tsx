@@ -1,18 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { api, ApiError } from '@/lib/api';
-import type { CustomerProfile, Vehicle } from '@/lib/types';
-import { VehicleForm, VehicleFormData } from '@/components/vehicle-form';
+import type { CustomerProfile } from '@/lib/types';
 
 interface ProfileClientProps {
   initialProfile: CustomerProfile;
-  initialVehicles: Vehicle[];
 }
 
-export function ProfileClient({ initialProfile, initialVehicles }: ProfileClientProps) {
+export function ProfileClient({ initialProfile }: ProfileClientProps) {
   const [profile, setProfile] = useState(initialProfile);
-  const [vehicles, setVehicles] = useState(initialVehicles);
   const [phone, setPhone] = useState(profile.phone);
   const [address, setAddress] = useState(profile.address);
   const [suburb, setSuburb] = useState(profile.suburb);
@@ -20,11 +18,6 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
   const [saving, setSaving] = useState(false);
   const [profileMessage, setProfileMessage] = useState('');
   const [profileError, setProfileError] = useState('');
-
-  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
-  const [showAddVehicle, setShowAddVehicle] = useState(false);
-  const [vehicleLoading, setVehicleLoading] = useState<string | null>(null);
-  const [vehicleError, setVehicleError] = useState('');
 
   async function saveProfile(e: React.FormEvent) {
     e.preventDefault();
@@ -46,57 +39,10 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
     }
   }
 
-  async function handleAddVehicle(data: VehicleFormData) {
-    setVehicleError('');
-    try {
-      const res = await api<{ vehicle: Vehicle }>('/me/vehicles', {
-        method: 'POST',
-        body: data,
-      });
-      setVehicles(prev => [...prev, res.vehicle]);
-      setShowAddVehicle(false);
-    } catch (err: unknown) {
-      const apiErr = err as ApiError;
-      setVehicleError(apiErr.detail || 'Failed to add vehicle.');
-    }
-  }
-
-  async function handleEditVehicle(data: VehicleFormData) {
-    if (!editingVehicle) return;
-    setVehicleError('');
-    try {
-      const res = await api<{ vehicle: Vehicle }>(`/me/vehicles/${editingVehicle.id}`, {
-        method: 'PUT',
-        body: data,
-      });
-      setVehicles(prev => prev.map(v => v.id === editingVehicle.id ? res.vehicle : v));
-      setEditingVehicle(null);
-    } catch (err: unknown) {
-      const apiErr = err as ApiError;
-      setVehicleError(apiErr.detail || 'Failed to update vehicle.');
-    }
-  }
-
-  async function handleDeleteVehicle(id: string) {
-    if (!confirm('Are you sure you want to delete this vehicle?')) return;
-    setVehicleLoading(id);
-    setVehicleError('');
-    try {
-      await api(`/me/vehicles/${id}`, { method: 'DELETE' });
-      setVehicles(prev => prev.filter(v => v.id !== id));
-    } catch (err: unknown) {
-      const apiErr = err as ApiError;
-      setVehicleError(apiErr.detail || 'Failed to delete vehicle.');
-    } finally {
-      setVehicleLoading(null);
-    }
-  }
-
   const inputClass = 'w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500';
 
   return (
     <div className="space-y-10">
-      {/* Profile form */}
       <section>
         <h2 className="text-lg font-semibold text-white mb-4">Contact Details</h2>
         <form onSubmit={saveProfile} className="max-w-lg space-y-4">
@@ -150,89 +96,13 @@ export function ProfileClient({ initialProfile, initialVehicles }: ProfileClient
         </form>
       </section>
 
-      {/* Vehicles */}
       <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">Vehicles</h2>
-          {!showAddVehicle && !editingVehicle && (
-            <button
-              onClick={() => setShowAddVehicle(true)}
-              className="btn-brand px-3 py-1.5 text-sm font-medium rounded-md"
-            >
-              Add Vehicle
-            </button>
-          )}
-        </div>
-
-        {vehicleError && <p className="text-sm text-red-400 mb-4">{vehicleError}</p>}
-
-        {showAddVehicle && (
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-text-secondary mb-3">New Vehicle</h3>
-            <VehicleForm
-              onSubmit={handleAddVehicle}
-              onCancel={() => setShowAddVehicle(false)}
-            />
-          </div>
-        )}
-
-        {editingVehicle && (
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-text-secondary mb-3">Edit Vehicle</h3>
-            <VehicleForm
-              vehicle={editingVehicle}
-              onSubmit={handleEditVehicle}
-              onCancel={() => setEditingVehicle(null)}
-            />
-          </div>
-        )}
-
-        {vehicles.length === 0 && !showAddVehicle ? (
-          <p className="text-text-muted text-sm">No vehicles added yet.</p>
-        ) : (
-          <div className="space-y-3">
-            {vehicles.map(vehicle => (
-              <div
-                key={vehicle.id}
-                className="border border-border-subtle rounded-lg p-4 flex items-center justify-between"
-              >
-                <div>
-                  <p className="font-medium text-white">
-                    {vehicle.year} {vehicle.make} {vehicle.model}
-                    {vehicle.isPrimary && (
-                      <span className="ml-2 text-xs bg-white/10 text-text-secondary px-2 py-0.5 rounded-full">
-                        Primary
-                      </span>
-                    )}
-                  </p>
-                  <p className="text-sm text-text-muted">
-                    {vehicle.colour}
-                    {vehicle.rego && ` \u00B7 ${vehicle.rego}`}
-                    {vehicle.paintType && ` \u00B7 ${vehicle.paintType}`}
-                  </p>
-                  {vehicle.conditionNotes && (
-                    <p className="text-xs text-text-muted mt-1">{vehicle.conditionNotes}</p>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => { setEditingVehicle(vehicle); setShowAddVehicle(false); }}
-                    className="text-sm text-text-secondary hover:text-white"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteVehicle(vehicle.id)}
-                    disabled={vehicleLoading === vehicle.id}
-                    className="text-sm text-red-400 hover:text-red-300 disabled:opacity-50"
-                  >
-                    {vehicleLoading === vehicle.id ? 'Deleting...' : 'Delete'}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <Link
+          href="/account/vehicles"
+          className="text-sm font-medium text-brand-400 hover:text-brand-400 underline"
+        >
+          Manage your vehicles &rarr;
+        </Link>
       </section>
     </div>
   );

@@ -8,6 +8,7 @@ import { logout } from './actions';
 const navItems = [
   { href: '/account', label: 'Dashboard' },
   { href: '/account/profile', label: 'Profile' },
+  { href: '/account/vehicles', label: 'Vehicles' },
   { href: '/account/bookings', label: 'Bookings' },
   { href: '/account/history', label: 'History' },
 ];
