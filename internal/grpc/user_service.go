@@ -53,6 +53,7 @@ func (s *UserServiceServer) GetUser(ctx context.Context, req *pb.GetUserRequest)
 			Surname:    user.Surname,
 			Email:      user.EMail,
 			Enabled:    user.Enabled,
+			Sysop:      user.Sysop,
 			CreatedOn:  timestamppb.New(user.CreatedOn),
 			UpdatedAt:  timestamppb.New(user.UpdatedAt),
 		},
@@ -95,6 +96,7 @@ func (s *UserServiceServer) UpdateUser(ctx context.Context, req *pb.UpdateUserRe
 			Surname:    user.Surname,
 			Email:      user.EMail,
 			Enabled:    user.Enabled,
+			Sysop:      user.Sysop,
 			CreatedOn:  timestamppb.New(user.CreatedOn),
 			UpdatedAt:  timestamppb.New(user.UpdatedAt),
 		},
@@ -183,6 +185,7 @@ func (s *UserServiceServer) ListUsers(ctx context.Context, req *pb.ListUsersRequ
 			Surname:    user.Surname,
 			Email:      user.EMail,
 			Enabled:    user.Enabled,
+			Sysop:      user.Sysop,
 			CreatedOn:  timestamppb.New(user.CreatedOn),
 			UpdatedAt:  timestamppb.New(user.UpdatedAt),
 		}

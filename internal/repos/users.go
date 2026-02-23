@@ -69,6 +69,7 @@ func (a *Users) Create(ctx context.Context, params services.NewUser) (services.U
 		EMail:      createdEmail.Email,
 		// SignUpStage: createdUser.SignUpStage,
 		Enabled:   createdUser.Enabled,
+		Sysop:     createdUser.Sysop,
 		CreatedOn: createdUser.CreatedOn.Time,
 		UpdatedAt: createdUser.UpdatedAt.Time,
 	}
@@ -118,6 +119,7 @@ func (a *Users) UpdateEnabled(ctx context.Context, userID int64, enabled bool) (
 		Surname:    updatedUser.Surname.String,
 		EMail:      updatedUser.LoginEmail,
 		Enabled:    updatedUser.Enabled,
+		Sysop:      updatedUser.Sysop,
 		CreatedOn:  updatedUser.CreatedOn.Time,
 		UpdatedAt:  updatedUser.UpdatedAt.Time,
 	}, nil
@@ -140,6 +142,7 @@ func (a *Users) GetUserByID(ctx context.Context, userID int64) (services.User, e
 		EMail:       dbUser.LoginEmail,
 		SignUpStage: dbUser.SignUpStage,
 		Enabled:     dbUser.Enabled,
+		Sysop:       dbUser.Sysop,
 		CreatedOn:   dbUser.CreatedOn.Time,
 		UpdatedAt:   dbUser.UpdatedAt.Time,
 	}, nil
@@ -167,6 +170,7 @@ func (a *Users) UpdateUser(ctx context.Context, userID int64, firstName string, 
 		EMail:       dbUser.LoginEmail,
 		SignUpStage: dbUser.SignUpStage,
 		Enabled:     dbUser.Enabled,
+		Sysop:       dbUser.Sysop,
 		CreatedOn:   dbUser.CreatedOn.Time,
 		UpdatedAt:   dbUser.UpdatedAt.Time,
 	}, nil
@@ -187,6 +191,7 @@ func (a *Users) ListAllUsers(ctx context.Context) ([]services.User, error) {
 			Surname:    dbUser.Surname.String,
 			EMail:      dbUser.LoginEmail,
 			Enabled:    dbUser.Enabled,
+			Sysop:      dbUser.Sysop,
 			CreatedOn:  dbUser.CreatedOn.Time,
 			UpdatedAt:  dbUser.UpdatedAt.Time,
 		}

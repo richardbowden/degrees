@@ -124,12 +124,13 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*p
 	return &pb.LoginResponse{
 		SessionToken: session.SessionToken,
 		User: &pb.User{
-			Id:        user.ID,
-			FirstName: user.FirstName,
+			Id:         user.ID,
+			FirstName:  user.FirstName,
 			MiddleName: user.MiddleName.String,
-			Surname:   user.Surname.String,
-			Email:     user.LoginEmail,
-			Enabled:   user.Enabled,
+			Surname:    user.Surname.String,
+			Email:      user.LoginEmail,
+			Enabled:    user.Enabled,
+			Sysop:      user.Sysop,
 		},
 		Message: "login successful",
 	}, nil

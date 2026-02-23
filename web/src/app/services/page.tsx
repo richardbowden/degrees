@@ -69,7 +69,7 @@ export default async function ServicesPage({ searchParams }: Props) {
       {services.length === 0 ? (
         <p className="text-text-muted">No services found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
           {services.map(service => (
             <ServiceCard key={service.id} service={service} />
           ))}

@@ -46,6 +46,7 @@ type User struct {
 	EMail       string
 	SignUpStage string
 	Enabled     bool
+	Sysop       bool
 	CreatedOn   time.Time
 	UpdatedAt   time.Time
 }

@@ -1,5 +1,6 @@
 import { api } from '@/lib/api';
 import { formatPrice } from '@/lib/format';
+import { MarkdownContent } from '@/components/markdown-content';
 import { AddToCart } from './add-to-cart';
 import type { DetailingService } from '@/lib/types';
 
@@ -26,18 +27,19 @@ export default async function ServiceDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-8">
       <a href="/services" className="text-sm text-text-muted hover:text-white mb-4 inline-block">
         &larr; Back to services
       </a>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+        <div className="lg:col-span-3">
           <h1 className="text-3xl font-bold mb-2">{service.name}</h1>
-          <p className="text-sm text-text-muted mb-4">{service.categoryName}</p>
-          <p className="text-text-secondary leading-relaxed mb-6">{service.description}</p>
+          <p className="text-sm text-text-muted mb-6">{service.categoryName}</p>
 
-          <div className="flex items-center gap-6 text-sm">
+          <MarkdownContent content={service.description} />
+
+          <div className="flex items-center gap-6 text-sm mt-8 pt-6 border-t border-border-subtle">
             <div>
               <span className="text-text-muted">Starting from</span>
               <p className="text-2xl font-bold text-brand-400">{formatPrice(service.basePrice)}</p>
@@ -49,9 +51,11 @@ export default async function ServiceDetailPage({ params }: Props) {
           </div>
         </div>
 
-        <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold mb-4">Add to Cart</h2>
-          <AddToCart service={service} />
+        <div className="lg:col-span-2">
+          <div className="glass-card p-6 sticky top-24">
+            <h2 className="text-lg font-semibold mb-4">Add to Cart</h2>
+            <AddToCart service={service} />
+          </div>
         </div>
       </div>
     </div>
