@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: '/admin/bookings', label: 'Bookings' },
   { href: '/admin/customers', label: 'Customers' },
   { href: '/admin/services', label: 'Services' },
+  { href: '/admin/vehicle-categories', label: 'Vehicle Categories' },
   { href: '/admin/schedule', label: 'Schedule' },
   { href: '/admin/users', label: 'Users' },
 ];

@@ -132,6 +132,68 @@ func (q *Queries) CreateServiceOption(ctx context.Context, arg CreateServiceOpti
 	return i, err
 }
 
+const createVehicleCategory = `-- name: CreateVehicleCategory :one
+INSERT INTO vehicle_categories (name, slug, description, sort_order)
+VALUES ($1, $2, $3, $4)
+RETURNING id, name, slug, description, sort_order, created_at, updated_at
+`
+
+type CreateVehicleCategoryParams struct {
+	Name        string
+	Slug        string
+	Description pgtype.Text
+	SortOrder   int32
+}
+
+func (q *Queries) CreateVehicleCategory(ctx context.Context, arg CreateVehicleCategoryParams) (VehicleCategory, error) {
+	row := q.db.QueryRow(ctx, createVehicleCategory,
+		arg.Name,
+		arg.Slug,
+		arg.Description,
+		arg.SortOrder,
+	)
+	var i VehicleCategory
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Slug,
+		&i.Description,
+		&i.SortOrder,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const deletePriceTier = `-- name: DeletePriceTier :exec
+DELETE FROM service_price_tiers
+WHERE service_id = $1 AND vehicle_category_id = $2
+`
+
+type DeletePriceTierParams struct {
+	ServiceID         int64
+	VehicleCategoryID int64
+}
+
+func (q *Queries) DeletePriceTier(ctx context.Context, arg DeletePriceTierParams) error {
+	_, err := q.db.Exec(ctx, deletePriceTier, arg.ServiceID, arg.VehicleCategoryID)
+	return err
+}
+
+const deletePriceTiersByService = `-- name: DeletePriceTiersByService :exec
+DELETE FROM service_price_tiers
+WHERE service_id = $1
+`
+
+type DeletePriceTiersByServiceParams struct {
+	ServiceID int64
+}
+
+func (q *Queries) DeletePriceTiersByService(ctx context.Context, arg DeletePriceTiersByServiceParams) error {
+	_, err := q.db.Exec(ctx, deletePriceTiersByService, arg.ServiceID)
+	return err
+}
+
 const deleteService = `-- name: DeleteService :one
 UPDATE services
 SET is_active = false
@@ -190,6 +252,20 @@ func (q *Queries) DeleteServiceOption(ctx context.Context, arg DeleteServiceOpti
 	return i, err
 }
 
+const deleteVehicleCategory = `-- name: DeleteVehicleCategory :exec
+DELETE FROM vehicle_categories
+WHERE id = $1
+`
+
+type DeleteVehicleCategoryParams struct {
+	ID int64
+}
+
+func (q *Queries) DeleteVehicleCategory(ctx context.Context, arg DeleteVehicleCategoryParams) error {
+	_, err := q.db.Exec(ctx, deleteVehicleCategory, arg.ID)
+	return err
+}
+
 const getCategoryBySlug = `-- name: GetCategoryBySlug :one
 SELECT id, name, slug, description, sort_order, created_at, updated_at FROM service_categories
 WHERE slug = $1
@@ -210,6 +286,44 @@ func (q *Queries) GetCategoryBySlug(ctx context.Context, arg GetCategoryBySlugPa
 		&i.SortOrder,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getPriceTier = `-- name: GetPriceTier :one
+SELECT spt.id, spt.service_id, spt.vehicle_category_id, spt.price, spt.created_at,
+       vc.name AS category_name, vc.slug AS category_slug
+FROM service_price_tiers spt
+JOIN vehicle_categories vc ON vc.id = spt.vehicle_category_id
+WHERE spt.service_id = $1 AND spt.vehicle_category_id = $2
+`
+
+type GetPriceTierParams struct {
+	ServiceID         int64
+	VehicleCategoryID int64
+}
+
+type GetPriceTierRow struct {
+	ID                int64
+	ServiceID         int64
+	VehicleCategoryID int64
+	Price             int64
+	CreatedAt         pgtype.Timestamptz
+	CategoryName      string
+	CategorySlug      string
+}
+
+func (q *Queries) GetPriceTier(ctx context.Context, arg GetPriceTierParams) (GetPriceTierRow, error) {
+	row := q.db.QueryRow(ctx, getPriceTier, arg.ServiceID, arg.VehicleCategoryID)
+	var i GetPriceTierRow
+	err := row.Scan(
+		&i.ID,
+		&i.ServiceID,
+		&i.VehicleCategoryID,
+		&i.Price,
+		&i.CreatedAt,
+		&i.CategoryName,
+		&i.CategorySlug,
 	)
 	return i, err
 }
@@ -291,6 +405,30 @@ func (q *Queries) GetServiceBySlug(ctx context.Context, arg GetServiceBySlugPara
 	return i, err
 }
 
+const getVehicleCategoryByID = `-- name: GetVehicleCategoryByID :one
+SELECT id, name, slug, description, sort_order, created_at, updated_at FROM vehicle_categories
+WHERE id = $1
+`
+
+type GetVehicleCategoryByIDParams struct {
+	ID int64
+}
+
+func (q *Queries) GetVehicleCategoryByID(ctx context.Context, arg GetVehicleCategoryByIDParams) (VehicleCategory, error) {
+	row := q.db.QueryRow(ctx, getVehicleCategoryByID, arg.ID)
+	var i VehicleCategory
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Slug,
+		&i.Description,
+		&i.SortOrder,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const listCategories = `-- name: ListCategories :many
 SELECT id, name, slug, description, sort_order, created_at, updated_at FROM service_categories
 ORDER BY sort_order, name
@@ -313,6 +451,61 @@ func (q *Queries) ListCategories(ctx context.Context) ([]ServiceCategory, error)
 			&i.SortOrder,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listPriceTiersByService = `-- name: ListPriceTiersByService :many
+
+SELECT spt.id, spt.service_id, spt.vehicle_category_id, spt.price, spt.created_at,
+       vc.name AS category_name, vc.slug AS category_slug
+FROM service_price_tiers spt
+JOIN vehicle_categories vc ON vc.id = spt.vehicle_category_id
+WHERE spt.service_id = $1
+ORDER BY vc.sort_order, vc.name
+`
+
+type ListPriceTiersByServiceParams struct {
+	ServiceID int64
+}
+
+type ListPriceTiersByServiceRow struct {
+	ID                int64
+	ServiceID         int64
+	VehicleCategoryID int64
+	Price             int64
+	CreatedAt         pgtype.Timestamptz
+	CategoryName      string
+	CategorySlug      string
+}
+
+// ========================================
+// Service Price Tiers
+// ========================================
+func (q *Queries) ListPriceTiersByService(ctx context.Context, arg ListPriceTiersByServiceParams) ([]ListPriceTiersByServiceRow, error) {
+	rows, err := q.db.Query(ctx, listPriceTiersByService, arg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListPriceTiersByServiceRow
+	for rows.Next() {
+		var i ListPriceTiersByServiceRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.ServiceID,
+			&i.VehicleCategoryID,
+			&i.Price,
+			&i.CreatedAt,
+			&i.CategoryName,
+			&i.CategorySlug,
 		); err != nil {
 			return nil, err
 		}
@@ -431,6 +624,43 @@ func (q *Queries) ListServicesByCategory(ctx context.Context, arg ListServicesBy
 			&i.BasePrice,
 			&i.DurationMinutes,
 			&i.IsActive,
+			&i.SortOrder,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listVehicleCategories = `-- name: ListVehicleCategories :many
+
+SELECT id, name, slug, description, sort_order, created_at, updated_at FROM vehicle_categories
+ORDER BY sort_order, name
+`
+
+// ========================================
+// Vehicle Categories
+// ========================================
+func (q *Queries) ListVehicleCategories(ctx context.Context) ([]VehicleCategory, error) {
+	rows, err := q.db.Query(ctx, listVehicleCategories)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []VehicleCategory
+	for rows.Next() {
+		var i VehicleCategory
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Slug,
+			&i.Description,
 			&i.SortOrder,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -568,6 +798,69 @@ func (q *Queries) UpdateServiceOption(ctx context.Context, arg UpdateServiceOpti
 		&i.Price,
 		&i.IsActive,
 		&i.SortOrder,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const updateVehicleCategory = `-- name: UpdateVehicleCategory :one
+UPDATE vehicle_categories
+SET name = $2, slug = $3, description = $4, sort_order = $5
+WHERE id = $1
+RETURNING id, name, slug, description, sort_order, created_at, updated_at
+`
+
+type UpdateVehicleCategoryParams struct {
+	ID          int64
+	Name        string
+	Slug        string
+	Description pgtype.Text
+	SortOrder   int32
+}
+
+func (q *Queries) UpdateVehicleCategory(ctx context.Context, arg UpdateVehicleCategoryParams) (VehicleCategory, error) {
+	row := q.db.QueryRow(ctx, updateVehicleCategory,
+		arg.ID,
+		arg.Name,
+		arg.Slug,
+		arg.Description,
+		arg.SortOrder,
+	)
+	var i VehicleCategory
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Slug,
+		&i.Description,
+		&i.SortOrder,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const upsertPriceTier = `-- name: UpsertPriceTier :one
+INSERT INTO service_price_tiers (service_id, vehicle_category_id, price)
+VALUES ($1, $2, $3)
+ON CONFLICT (service_id, vehicle_category_id)
+DO UPDATE SET price = EXCLUDED.price
+RETURNING id, service_id, vehicle_category_id, price, created_at
+`
+
+type UpsertPriceTierParams struct {
+	ServiceID         int64
+	VehicleCategoryID int64
+	Price             int64
+}
+
+func (q *Queries) UpsertPriceTier(ctx context.Context, arg UpsertPriceTierParams) (ServicePriceTier, error) {
+	row := q.db.QueryRow(ctx, upsertPriceTier, arg.ServiceID, arg.VehicleCategoryID, arg.Price)
+	var i ServicePriceTier
+	err := row.Scan(
+		&i.ID,
+		&i.ServiceID,
+		&i.VehicleCategoryID,
+		&i.Price,
 		&i.CreatedAt,
 	)
 	return i, err

@@ -24,6 +24,21 @@ type CatalogueRepository interface {
 	CreateServiceOption(ctx context.Context, params dbpg.CreateServiceOptionParams) (dbpg.ServiceOption, error)
 	UpdateServiceOption(ctx context.Context, params dbpg.UpdateServiceOptionParams) (dbpg.ServiceOption, error)
 	DeleteServiceOption(ctx context.Context, id int64) (dbpg.ServiceOption, error)
+	ListVehicleCategories(ctx context.Context) ([]dbpg.VehicleCategory, error)
+	GetVehicleCategoryByID(ctx context.Context, id int64) (dbpg.VehicleCategory, error)
+	CreateVehicleCategory(ctx context.Context, params dbpg.CreateVehicleCategoryParams) (dbpg.VehicleCategory, error)
+	UpdateVehicleCategory(ctx context.Context, params dbpg.UpdateVehicleCategoryParams) (dbpg.VehicleCategory, error)
+	DeleteVehicleCategory(ctx context.Context, id int64) error
+	ListPriceTiersByService(ctx context.Context, serviceID int64) ([]dbpg.ListPriceTiersByServiceRow, error)
+	UpsertPriceTier(ctx context.Context, params dbpg.UpsertPriceTierParams) (dbpg.ServicePriceTier, error)
+	DeletePriceTiersByService(ctx context.Context, serviceID int64) error
+	GetPriceTier(ctx context.Context, serviceID, vehicleCategoryID int64) (dbpg.GetPriceTierRow, error)
+}
+
+// ServiceWithTiers bundles a service with its price tiers.
+type ServiceWithTiers struct {
+	Service dbpg.Service
+	Tiers   []dbpg.ListPriceTiersByServiceRow
 }
 
 type CatalogueService struct {
@@ -47,31 +62,45 @@ func (s *CatalogueService) ListCategories(ctx context.Context) ([]dbpg.ServiceCa
 	return cats, nil
 }
 
-// ListServices returns all active services (public).
-func (s *CatalogueService) ListServices(ctx context.Context) ([]dbpg.Service, error) {
+// ListServices returns all active services with their price tiers (public).
+func (s *CatalogueService) ListServices(ctx context.Context) ([]ServiceWithTiers, error) {
 	svcs, err := s.repo.ListServices(ctx)
 	if err != nil {
 		return nil, problems.New(problems.Database, "failed to list services", err)
 	}
-	return svcs, nil
+
+	result := make([]ServiceWithTiers, len(svcs))
+	for i, svc := range svcs {
+		tiers, err := s.repo.ListPriceTiersByService(ctx, svc.ID)
+		if err != nil {
+			return nil, problems.New(problems.Database, "failed to list price tiers", err)
+		}
+		result[i] = ServiceWithTiers{Service: svc, Tiers: tiers}
+	}
+	return result, nil
 }
 
-// GetServiceBySlug returns a service by slug with category name (public).
-func (s *CatalogueService) GetServiceBySlug(ctx context.Context, slug string) (dbpg.GetServiceBySlugRow, []dbpg.ServiceOption, error) {
+// GetServiceBySlug returns a service by slug with category name, options, and price tiers (public).
+func (s *CatalogueService) GetServiceBySlug(ctx context.Context, slug string) (dbpg.GetServiceBySlugRow, []dbpg.ServiceOption, []dbpg.ListPriceTiersByServiceRow, error) {
 	svc, err := s.repo.GetServiceBySlug(ctx, slug)
 	if err != nil {
 		if errors.Is(err, ErrNoRecord) {
-			return dbpg.GetServiceBySlugRow{}, nil, problems.New(problems.NotExist, "service not found")
+			return dbpg.GetServiceBySlugRow{}, nil, nil, problems.New(problems.NotExist, "service not found")
 		}
-		return dbpg.GetServiceBySlugRow{}, nil, problems.New(problems.Database, "failed to get service", err)
+		return dbpg.GetServiceBySlugRow{}, nil, nil, problems.New(problems.Database, "failed to get service", err)
 	}
 
 	opts, err := s.repo.ListServiceOptions(ctx, svc.ID)
 	if err != nil {
-		return dbpg.GetServiceBySlugRow{}, nil, problems.New(problems.Database, "failed to list service options", err)
+		return dbpg.GetServiceBySlugRow{}, nil, nil, problems.New(problems.Database, "failed to list service options", err)
 	}
 
-	return svc, opts, nil
+	tiers, err := s.repo.ListPriceTiersByService(ctx, svc.ID)
+	if err != nil {
+		return dbpg.GetServiceBySlugRow{}, nil, nil, problems.New(problems.Database, "failed to list price tiers", err)
+	}
+
+	return svc, opts, tiers, nil
 }
 
 // CreateService creates a new service (admin only).
@@ -146,4 +175,92 @@ func (s *CatalogueService) AddServiceOption(ctx context.Context, userID int64, p
 		return dbpg.ServiceOption{}, problems.New(problems.Database, "failed to create service option", err)
 	}
 	return opt, nil
+}
+
+// ListVehicleCategories returns all vehicle categories (public).
+func (s *CatalogueService) ListVehicleCategories(ctx context.Context) ([]dbpg.VehicleCategory, error) {
+	cats, err := s.repo.ListVehicleCategories(ctx)
+	if err != nil {
+		return nil, problems.New(problems.Database, "failed to list vehicle categories", err)
+	}
+	return cats, nil
+}
+
+// CreateVehicleCategory creates a vehicle category (admin only).
+func (s *CatalogueService) CreateVehicleCategory(ctx context.Context, userID int64, params dbpg.CreateVehicleCategoryParams) (dbpg.VehicleCategory, error) {
+	isAdmin, err := s.authz.IsSystemAdmin(ctx, userID)
+	if err != nil {
+		return dbpg.VehicleCategory{}, err
+	}
+	if !isAdmin {
+		return dbpg.VehicleCategory{}, problems.New(problems.Unauthorized, "admin access required")
+	}
+
+	vc, err := s.repo.CreateVehicleCategory(ctx, params)
+	if err != nil {
+		return dbpg.VehicleCategory{}, problems.New(problems.Database, "failed to create vehicle category", err)
+	}
+	return vc, nil
+}
+
+// UpdateVehicleCategory updates a vehicle category (admin only).
+func (s *CatalogueService) UpdateVehicleCategory(ctx context.Context, userID int64, params dbpg.UpdateVehicleCategoryParams) (dbpg.VehicleCategory, error) {
+	isAdmin, err := s.authz.IsSystemAdmin(ctx, userID)
+	if err != nil {
+		return dbpg.VehicleCategory{}, err
+	}
+	if !isAdmin {
+		return dbpg.VehicleCategory{}, problems.New(problems.Unauthorized, "admin access required")
+	}
+
+	vc, err := s.repo.UpdateVehicleCategory(ctx, params)
+	if err != nil {
+		if errors.Is(err, ErrNoRecord) {
+			return dbpg.VehicleCategory{}, problems.New(problems.NotExist, "vehicle category not found")
+		}
+		return dbpg.VehicleCategory{}, problems.New(problems.Database, "failed to update vehicle category", err)
+	}
+	return vc, nil
+}
+
+// DeleteVehicleCategory deletes a vehicle category (admin only).
+func (s *CatalogueService) DeleteVehicleCategory(ctx context.Context, userID int64, id int64) error {
+	isAdmin, err := s.authz.IsSystemAdmin(ctx, userID)
+	if err != nil {
+		return err
+	}
+	if !isAdmin {
+		return problems.New(problems.Unauthorized, "admin access required")
+	}
+
+	return s.repo.DeleteVehicleCategory(ctx, id)
+}
+
+// SetServicePriceTiers replaces all price tiers for a service (admin only).
+func (s *CatalogueService) SetServicePriceTiers(ctx context.Context, userID int64, serviceID int64, tiers []dbpg.UpsertPriceTierParams) ([]dbpg.ListPriceTiersByServiceRow, error) {
+	isAdmin, err := s.authz.IsSystemAdmin(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	if !isAdmin {
+		return nil, problems.New(problems.Unauthorized, "admin access required")
+	}
+
+	// Delete existing tiers then upsert new ones
+	if err := s.repo.DeletePriceTiersByService(ctx, serviceID); err != nil {
+		return nil, problems.New(problems.Database, "failed to clear price tiers", err)
+	}
+
+	for _, t := range tiers {
+		t.ServiceID = serviceID
+		if _, err := s.repo.UpsertPriceTier(ctx, t); err != nil {
+			return nil, problems.New(problems.Database, "failed to upsert price tier", err)
+		}
+	}
+
+	result, err := s.repo.ListPriceTiersByService(ctx, serviceID)
+	if err != nil {
+		return nil, problems.New(problems.Database, "failed to list price tiers", err)
+	}
+	return result, nil
 }

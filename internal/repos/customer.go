@@ -80,17 +80,18 @@ func (r *Customer) ListCustomers(ctx context.Context, limit, offset int32) ([]se
 	return profiles, nil
 }
 
-func (r *Customer) CreateVehicle(ctx context.Context, customerID int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool) (services.Vehicle, error) {
+func (r *Customer) CreateVehicle(ctx context.Context, customerID int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool, vehicleCategoryID int64) (services.Vehicle, error) {
 	dbVehicle, err := r.store.CreateVehicle(ctx, dbpg.CreateVehicleParams{
-		CustomerID:     customerID,
-		Make:           make,
-		Model:          model,
-		Year:           pgtype.Int4{Int32: year, Valid: year > 0},
-		Colour:         dbpg.StringToPGString(colour),
-		Rego:           dbpg.StringToPGString(rego),
-		PaintType:      dbpg.StringToPGString(paintType),
-		ConditionNotes: dbpg.StringToPGString(conditionNotes),
-		IsPrimary:      isPrimary,
+		CustomerID:        customerID,
+		Make:              make,
+		Model:             model,
+		Year:              pgtype.Int4{Int32: year, Valid: year > 0},
+		Colour:            dbpg.StringToPGString(colour),
+		Rego:              dbpg.StringToPGString(rego),
+		PaintType:         dbpg.StringToPGString(paintType),
+		ConditionNotes:    dbpg.StringToPGString(conditionNotes),
+		IsPrimary:         isPrimary,
+		VehicleCategoryID: pgtype.Int8{Int64: vehicleCategoryID, Valid: vehicleCategoryID > 0},
 	})
 	if err != nil {
 		return services.Vehicle{}, err
@@ -125,17 +126,18 @@ func (r *Customer) ListVehiclesByCustomer(ctx context.Context, customerID int64)
 	return vehicles, nil
 }
 
-func (r *Customer) UpdateVehicle(ctx context.Context, id int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool) (services.Vehicle, error) {
+func (r *Customer) UpdateVehicle(ctx context.Context, id int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool, vehicleCategoryID int64) (services.Vehicle, error) {
 	dbVehicle, err := r.store.UpdateVehicle(ctx, dbpg.UpdateVehicleParams{
-		ID:             id,
-		Make:           make,
-		Model:          model,
-		Year:           pgtype.Int4{Int32: year, Valid: year > 0},
-		Colour:         dbpg.StringToPGString(colour),
-		Rego:           dbpg.StringToPGString(rego),
-		PaintType:      dbpg.StringToPGString(paintType),
-		ConditionNotes: dbpg.StringToPGString(conditionNotes),
-		IsPrimary:      isPrimary,
+		ID:                id,
+		Make:              make,
+		Model:             model,
+		Year:              pgtype.Int4{Int32: year, Valid: year > 0},
+		Colour:            dbpg.StringToPGString(colour),
+		Rego:              dbpg.StringToPGString(rego),
+		PaintType:         dbpg.StringToPGString(paintType),
+		ConditionNotes:    dbpg.StringToPGString(conditionNotes),
+		IsPrimary:         isPrimary,
+		VehicleCategoryID: pgtype.Int8{Int64: vehicleCategoryID, Valid: vehicleCategoryID > 0},
 	})
 	if err != nil {
 		if dbpg.IsErrNoRows(err) {
@@ -168,17 +170,18 @@ func dbProfileToService(p dbpg.CustomerProfile) services.CustomerProfile {
 
 func dbVehicleToService(v dbpg.Vehicle) services.Vehicle {
 	return services.Vehicle{
-		ID:             v.ID,
-		CustomerID:     v.CustomerID,
-		Make:           v.Make,
-		Model:          v.Model,
-		Year:           v.Year.Int32,
-		Colour:         v.Colour.String,
-		Rego:           v.Rego.String,
-		PaintType:      v.PaintType.String,
-		ConditionNotes: v.ConditionNotes.String,
-		IsPrimary:      v.IsPrimary,
-		CreatedAt:      v.CreatedAt.Time,
-		UpdatedAt:      v.UpdatedAt.Time,
+		ID:                v.ID,
+		CustomerID:        v.CustomerID,
+		Make:              v.Make,
+		Model:             v.Model,
+		Year:              v.Year.Int32,
+		Colour:            v.Colour.String,
+		Rego:              v.Rego.String,
+		PaintType:         v.PaintType.String,
+		ConditionNotes:    v.ConditionNotes.String,
+		IsPrimary:         v.IsPrimary,
+		VehicleCategoryID: v.VehicleCategoryID.Int64,
+		CreatedAt:         v.CreatedAt.Time,
+		UpdatedAt:         v.UpdatedAt.Time,
 	}
 }

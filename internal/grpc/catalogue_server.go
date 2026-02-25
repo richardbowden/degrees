@@ -44,8 +44,10 @@ func (s *CatalogueServiceServer) ListServices(ctx context.Context, req *pb.ListC
 	}
 
 	pbSvcs := make([]*pb.DetailingService, len(svcs))
-	for i, svc := range svcs {
-		pbSvcs[i] = dbServiceToPB(svc)
+	for i, swt := range svcs {
+		pbSvc := dbServiceToPB(swt.Service)
+		pbSvc.PriceTiers = dbPriceTiersToPB(swt.Tiers)
+		pbSvcs[i] = pbSvc
 	}
 
 	return &pb.ListCatalogueServicesResponse{Services: pbSvcs}, nil
@@ -56,7 +58,7 @@ func (s *CatalogueServiceServer) GetService(ctx context.Context, req *pb.GetCata
 		return nil, status.Error(codes.InvalidArgument, "slug is required")
 	}
 
-	svc, opts, err := s.catalogueSvc.GetServiceBySlug(ctx, req.Slug)
+	svc, opts, tiers, err := s.catalogueSvc.GetServiceBySlug(ctx, req.Slug)
 	if err != nil {
 		return nil, ToGRPCError(err)
 	}
@@ -79,6 +81,7 @@ func (s *CatalogueServiceServer) GetService(ctx context.Context, req *pb.GetCata
 		SortOrder:       svc.SortOrder,
 		CategoryName:    svc.CategoryName,
 		Options:         pbOpts,
+		PriceTiers:      dbPriceTiersToPB(tiers),
 	}
 	if svc.CreatedAt.Valid {
 		pbSvc.CreatedAt = timestamppb.New(svc.CreatedAt.Time)
@@ -202,6 +205,119 @@ func (s *CatalogueServiceServer) AddServiceOption(ctx context.Context, req *pb.A
 	return &pb.AddServiceOptionResponse{Option: dbServiceOptionToPB(opt)}, nil
 }
 
+func (s *CatalogueServiceServer) ListVehicleCategories(ctx context.Context, req *pb.ListVehicleCategoriesRequest) (*pb.ListVehicleCategoriesResponse, error) {
+	cats, err := s.catalogueSvc.ListVehicleCategories(ctx)
+	if err != nil {
+		return nil, ToGRPCError(err)
+	}
+
+	pbCats := make([]*pb.VehicleCategory, len(cats))
+	for i, c := range cats {
+		pbCats[i] = dbVehicleCategoryToPB(c)
+	}
+
+	return &pb.ListVehicleCategoriesResponse{VehicleCategories: pbCats}, nil
+}
+
+func (s *CatalogueServiceServer) CreateVehicleCategory(ctx context.Context, req *pb.CreateVehicleCategoryRequest) (*pb.CreateVehicleCategoryResponse, error) {
+	if req.Name == "" {
+		return nil, status.Error(codes.InvalidArgument, "name is required")
+	}
+	if req.Slug == "" {
+		return nil, status.Error(codes.InvalidArgument, "slug is required")
+	}
+
+	userID, ok := GetUserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+
+	params := dbpg.CreateVehicleCategoryParams{
+		Name:        req.Name,
+		Slug:        req.Slug,
+		Description: dbpg.StringToPGString(req.Description),
+		SortOrder:   req.SortOrder,
+	}
+
+	vc, err := s.catalogueSvc.CreateVehicleCategory(ctx, userID, params)
+	if err != nil {
+		return nil, ToGRPCError(err)
+	}
+
+	return &pb.CreateVehicleCategoryResponse{VehicleCategory: dbVehicleCategoryToPB(vc)}, nil
+}
+
+func (s *CatalogueServiceServer) UpdateVehicleCategory(ctx context.Context, req *pb.UpdateVehicleCategoryRequest) (*pb.UpdateVehicleCategoryResponse, error) {
+	if req.Id == 0 {
+		return nil, status.Error(codes.InvalidArgument, "id is required")
+	}
+
+	userID, ok := GetUserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+
+	params := dbpg.UpdateVehicleCategoryParams{
+		ID:          req.Id,
+		Name:        req.Name,
+		Slug:        req.Slug,
+		Description: dbpg.StringToPGString(req.Description),
+		SortOrder:   req.SortOrder,
+	}
+
+	vc, err := s.catalogueSvc.UpdateVehicleCategory(ctx, userID, params)
+	if err != nil {
+		return nil, ToGRPCError(err)
+	}
+
+	return &pb.UpdateVehicleCategoryResponse{VehicleCategory: dbVehicleCategoryToPB(vc)}, nil
+}
+
+func (s *CatalogueServiceServer) DeleteVehicleCategory(ctx context.Context, req *pb.DeleteVehicleCategoryRequest) (*pb.DeleteVehicleCategoryResponse, error) {
+	if req.Id == 0 {
+		return nil, status.Error(codes.InvalidArgument, "id is required")
+	}
+
+	userID, ok := GetUserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+
+	err := s.catalogueSvc.DeleteVehicleCategory(ctx, userID, req.Id)
+	if err != nil {
+		return nil, ToGRPCError(err)
+	}
+
+	return &pb.DeleteVehicleCategoryResponse{Success: true}, nil
+}
+
+func (s *CatalogueServiceServer) SetServicePriceTiers(ctx context.Context, req *pb.SetServicePriceTiersRequest) (*pb.SetServicePriceTiersResponse, error) {
+	if req.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "service_id is required")
+	}
+
+	userID, ok := GetUserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+
+	tiers := make([]dbpg.UpsertPriceTierParams, len(req.Tiers))
+	for i, t := range req.Tiers {
+		tiers[i] = dbpg.UpsertPriceTierParams{
+			ServiceID:         req.ServiceId,
+			VehicleCategoryID: t.VehicleCategoryId,
+			Price:             t.Price,
+		}
+	}
+
+	result, err := s.catalogueSvc.SetServicePriceTiers(ctx, userID, req.ServiceId, tiers)
+	if err != nil {
+		return nil, ToGRPCError(err)
+	}
+
+	return &pb.SetServicePriceTiersResponse{PriceTiers: dbPriceTiersToPB(result)}, nil
+}
+
 // Conversion helpers
 
 func dbCategoryToPB(c dbpg.ServiceCategory) *pb.ServiceCategory {
@@ -257,4 +373,35 @@ func dbServiceOptionToPB(o dbpg.ServiceOption) *pb.DetailingServiceOption {
 		opt.CreatedAt = timestamppb.New(o.CreatedAt.Time)
 	}
 	return opt
+}
+
+func dbVehicleCategoryToPB(c dbpg.VehicleCategory) *pb.VehicleCategory {
+	vc := &pb.VehicleCategory{
+		Id:          c.ID,
+		Name:        c.Name,
+		Slug:        c.Slug,
+		Description: c.Description.String,
+		SortOrder:   c.SortOrder,
+	}
+	if c.CreatedAt.Valid {
+		vc.CreatedAt = timestamppb.New(c.CreatedAt.Time)
+	}
+	if c.UpdatedAt.Valid {
+		vc.UpdatedAt = timestamppb.New(c.UpdatedAt.Time)
+	}
+	return vc
+}
+
+func dbPriceTiersToPB(tiers []dbpg.ListPriceTiersByServiceRow) []*pb.ServicePriceTier {
+	result := make([]*pb.ServicePriceTier, len(tiers))
+	for i, t := range tiers {
+		result[i] = &pb.ServicePriceTier{
+			ServiceId:         t.ServiceID,
+			VehicleCategoryId: t.VehicleCategoryID,
+			CategoryName:      t.CategoryName,
+			CategorySlug:      t.CategorySlug,
+			Price:             t.Price,
+		}
+	}
+	return result
 }

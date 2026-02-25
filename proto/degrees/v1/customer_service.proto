@@ -36,6 +36,7 @@ message Vehicle {
   bool is_primary = 10;
   google.protobuf.Timestamp created_at = 11;
   google.protobuf.Timestamp updated_at = 12;
+  int64 vehicle_category_id = 13;
 }
 
 // ========================================
@@ -74,6 +75,7 @@ message AddVehicleRequest {
   string paint_type = 6;
   string condition_notes = 7;
   bool is_primary = 8;
+  int64 vehicle_category_id = 9;
 }
 
 message AddVehicleResponse {
@@ -90,6 +92,7 @@ message UpdateVehicleRequest {
   string paint_type = 7;
   string condition_notes = 8;
   bool is_primary = 9;
+  int64 vehicle_category_id = 10;
 }
 
 message UpdateVehicleResponse {

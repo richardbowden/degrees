@@ -673,6 +673,46 @@
         ]
       }
     },
+    "/api/v1/admin/services/{serviceId}/price-tiers": {
+      "put": {
+        "summary": "Set price tiers for a service (admin)",
+        "operationId": "CatalogueService_SetServicePriceTiers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetServicePriceTiersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CatalogueServiceSetServicePriceTiersBody"
+            }
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
     "/api/v1/admin/settings": {
       "get": {
         "summary": "ListAllSettings lists all settings (for admin interface)",
@@ -1197,6 +1237,109 @@
         ]
       }
     },
+    "/api/v1/admin/vehicle-categories": {
+      "post": {
+        "summary": "Create a vehicle category (admin)",
+        "operationId": "CatalogueService_CreateVehicleCategory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateVehicleCategoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateVehicleCategoryRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
+    "/api/v1/admin/vehicle-categories/{id}": {
+      "delete": {
+        "summary": "Delete a vehicle category (admin)",
+        "operationId": "CatalogueService_DeleteVehicleCategory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteVehicleCategoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      },
+      "put": {
+        "summary": "Update a vehicle category (admin)",
+        "operationId": "CatalogueService_UpdateVehicleCategory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateVehicleCategoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CatalogueServiceUpdateVehicleCategoryBody"
+            }
+          }
+        ],
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
     "/api/v1/auth/complete-password-reset": {
       "post": {
         "summary": "Complete password reset with token",
@@ -1574,6 +1717,29 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/v1ListCategoriesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "CatalogueService"
+        ]
+      }
+    },
+    "/api/v1/catalogue/vehicle-categories": {
+      "get": {
+        "summary": "List all vehicle categories (public)",
+        "operationId": "CatalogueService_ListVehicleCategories",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListVehicleCategoriesResponse"
             }
           },
           "default": {
@@ -2359,6 +2525,18 @@
         }
       }
     },
+    "CatalogueServiceSetServicePriceTiersBody": {
+      "type": "object",
+      "properties": {
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PriceTierInput"
+          }
+        }
+      }
+    },
     "CatalogueServiceUpdateServiceBody": {
       "type": "object",
       "properties": {
@@ -2395,6 +2573,24 @@
         }
       }
     },
+    "CatalogueServiceUpdateVehicleCategoryBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "CustomerServiceUpdateVehicleBody": {
       "type": "object",
       "properties": {
@@ -2422,6 +2618,10 @@
         },
         "isPrimary": {
           "type": "boolean"
+        },
+        "vehicleCategoryId": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -2652,6 +2852,10 @@
         },
         "isPrimary": {
           "type": "boolean"
+        },
+        "vehicleCategoryId": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -3127,6 +3331,32 @@
         }
       }
     },
+    "v1CreateVehicleCategoryRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1CreateVehicleCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "vehicleCategory": {
+          "$ref": "#/definitions/v1VehicleCategory"
+        }
+      }
+    },
     "v1CustomerProfile": {
       "type": "object",
       "properties": {
@@ -3172,6 +3402,14 @@
       }
     },
     "v1DeleteSettingResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1DeleteVehicleCategoryResponse": {
       "type": "object",
       "properties": {
         "success": {
@@ -3242,6 +3480,13 @@
         "updatedAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "priceTiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ServicePriceTier"
+          }
         }
       }
     },
@@ -3588,6 +3833,18 @@
         }
       }
     },
+    "v1ListVehicleCategoriesResponse": {
+      "type": "object",
+      "properties": {
+        "vehicleCategories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1VehicleCategory"
+          }
+        }
+      }
+    },
     "v1LoginRequest": {
       "type": "object",
       "properties": {
@@ -3626,6 +3883,19 @@
       "properties": {
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "v1PriceTierInput": {
+      "type": "object",
+      "properties": {
+        "vehicleCategoryId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "price": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -3829,6 +4099,29 @@
         }
       }
     },
+    "v1ServicePriceTier": {
+      "type": "object",
+      "properties": {
+        "serviceId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "vehicleCategoryId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "categorySlug": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "v1ServiceRecord": {
       "type": "object",
       "properties": {
@@ -3880,6 +4173,18 @@
         "updatedAt": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1SetServicePriceTiersResponse": {
+      "type": "object",
+      "properties": {
+        "priceTiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ServicePriceTier"
+          }
         }
       }
     },
@@ -4058,6 +4363,14 @@
         }
       }
     },
+    "v1UpdateVehicleCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "vehicleCategory": {
+          "$ref": "#/definitions/v1VehicleCategory"
+        }
+      }
+    },
     "v1UpdateVehicleResponse": {
       "type": "object",
       "properties": {
@@ -4141,6 +4454,40 @@
         },
         "isPrimary": {
           "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "vehicleCategoryId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1VehicleCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
         },
         "createdAt": {
           "type": "string",

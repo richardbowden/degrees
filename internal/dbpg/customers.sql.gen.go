@@ -53,21 +53,22 @@ func (q *Queries) CreateCustomerProfile(ctx context.Context, arg CreateCustomerP
 const createVehicle = `-- name: CreateVehicle :one
 INSERT INTO vehicles (
     customer_id, make, model, year, colour, rego,
-    paint_type, condition_notes, is_primary
-) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-RETURNING id, customer_id, make, model, year, colour, rego, paint_type, condition_notes, is_primary, created_at, updated_at
+    paint_type, condition_notes, is_primary, vehicle_category_id
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+RETURNING id, customer_id, make, model, year, colour, rego, paint_type, condition_notes, is_primary, created_at, updated_at, vehicle_category_id
 `
 
 type CreateVehicleParams struct {
-	CustomerID     int64
-	Make           string
-	Model          string
-	Year           pgtype.Int4
-	Colour         pgtype.Text
-	Rego           pgtype.Text
-	PaintType      pgtype.Text
-	ConditionNotes pgtype.Text
-	IsPrimary      bool
+	CustomerID        int64
+	Make              string
+	Model             string
+	Year              pgtype.Int4
+	Colour            pgtype.Text
+	Rego              pgtype.Text
+	PaintType         pgtype.Text
+	ConditionNotes    pgtype.Text
+	IsPrimary         bool
+	VehicleCategoryID pgtype.Int8
 }
 
 func (q *Queries) CreateVehicle(ctx context.Context, arg CreateVehicleParams) (Vehicle, error) {
@@ -81,6 +82,7 @@ func (q *Queries) CreateVehicle(ctx context.Context, arg CreateVehicleParams) (V
 		arg.PaintType,
 		arg.ConditionNotes,
 		arg.IsPrimary,
+		arg.VehicleCategoryID,
 	)
 	var i Vehicle
 	err := row.Scan(
@@ -96,6 +98,7 @@ func (q *Queries) CreateVehicle(ctx context.Context, arg CreateVehicleParams) (V
 		&i.IsPrimary,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.VehicleCategoryID,
 	)
 	return i, err
 }
@@ -141,7 +144,7 @@ func (q *Queries) GetCustomerProfileByUserID(ctx context.Context, arg GetCustome
 }
 
 const getVehicleByID = `-- name: GetVehicleByID :one
-SELECT id, customer_id, make, model, year, colour, rego, paint_type, condition_notes, is_primary, created_at, updated_at FROM vehicles
+SELECT id, customer_id, make, model, year, colour, rego, paint_type, condition_notes, is_primary, created_at, updated_at, vehicle_category_id FROM vehicles
 WHERE id = $1
 `
 
@@ -165,6 +168,7 @@ func (q *Queries) GetVehicleByID(ctx context.Context, arg GetVehicleByIDParams) 
 		&i.IsPrimary,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.VehicleCategoryID,
 	)
 	return i, err
 }
@@ -211,7 +215,7 @@ func (q *Queries) ListCustomers(ctx context.Context, arg ListCustomersParams) ([
 }
 
 const listVehiclesByCustomer = `-- name: ListVehiclesByCustomer :many
-SELECT id, customer_id, make, model, year, colour, rego, paint_type, condition_notes, is_primary, created_at, updated_at FROM vehicles
+SELECT id, customer_id, make, model, year, colour, rego, paint_type, condition_notes, is_primary, created_at, updated_at, vehicle_category_id FROM vehicles
 WHERE customer_id = $1
 ORDER BY is_primary DESC, created_at DESC
 `
@@ -242,6 +246,7 @@ func (q *Queries) ListVehiclesByCustomer(ctx context.Context, arg ListVehiclesBy
 			&i.IsPrimary,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.VehicleCategoryID,
 		); err != nil {
 			return nil, err
 		}
@@ -296,21 +301,23 @@ func (q *Queries) UpdateCustomerProfile(ctx context.Context, arg UpdateCustomerP
 const updateVehicle = `-- name: UpdateVehicle :one
 UPDATE vehicles
 SET make = $2, model = $3, year = $4, colour = $5, rego = $6,
-    paint_type = $7, condition_notes = $8, is_primary = $9
+    paint_type = $7, condition_notes = $8, is_primary = $9,
+    vehicle_category_id = $10
 WHERE id = $1
-RETURNING id, customer_id, make, model, year, colour, rego, paint_type, condition_notes, is_primary, created_at, updated_at
+RETURNING id, customer_id, make, model, year, colour, rego, paint_type, condition_notes, is_primary, created_at, updated_at, vehicle_category_id
 `
 
 type UpdateVehicleParams struct {
-	ID             int64
-	Make           string
-	Model          string
-	Year           pgtype.Int4
-	Colour         pgtype.Text
-	Rego           pgtype.Text
-	PaintType      pgtype.Text
-	ConditionNotes pgtype.Text
-	IsPrimary      bool
+	ID                int64
+	Make              string
+	Model             string
+	Year              pgtype.Int4
+	Colour            pgtype.Text
+	Rego              pgtype.Text
+	PaintType         pgtype.Text
+	ConditionNotes    pgtype.Text
+	IsPrimary         bool
+	VehicleCategoryID pgtype.Int8
 }
 
 func (q *Queries) UpdateVehicle(ctx context.Context, arg UpdateVehicleParams) (Vehicle, error) {
@@ -324,6 +331,7 @@ func (q *Queries) UpdateVehicle(ctx context.Context, arg UpdateVehicleParams) (V
 		arg.PaintType,
 		arg.ConditionNotes,
 		arg.IsPrimary,
+		arg.VehicleCategoryID,
 	)
 	var i Vehicle
 	err := row.Scan(
@@ -339,6 +347,7 @@ func (q *Queries) UpdateVehicle(ctx context.Context, arg UpdateVehicleParams) (V
 		&i.IsPrimary,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.VehicleCategoryID,
 	)
 	return i, err
 }

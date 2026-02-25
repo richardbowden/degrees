@@ -30,14 +30,15 @@ WHERE id = $1;
 -- name: CreateVehicle :one
 INSERT INTO vehicles (
     customer_id, make, model, year, colour, rego,
-    paint_type, condition_notes, is_primary
-) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    paint_type, condition_notes, is_primary, vehicle_category_id
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 RETURNING *;
 
 -- name: UpdateVehicle :one
 UPDATE vehicles
 SET make = $2, model = $3, year = $4, colour = $5, rego = $6,
-    paint_type = $7, condition_notes = $8, is_primary = $9
+    paint_type = $7, condition_notes = $8, is_primary = $9,
+    vehicle_category_id = $10
 WHERE id = $1
 RETURNING *;
 

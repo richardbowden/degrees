@@ -88,7 +88,7 @@ func (s *CustomerServiceServer) AddVehicle(ctx context.Context, req *pb.AddVehic
 		return nil, status.Error(codes.InvalidArgument, "model is required")
 	}
 
-	vehicle, err := s.customerSvc.AddVehicle(ctx, userID, req.Make, req.Model, req.Year, req.Colour, req.Rego, req.PaintType, req.ConditionNotes, req.IsPrimary)
+	vehicle, err := s.customerSvc.AddVehicle(ctx, userID, req.Make, req.Model, req.Year, req.Colour, req.Rego, req.PaintType, req.ConditionNotes, req.IsPrimary, req.VehicleCategoryId)
 	if err != nil {
 		return nil, ToGRPCError(err)
 	}
@@ -114,7 +114,7 @@ func (s *CustomerServiceServer) UpdateVehicle(ctx context.Context, req *pb.Updat
 		return nil, status.Error(codes.InvalidArgument, "model is required")
 	}
 
-	vehicle, err := s.customerSvc.UpdateVehicle(ctx, userID, req.Id, req.Make, req.Model, req.Year, req.Colour, req.Rego, req.PaintType, req.ConditionNotes, req.IsPrimary)
+	vehicle, err := s.customerSvc.UpdateVehicle(ctx, userID, req.Id, req.Make, req.Model, req.Year, req.Colour, req.Rego, req.PaintType, req.ConditionNotes, req.IsPrimary, req.VehicleCategoryId)
 	if err != nil {
 		return nil, ToGRPCError(err)
 	}
@@ -207,17 +207,18 @@ func customerProfileToPB(p *services.CustomerProfile) *pb.CustomerProfile {
 
 func vehicleToPB(v *services.Vehicle) *pb.Vehicle {
 	return &pb.Vehicle{
-		Id:             v.ID,
-		CustomerId:     v.CustomerID,
-		Make:           v.Make,
-		Model:          v.Model,
-		Year:           v.Year,
-		Colour:         v.Colour,
-		Rego:           v.Rego,
-		PaintType:      v.PaintType,
-		ConditionNotes: v.ConditionNotes,
-		IsPrimary:      v.IsPrimary,
-		CreatedAt:      timestamppb.New(v.CreatedAt),
-		UpdatedAt:      timestamppb.New(v.UpdatedAt),
+		Id:                v.ID,
+		CustomerId:        v.CustomerID,
+		Make:              v.Make,
+		Model:             v.Model,
+		Year:              v.Year,
+		Colour:            v.Colour,
+		Rego:              v.Rego,
+		PaintType:         v.PaintType,
+		ConditionNotes:    v.ConditionNotes,
+		IsPrimary:         v.IsPrimary,
+		VehicleCategoryId: v.VehicleCategoryID,
+		CreatedAt:         timestamppb.New(v.CreatedAt),
+		UpdatedAt:         timestamppb.New(v.UpdatedAt),
 	}
 }

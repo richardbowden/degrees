@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { Vehicle } from '@/lib/types';
+import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
+import { Vehicle, VehicleCategory } from '@/lib/types';
 
 interface VehicleFormProps {
   vehicle?: Vehicle;
@@ -18,6 +19,7 @@ export interface VehicleFormData {
   paintType: string;
   conditionNotes: string;
   isPrimary: boolean;
+  vehicleCategoryId: string;
 }
 
 export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
@@ -29,10 +31,18 @@ export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
   const [paintType, setPaintType] = useState(vehicle?.paintType ?? '');
   const [conditionNotes, setConditionNotes] = useState(vehicle?.conditionNotes ?? '');
   const [isPrimary, setIsPrimary] = useState(vehicle?.isPrimary ?? false);
+  const [vehicleCategoryId, setVehicleCategoryId] = useState(vehicle?.vehicleCategoryId ?? '');
+  const [vehicleCategories, setVehicleCategories] = useState<VehicleCategory[]>([]);
+
+  useEffect(() => {
+    api<{ vehicleCategories: VehicleCategory[] }>('/catalogue/vehicle-categories')
+      .then(res => setVehicleCategories(res.vehicleCategories ?? []))
+      .catch(() => {});
+  }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    onSubmit({ make, model, year, colour, rego, paintType, conditionNotes, isPrimary });
+    onSubmit({ make, model, year, colour, rego, paintType, conditionNotes, isPrimary, vehicleCategoryId });
   }
 
   const inputClass = 'w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500';
@@ -65,6 +75,22 @@ export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
           <label className={labelClass}>Paint Type</label>
           <input type="text" value={paintType} onChange={e => setPaintType(e.target.value)} className={inputClass} placeholder="Metallic" />
         </div>
+        {vehicleCategories.length > 0 && (
+          <div>
+            <label className={labelClass}>Vehicle Size</label>
+            <select
+              required
+              value={vehicleCategoryId}
+              onChange={e => setVehicleCategoryId(e.target.value)}
+              className={inputClass}
+            >
+              <option value="">Select size...</option>
+              {vehicleCategories.map(vc => (
+                <option key={vc.id} value={vc.id}>{vc.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
       <div>
         <label className={labelClass}>Condition Notes</label>

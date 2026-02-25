@@ -132,3 +132,67 @@ func (r *Catalogue) DeleteServiceOption(ctx context.Context, id int64) (dbpg.Ser
 	}
 	return opt, nil
 }
+
+// Vehicle Categories
+
+func (r *Catalogue) ListVehicleCategories(ctx context.Context) ([]dbpg.VehicleCategory, error) {
+	return r.store.ListVehicleCategories(ctx)
+}
+
+func (r *Catalogue) GetVehicleCategoryByID(ctx context.Context, id int64) (dbpg.VehicleCategory, error) {
+	vc, err := r.store.GetVehicleCategoryByID(ctx, dbpg.GetVehicleCategoryByIDParams{ID: id})
+	if err != nil {
+		if dbpg.IsErrNoRows(err) {
+			return dbpg.VehicleCategory{}, services.ErrNoRecord
+		}
+		return dbpg.VehicleCategory{}, err
+	}
+	return vc, nil
+}
+
+func (r *Catalogue) CreateVehicleCategory(ctx context.Context, params dbpg.CreateVehicleCategoryParams) (dbpg.VehicleCategory, error) {
+	return r.store.CreateVehicleCategory(ctx, params)
+}
+
+func (r *Catalogue) UpdateVehicleCategory(ctx context.Context, params dbpg.UpdateVehicleCategoryParams) (dbpg.VehicleCategory, error) {
+	vc, err := r.store.UpdateVehicleCategory(ctx, params)
+	if err != nil {
+		if dbpg.IsErrNoRows(err) {
+			return dbpg.VehicleCategory{}, services.ErrNoRecord
+		}
+		return dbpg.VehicleCategory{}, err
+	}
+	return vc, nil
+}
+
+func (r *Catalogue) DeleteVehicleCategory(ctx context.Context, id int64) error {
+	return r.store.DeleteVehicleCategory(ctx, dbpg.DeleteVehicleCategoryParams{ID: id})
+}
+
+// Price Tiers
+
+func (r *Catalogue) ListPriceTiersByService(ctx context.Context, serviceID int64) ([]dbpg.ListPriceTiersByServiceRow, error) {
+	return r.store.ListPriceTiersByService(ctx, dbpg.ListPriceTiersByServiceParams{ServiceID: serviceID})
+}
+
+func (r *Catalogue) UpsertPriceTier(ctx context.Context, params dbpg.UpsertPriceTierParams) (dbpg.ServicePriceTier, error) {
+	return r.store.UpsertPriceTier(ctx, params)
+}
+
+func (r *Catalogue) DeletePriceTiersByService(ctx context.Context, serviceID int64) error {
+	return r.store.DeletePriceTiersByService(ctx, dbpg.DeletePriceTiersByServiceParams{ServiceID: serviceID})
+}
+
+func (r *Catalogue) GetPriceTier(ctx context.Context, serviceID, vehicleCategoryID int64) (dbpg.GetPriceTierRow, error) {
+	row, err := r.store.GetPriceTier(ctx, dbpg.GetPriceTierParams{
+		ServiceID:         serviceID,
+		VehicleCategoryID: vehicleCategoryID,
+	})
+	if err != nil {
+		if dbpg.IsErrNoRows(err) {
+			return dbpg.GetPriceTierRow{}, services.ErrNoRecord
+		}
+		return dbpg.GetPriceTierRow{}, err
+	}
+	return row, nil
+}

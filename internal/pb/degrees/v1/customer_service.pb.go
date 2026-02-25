@@ -132,21 +132,22 @@ func (x *CustomerProfile) GetUpdatedAt() *timestamppb.Timestamp {
 }
 
 type Vehicle struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	CustomerId     int64                  `protobuf:"varint,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
-	Make           string                 `protobuf:"bytes,3,opt,name=make,proto3" json:"make,omitempty"`
-	Model          string                 `protobuf:"bytes,4,opt,name=model,proto3" json:"model,omitempty"`
-	Year           int32                  `protobuf:"varint,5,opt,name=year,proto3" json:"year,omitempty"`
-	Colour         string                 `protobuf:"bytes,6,opt,name=colour,proto3" json:"colour,omitempty"`
-	Rego           string                 `protobuf:"bytes,7,opt,name=rego,proto3" json:"rego,omitempty"`
-	PaintType      string                 `protobuf:"bytes,8,opt,name=paint_type,json=paintType,proto3" json:"paint_type,omitempty"`
-	ConditionNotes string                 `protobuf:"bytes,9,opt,name=condition_notes,json=conditionNotes,proto3" json:"condition_notes,omitempty"`
-	IsPrimary      bool                   `protobuf:"varint,10,opt,name=is_primary,json=isPrimary,proto3" json:"is_primary,omitempty"`
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Id                int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	CustomerId        int64                  `protobuf:"varint,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
+	Make              string                 `protobuf:"bytes,3,opt,name=make,proto3" json:"make,omitempty"`
+	Model             string                 `protobuf:"bytes,4,opt,name=model,proto3" json:"model,omitempty"`
+	Year              int32                  `protobuf:"varint,5,opt,name=year,proto3" json:"year,omitempty"`
+	Colour            string                 `protobuf:"bytes,6,opt,name=colour,proto3" json:"colour,omitempty"`
+	Rego              string                 `protobuf:"bytes,7,opt,name=rego,proto3" json:"rego,omitempty"`
+	PaintType         string                 `protobuf:"bytes,8,opt,name=paint_type,json=paintType,proto3" json:"paint_type,omitempty"`
+	ConditionNotes    string                 `protobuf:"bytes,9,opt,name=condition_notes,json=conditionNotes,proto3" json:"condition_notes,omitempty"`
+	IsPrimary         bool                   `protobuf:"varint,10,opt,name=is_primary,json=isPrimary,proto3" json:"is_primary,omitempty"`
+	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	VehicleCategoryId int64                  `protobuf:"varint,13,opt,name=vehicle_category_id,json=vehicleCategoryId,proto3" json:"vehicle_category_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *Vehicle) Reset() {
@@ -261,6 +262,13 @@ func (x *Vehicle) GetUpdatedAt() *timestamppb.Timestamp {
 		return x.UpdatedAt
 	}
 	return nil
+}
+
+func (x *Vehicle) GetVehicleCategoryId() int64 {
+	if x != nil {
+		return x.VehicleCategoryId
+	}
+	return 0
 }
 
 type GetMyProfileRequest struct {
@@ -536,17 +544,18 @@ func (x *ListMyVehiclesResponse) GetVehicles() []*Vehicle {
 }
 
 type AddVehicleRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	Make           string                 `protobuf:"bytes,1,opt,name=make,proto3" json:"make,omitempty"`
-	Model          string                 `protobuf:"bytes,2,opt,name=model,proto3" json:"model,omitempty"`
-	Year           int32                  `protobuf:"varint,3,opt,name=year,proto3" json:"year,omitempty"`
-	Colour         string                 `protobuf:"bytes,4,opt,name=colour,proto3" json:"colour,omitempty"`
-	Rego           string                 `protobuf:"bytes,5,opt,name=rego,proto3" json:"rego,omitempty"`
-	PaintType      string                 `protobuf:"bytes,6,opt,name=paint_type,json=paintType,proto3" json:"paint_type,omitempty"`
-	ConditionNotes string                 `protobuf:"bytes,7,opt,name=condition_notes,json=conditionNotes,proto3" json:"condition_notes,omitempty"`
-	IsPrimary      bool                   `protobuf:"varint,8,opt,name=is_primary,json=isPrimary,proto3" json:"is_primary,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Make              string                 `protobuf:"bytes,1,opt,name=make,proto3" json:"make,omitempty"`
+	Model             string                 `protobuf:"bytes,2,opt,name=model,proto3" json:"model,omitempty"`
+	Year              int32                  `protobuf:"varint,3,opt,name=year,proto3" json:"year,omitempty"`
+	Colour            string                 `protobuf:"bytes,4,opt,name=colour,proto3" json:"colour,omitempty"`
+	Rego              string                 `protobuf:"bytes,5,opt,name=rego,proto3" json:"rego,omitempty"`
+	PaintType         string                 `protobuf:"bytes,6,opt,name=paint_type,json=paintType,proto3" json:"paint_type,omitempty"`
+	ConditionNotes    string                 `protobuf:"bytes,7,opt,name=condition_notes,json=conditionNotes,proto3" json:"condition_notes,omitempty"`
+	IsPrimary         bool                   `protobuf:"varint,8,opt,name=is_primary,json=isPrimary,proto3" json:"is_primary,omitempty"`
+	VehicleCategoryId int64                  `protobuf:"varint,9,opt,name=vehicle_category_id,json=vehicleCategoryId,proto3" json:"vehicle_category_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *AddVehicleRequest) Reset() {
@@ -635,6 +644,13 @@ func (x *AddVehicleRequest) GetIsPrimary() bool {
 	return false
 }
 
+func (x *AddVehicleRequest) GetVehicleCategoryId() int64 {
+	if x != nil {
+		return x.VehicleCategoryId
+	}
+	return 0
+}
+
 type AddVehicleResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Vehicle       *Vehicle               `protobuf:"bytes,1,opt,name=vehicle,proto3" json:"vehicle,omitempty"`
@@ -680,18 +696,19 @@ func (x *AddVehicleResponse) GetVehicle() *Vehicle {
 }
 
 type UpdateVehicleRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Make           string                 `protobuf:"bytes,2,opt,name=make,proto3" json:"make,omitempty"`
-	Model          string                 `protobuf:"bytes,3,opt,name=model,proto3" json:"model,omitempty"`
-	Year           int32                  `protobuf:"varint,4,opt,name=year,proto3" json:"year,omitempty"`
-	Colour         string                 `protobuf:"bytes,5,opt,name=colour,proto3" json:"colour,omitempty"`
-	Rego           string                 `protobuf:"bytes,6,opt,name=rego,proto3" json:"rego,omitempty"`
-	PaintType      string                 `protobuf:"bytes,7,opt,name=paint_type,json=paintType,proto3" json:"paint_type,omitempty"`
-	ConditionNotes string                 `protobuf:"bytes,8,opt,name=condition_notes,json=conditionNotes,proto3" json:"condition_notes,omitempty"`
-	IsPrimary      bool                   `protobuf:"varint,9,opt,name=is_primary,json=isPrimary,proto3" json:"is_primary,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Id                int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Make              string                 `protobuf:"bytes,2,opt,name=make,proto3" json:"make,omitempty"`
+	Model             string                 `protobuf:"bytes,3,opt,name=model,proto3" json:"model,omitempty"`
+	Year              int32                  `protobuf:"varint,4,opt,name=year,proto3" json:"year,omitempty"`
+	Colour            string                 `protobuf:"bytes,5,opt,name=colour,proto3" json:"colour,omitempty"`
+	Rego              string                 `protobuf:"bytes,6,opt,name=rego,proto3" json:"rego,omitempty"`
+	PaintType         string                 `protobuf:"bytes,7,opt,name=paint_type,json=paintType,proto3" json:"paint_type,omitempty"`
+	ConditionNotes    string                 `protobuf:"bytes,8,opt,name=condition_notes,json=conditionNotes,proto3" json:"condition_notes,omitempty"`
+	IsPrimary         bool                   `protobuf:"varint,9,opt,name=is_primary,json=isPrimary,proto3" json:"is_primary,omitempty"`
+	VehicleCategoryId int64                  `protobuf:"varint,10,opt,name=vehicle_category_id,json=vehicleCategoryId,proto3" json:"vehicle_category_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *UpdateVehicleRequest) Reset() {
@@ -785,6 +802,13 @@ func (x *UpdateVehicleRequest) GetIsPrimary() bool {
 		return x.IsPrimary
 	}
 	return false
+}
+
+func (x *UpdateVehicleRequest) GetVehicleCategoryId() int64 {
+	if x != nil {
+		return x.VehicleCategoryId
+	}
+	return 0
 }
 
 type UpdateVehicleResponse struct {
@@ -1128,7 +1152,7 @@ const file_degrees_v1_customer_service_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x81\x03\n" +
+	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xb1\x03\n" +
 	"\aVehicle\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
 	"\vcustomer_id\x18\x02 \x01(\x03R\n" +
@@ -1147,7 +1171,8 @@ const file_degrees_v1_customer_service_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x15\n" +
+	"updated_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12.\n" +
+	"\x13vehicle_category_id\x18\r \x01(\x03R\x11vehicleCategoryId\"\x15\n" +
 	"\x13GetMyProfileRequest\"M\n" +
 	"\x14GetMyProfileResponse\x125\n" +
 	"\aprofile\x18\x01 \x01(\v2\x1b.degrees.v1.CustomerProfileR\aprofile\"|\n" +
@@ -1160,7 +1185,7 @@ const file_degrees_v1_customer_service_proto_rawDesc = "" +
 	"\aprofile\x18\x01 \x01(\v2\x1b.degrees.v1.CustomerProfileR\aprofile\"\x17\n" +
 	"\x15ListMyVehiclesRequest\"I\n" +
 	"\x16ListMyVehiclesResponse\x12/\n" +
-	"\bvehicles\x18\x01 \x03(\v2\x13.degrees.v1.VehicleR\bvehicles\"\xe4\x01\n" +
+	"\bvehicles\x18\x01 \x03(\v2\x13.degrees.v1.VehicleR\bvehicles\"\x94\x02\n" +
 	"\x11AddVehicleRequest\x12\x12\n" +
 	"\x04make\x18\x01 \x01(\tR\x04make\x12\x14\n" +
 	"\x05model\x18\x02 \x01(\tR\x05model\x12\x12\n" +
@@ -1171,9 +1196,10 @@ const file_degrees_v1_customer_service_proto_rawDesc = "" +
 	"paint_type\x18\x06 \x01(\tR\tpaintType\x12'\n" +
 	"\x0fcondition_notes\x18\a \x01(\tR\x0econditionNotes\x12\x1d\n" +
 	"\n" +
-	"is_primary\x18\b \x01(\bR\tisPrimary\"C\n" +
+	"is_primary\x18\b \x01(\bR\tisPrimary\x12.\n" +
+	"\x13vehicle_category_id\x18\t \x01(\x03R\x11vehicleCategoryId\"C\n" +
 	"\x12AddVehicleResponse\x12-\n" +
-	"\avehicle\x18\x01 \x01(\v2\x13.degrees.v1.VehicleR\avehicle\"\xf7\x01\n" +
+	"\avehicle\x18\x01 \x01(\v2\x13.degrees.v1.VehicleR\avehicle\"\xa7\x02\n" +
 	"\x14UpdateVehicleRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04make\x18\x02 \x01(\tR\x04make\x12\x14\n" +
@@ -1185,7 +1211,9 @@ const file_degrees_v1_customer_service_proto_rawDesc = "" +
 	"paint_type\x18\a \x01(\tR\tpaintType\x12'\n" +
 	"\x0fcondition_notes\x18\b \x01(\tR\x0econditionNotes\x12\x1d\n" +
 	"\n" +
-	"is_primary\x18\t \x01(\bR\tisPrimary\"F\n" +
+	"is_primary\x18\t \x01(\bR\tisPrimary\x12.\n" +
+	"\x13vehicle_category_id\x18\n" +
+	" \x01(\x03R\x11vehicleCategoryId\"F\n" +
 	"\x15UpdateVehicleResponse\x12-\n" +
 	"\avehicle\x18\x01 \x01(\v2\x13.degrees.v1.VehicleR\avehicle\"&\n" +
 	"\x14DeleteVehicleRequest\x12\x0e\n" +

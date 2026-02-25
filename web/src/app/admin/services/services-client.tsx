@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { api, type ApiError } from '@/lib/api';
-import type { DetailingService, DetailingServiceOption, ServiceCategory } from '@/lib/types';
+import type { DetailingService, DetailingServiceOption, ServiceCategory, VehicleCategory, ServicePriceTier } from '@/lib/types';
 import { formatPrice } from '@/lib/format';
 
 function slugify(s: string): string {
@@ -52,6 +52,7 @@ const EMPTY_OPTION: OptionForm = {
 export function ServicesClient({ token }: { token: string }) {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
   const [services, setServices] = useState<DetailingService[]>([]);
+  const [vehicleCategories, setVehicleCategories] = useState<VehicleCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -68,6 +69,12 @@ export function ServicesClient({ token }: { token: string }) {
   const [optionLoading, setOptionLoading] = useState(false);
   const [optionError, setOptionError] = useState('');
 
+  // Price tier state
+  const [showTiersFor, setShowTiersFor] = useState<string | null>(null);
+  const [tierPrices, setTierPrices] = useState<Record<string, string>>({});
+  const [tierLoading, setTierLoading] = useState(false);
+  const [tierError, setTierError] = useState('');
+
   // Delete state
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -81,6 +88,14 @@ export function ServicesClient({ token }: { token: string }) {
       ]);
       setCategories(catRes.categories ?? []);
       setServices(svcRes.services ?? []);
+
+      // Vehicle categories are optional - don't break the page if they fail
+      try {
+        const vcRes = await api<{ vehicleCategories: VehicleCategory[] }>('/catalogue/vehicle-categories', { token });
+        setVehicleCategories(vcRes.vehicleCategories ?? []);
+      } catch {
+        setVehicleCategories([]);
+      }
     } catch {
       setError('Failed to load services');
     } finally {
@@ -194,6 +209,41 @@ export function ServicesClient({ token }: { token: string }) {
       setOptionError((err as ApiError)?.detail || 'Failed to add option');
     } finally {
       setOptionLoading(false);
+    }
+  }
+
+  function openTiers(svc: DetailingService) {
+    const prices: Record<string, string> = {};
+    for (const vc of vehicleCategories) {
+      const tier = (svc.priceTiers ?? []).find((t: ServicePriceTier) => t.vehicleCategoryId === vc.id);
+      prices[vc.id] = tier ? (Number(tier.price) / 100).toFixed(2) : '';
+    }
+    setTierPrices(prices);
+    setTierError('');
+    setShowTiersFor(svc.id);
+  }
+
+  async function handleSaveTiers(serviceId: string) {
+    setTierLoading(true);
+    setTierError('');
+    try {
+      const tiers = vehicleCategories
+        .filter(vc => tierPrices[vc.id] && parseFloat(tierPrices[vc.id]) > 0)
+        .map(vc => ({
+          vehicleCategoryId: vc.id,
+          price: Math.round(parseFloat(tierPrices[vc.id]) * 100),
+        }));
+      await api(`/admin/services/${serviceId}/price-tiers`, {
+        method: 'PUT',
+        body: { serviceId, tiers },
+        token,
+      });
+      setShowTiersFor(null);
+      await fetchData();
+    } catch (err) {
+      setTierError((err as ApiError)?.detail || 'Failed to save price tiers');
+    } finally {
+      setTierLoading(false);
     }
   }
 
@@ -316,6 +366,7 @@ export function ServicesClient({ token }: { token: string }) {
             </div>
             <div>
               <label className="block text-xs font-medium text-text-muted mb-1">Description</label>
+              <p className="text-xs text-text-muted mb-1">Supports Markdown: **bold**, *italic*, - bullet lists</p>
               <textarea
                 value={form.description}
                 onChange={e => updateForm('description', e.target.value)}
@@ -449,10 +500,71 @@ export function ServicesClient({ token }: { token: string }) {
                           </div>
                         </form>
                       )}
+
+                      {/* Price Tiers */}
+                      {svc.priceTiers && svc.priceTiers.length > 0 && showTiersFor !== svc.id && (
+                        <div className="mt-3 pl-4 border-l-2 border-brand-500/30 space-y-0.5">
+                          <p className="text-xs font-medium text-text-muted mb-1">Price Tiers</p>
+                          {svc.priceTiers.map((t: ServicePriceTier) => (
+                            <div key={t.vehicleCategoryId} className="flex items-center gap-3 text-sm text-text-secondary py-0.5">
+                              <span>{t.categoryName}</span>
+                              <span className="text-brand-400 font-semibold">{formatPrice(t.price)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {showTiersFor === svc.id && (
+                        <div className="mt-3 p-3 bg-white/5 rounded-md space-y-3">
+                          <p className="text-xs font-medium text-text-muted">Price per Vehicle Category (AUD)</p>
+                          {vehicleCategories.length === 0 ? (
+                            <p className="text-sm text-text-muted">No vehicle categories. Create some first.</p>
+                          ) : (
+                            <div className="space-y-2">
+                              {vehicleCategories.map(vc => (
+                                <div key={vc.id} className="flex items-center gap-3">
+                                  <span className="text-sm text-text-secondary w-40">{vc.name}</span>
+                                  <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0"
+                                    value={tierPrices[vc.id] ?? ''}
+                                    onChange={e => setTierPrices(prev => ({ ...prev, [vc.id]: e.target.value }))}
+                                    placeholder="Leave blank for base price"
+                                    className="flex-1 bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {tierError && <p className="text-sm text-red-400">{tierError}</p>}
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleSaveTiers(svc.id)}
+                              disabled={tierLoading}
+                              className="btn-brand px-3 py-1.5 rounded-md text-sm disabled:opacity-50"
+                            >
+                              {tierLoading ? 'Saving...' : 'Save Tiers'}
+                            </button>
+                            <button
+                              onClick={() => setShowTiersFor(null)}
+                              className="px-3 py-1.5 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-white/5"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Actions */}
                     <div className="flex gap-2 ml-4 flex-shrink-0">
+                      <button
+                        onClick={() => openTiers(svc)}
+                        className="text-xs text-text-muted hover:text-white px-2 py-1 border border-border-subtle rounded"
+                      >
+                        Tiers
+                      </button>
                       <button
                         onClick={() => { setShowOptionFor(svc.id); setOptionForm(EMPTY_OPTION); setOptionError(''); }}
                         className="text-xs text-text-muted hover:text-white px-2 py-1 border border-border-subtle rounded"

@@ -301,6 +301,14 @@ type ServicePhoto struct {
 	CreatedAt       pgtype.Timestamptz
 }
 
+type ServicePriceTier struct {
+	ID                int64
+	ServiceID         int64
+	VehicleCategoryID int64
+	Price             int64
+	CreatedAt         pgtype.Timestamptz
+}
+
 type ServiceProductsUsed struct {
 	ID              int64
 	ServiceRecordID int64
@@ -385,18 +393,29 @@ type UserEmail struct {
 }
 
 type Vehicle struct {
-	ID             int64
-	CustomerID     int64
-	Make           string
-	Model          string
-	Year           pgtype.Int4
-	Colour         pgtype.Text
-	Rego           pgtype.Text
-	PaintType      pgtype.Text
-	ConditionNotes pgtype.Text
-	IsPrimary      bool
-	CreatedAt      pgtype.Timestamptz
-	UpdatedAt      pgtype.Timestamptz
+	ID                int64
+	CustomerID        int64
+	Make              string
+	Model             string
+	Year              pgtype.Int4
+	Colour            pgtype.Text
+	Rego              pgtype.Text
+	PaintType         pgtype.Text
+	ConditionNotes    pgtype.Text
+	IsPrimary         bool
+	CreatedAt         pgtype.Timestamptz
+	UpdatedAt         pgtype.Timestamptz
+	VehicleCategoryID pgtype.Int8
+}
+
+type VehicleCategory struct {
+	ID          int64
+	Name        string
+	Slug        string
+	Description pgtype.Text
+	SortOrder   int32
+	CreatedAt   pgtype.Timestamptz
+	UpdatedAt   pgtype.Timestamptz
 }
 
 type Verification struct {

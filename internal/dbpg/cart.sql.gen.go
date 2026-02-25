@@ -151,9 +151,12 @@ func (q *Queries) GetCartByUserID(ctx context.Context, arg GetCartByUserIDParams
 const listCartItems = `-- name: ListCartItems :many
 SELECT ci.id, ci.cart_session_id, ci.service_id, ci.vehicle_id,
        ci.quantity, ci.created_at,
-       s.name AS service_name, s.base_price AS service_price
+       s.name AS service_name,
+       COALESCE(spt.price, s.base_price) AS service_price
 FROM cart_items ci
 JOIN services s ON s.id = ci.service_id
+LEFT JOIN vehicles v ON v.id = ci.vehicle_id
+LEFT JOIN service_price_tiers spt ON spt.service_id = s.id AND spt.vehicle_category_id = v.vehicle_category_id
 WHERE ci.cart_session_id = $1
 ORDER BY ci.created_at
 `

@@ -21,18 +21,19 @@ type CustomerProfile struct {
 }
 
 type Vehicle struct {
-	ID             int64
-	CustomerID     int64
-	Make           string
-	Model          string
-	Year           int32
-	Colour         string
-	Rego           string
-	PaintType      string
-	ConditionNotes string
-	IsPrimary      bool
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	ID                int64
+	CustomerID        int64
+	Make              string
+	Model             string
+	Year              int32
+	Colour            string
+	Rego              string
+	PaintType         string
+	ConditionNotes    string
+	IsPrimary         bool
+	VehicleCategoryID int64
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
 }
 
 type CustomerRepository interface {
@@ -40,10 +41,10 @@ type CustomerRepository interface {
 	GetProfileByUserID(ctx context.Context, userID int64) (CustomerProfile, error)
 	UpdateProfile(ctx context.Context, id int64, phone, address, suburb, postcode, notes string) (CustomerProfile, error)
 	ListCustomers(ctx context.Context, limit, offset int32) ([]CustomerProfile, error)
-	CreateVehicle(ctx context.Context, customerID int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool) (Vehicle, error)
+	CreateVehicle(ctx context.Context, customerID int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool, vehicleCategoryID int64) (Vehicle, error)
 	GetVehicleByID(ctx context.Context, vehicleID int64) (Vehicle, error)
 	ListVehiclesByCustomer(ctx context.Context, customerID int64) ([]Vehicle, error)
-	UpdateVehicle(ctx context.Context, id int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool) (Vehicle, error)
+	UpdateVehicle(ctx context.Context, id int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool, vehicleCategoryID int64) (Vehicle, error)
 	DeleteVehicle(ctx context.Context, vehicleID int64) error
 }
 
@@ -95,13 +96,13 @@ func (s *CustomerService) UpdateProfile(ctx context.Context, userID int64, phone
 }
 
 // AddVehicle adds a vehicle to the authenticated customer's profile.
-func (s *CustomerService) AddVehicle(ctx context.Context, userID int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool) (*Vehicle, error) {
+func (s *CustomerService) AddVehicle(ctx context.Context, userID int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool, vehicleCategoryID int64) (*Vehicle, error) {
 	profile, err := s.GetOrCreateProfile(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
 
-	vehicle, err := s.repo.CreateVehicle(ctx, profile.ID, make, model, year, colour, rego, paintType, conditionNotes, isPrimary)
+	vehicle, err := s.repo.CreateVehicle(ctx, profile.ID, make, model, year, colour, rego, paintType, conditionNotes, isPrimary, vehicleCategoryID)
 	if err != nil {
 		return nil, problems.New(problems.Database, "failed to create vehicle", err)
 	}
@@ -123,7 +124,7 @@ func (s *CustomerService) ListVehicles(ctx context.Context, userID int64) ([]Veh
 }
 
 // UpdateVehicle updates a vehicle, ensuring it belongs to the authenticated customer.
-func (s *CustomerService) UpdateVehicle(ctx context.Context, userID, vehicleID int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool) (*Vehicle, error) {
+func (s *CustomerService) UpdateVehicle(ctx context.Context, userID, vehicleID int64, make, model string, year int32, colour, rego, paintType, conditionNotes string, isPrimary bool, vehicleCategoryID int64) (*Vehicle, error) {
 	profile, err := s.GetOrCreateProfile(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -141,7 +142,7 @@ func (s *CustomerService) UpdateVehicle(ctx context.Context, userID, vehicleID i
 		return nil, problems.New(problems.Unauthorized, "vehicle does not belong to this customer")
 	}
 
-	vehicle, err := s.repo.UpdateVehicle(ctx, vehicleID, make, model, year, colour, rego, paintType, conditionNotes, isPrimary)
+	vehicle, err := s.repo.UpdateVehicle(ctx, vehicleID, make, model, year, colour, rego, paintType, conditionNotes, isPrimary, vehicleCategoryID)
 	if err != nil {
 		if errors.Is(err, ErrNoRecord) {
 			return nil, problems.New(problems.NotExist, "vehicle not found")

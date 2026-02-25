@@ -131,6 +131,7 @@ type DetailingService struct {
 	Options         []*DetailingServiceOption `protobuf:"bytes,12,rep,name=options,proto3" json:"options,omitempty"`
 	CreatedAt       *timestamppb.Timestamp    `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt       *timestamppb.Timestamp    `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	PriceTiers      []*ServicePriceTier       `protobuf:"bytes,15,rep,name=price_tiers,json=priceTiers,proto3" json:"price_tiers,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -263,6 +264,181 @@ func (x *DetailingService) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *DetailingService) GetPriceTiers() []*ServicePriceTier {
+	if x != nil {
+		return x.PriceTiers
+	}
+	return nil
+}
+
+type VehicleCategory struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Slug          string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
+	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	SortOrder     int32                  `protobuf:"varint,5,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VehicleCategory) Reset() {
+	*x = VehicleCategory{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VehicleCategory) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VehicleCategory) ProtoMessage() {}
+
+func (x *VehicleCategory) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VehicleCategory.ProtoReflect.Descriptor instead.
+func (*VehicleCategory) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *VehicleCategory) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *VehicleCategory) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *VehicleCategory) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
+}
+
+func (x *VehicleCategory) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *VehicleCategory) GetSortOrder() int32 {
+	if x != nil {
+		return x.SortOrder
+	}
+	return 0
+}
+
+func (x *VehicleCategory) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *VehicleCategory) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+type ServicePriceTier struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	ServiceId         int64                  `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	VehicleCategoryId int64                  `protobuf:"varint,2,opt,name=vehicle_category_id,json=vehicleCategoryId,proto3" json:"vehicle_category_id,omitempty"`
+	CategoryName      string                 `protobuf:"bytes,3,opt,name=category_name,json=categoryName,proto3" json:"category_name,omitempty"`
+	CategorySlug      string                 `protobuf:"bytes,4,opt,name=category_slug,json=categorySlug,proto3" json:"category_slug,omitempty"`
+	Price             int64                  `protobuf:"varint,5,opt,name=price,proto3" json:"price,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *ServicePriceTier) Reset() {
+	*x = ServicePriceTier{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ServicePriceTier) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ServicePriceTier) ProtoMessage() {}
+
+func (x *ServicePriceTier) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ServicePriceTier.ProtoReflect.Descriptor instead.
+func (*ServicePriceTier) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ServicePriceTier) GetServiceId() int64 {
+	if x != nil {
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *ServicePriceTier) GetVehicleCategoryId() int64 {
+	if x != nil {
+		return x.VehicleCategoryId
+	}
+	return 0
+}
+
+func (x *ServicePriceTier) GetCategoryName() string {
+	if x != nil {
+		return x.CategoryName
+	}
+	return ""
+}
+
+func (x *ServicePriceTier) GetCategorySlug() string {
+	if x != nil {
+		return x.CategorySlug
+	}
+	return ""
+}
+
+func (x *ServicePriceTier) GetPrice() int64 {
+	if x != nil {
+		return x.Price
+	}
+	return 0
+}
+
 type DetailingServiceOption struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -279,7 +455,7 @@ type DetailingServiceOption struct {
 
 func (x *DetailingServiceOption) Reset() {
 	*x = DetailingServiceOption{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[2]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -291,7 +467,7 @@ func (x *DetailingServiceOption) String() string {
 func (*DetailingServiceOption) ProtoMessage() {}
 
 func (x *DetailingServiceOption) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[2]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -304,7 +480,7 @@ func (x *DetailingServiceOption) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DetailingServiceOption.ProtoReflect.Descriptor instead.
 func (*DetailingServiceOption) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{2}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DetailingServiceOption) GetId() int64 {
@@ -371,7 +547,7 @@ type ListCategoriesRequest struct {
 
 func (x *ListCategoriesRequest) Reset() {
 	*x = ListCategoriesRequest{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[3]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -383,7 +559,7 @@ func (x *ListCategoriesRequest) String() string {
 func (*ListCategoriesRequest) ProtoMessage() {}
 
 func (x *ListCategoriesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[3]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -396,7 +572,7 @@ func (x *ListCategoriesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCategoriesRequest.ProtoReflect.Descriptor instead.
 func (*ListCategoriesRequest) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{3}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{5}
 }
 
 type ListCategoriesResponse struct {
@@ -408,7 +584,7 @@ type ListCategoriesResponse struct {
 
 func (x *ListCategoriesResponse) Reset() {
 	*x = ListCategoriesResponse{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[4]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -420,7 +596,7 @@ func (x *ListCategoriesResponse) String() string {
 func (*ListCategoriesResponse) ProtoMessage() {}
 
 func (x *ListCategoriesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[4]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -433,7 +609,7 @@ func (x *ListCategoriesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCategoriesResponse.ProtoReflect.Descriptor instead.
 func (*ListCategoriesResponse) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{4}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ListCategoriesResponse) GetCategories() []*ServiceCategory {
@@ -451,7 +627,7 @@ type ListCatalogueServicesRequest struct {
 
 func (x *ListCatalogueServicesRequest) Reset() {
 	*x = ListCatalogueServicesRequest{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[5]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -463,7 +639,7 @@ func (x *ListCatalogueServicesRequest) String() string {
 func (*ListCatalogueServicesRequest) ProtoMessage() {}
 
 func (x *ListCatalogueServicesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[5]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -476,7 +652,7 @@ func (x *ListCatalogueServicesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCatalogueServicesRequest.ProtoReflect.Descriptor instead.
 func (*ListCatalogueServicesRequest) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{5}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{7}
 }
 
 type ListCatalogueServicesResponse struct {
@@ -488,7 +664,7 @@ type ListCatalogueServicesResponse struct {
 
 func (x *ListCatalogueServicesResponse) Reset() {
 	*x = ListCatalogueServicesResponse{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[6]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -500,7 +676,7 @@ func (x *ListCatalogueServicesResponse) String() string {
 func (*ListCatalogueServicesResponse) ProtoMessage() {}
 
 func (x *ListCatalogueServicesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[6]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -513,7 +689,7 @@ func (x *ListCatalogueServicesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCatalogueServicesResponse.ProtoReflect.Descriptor instead.
 func (*ListCatalogueServicesResponse) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{6}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ListCatalogueServicesResponse) GetServices() []*DetailingService {
@@ -532,7 +708,7 @@ type GetCatalogueServiceRequest struct {
 
 func (x *GetCatalogueServiceRequest) Reset() {
 	*x = GetCatalogueServiceRequest{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[7]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -544,7 +720,7 @@ func (x *GetCatalogueServiceRequest) String() string {
 func (*GetCatalogueServiceRequest) ProtoMessage() {}
 
 func (x *GetCatalogueServiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[7]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -557,7 +733,7 @@ func (x *GetCatalogueServiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCatalogueServiceRequest.ProtoReflect.Descriptor instead.
 func (*GetCatalogueServiceRequest) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{7}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetCatalogueServiceRequest) GetSlug() string {
@@ -576,7 +752,7 @@ type GetCatalogueServiceResponse struct {
 
 func (x *GetCatalogueServiceResponse) Reset() {
 	*x = GetCatalogueServiceResponse{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[8]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -588,7 +764,7 @@ func (x *GetCatalogueServiceResponse) String() string {
 func (*GetCatalogueServiceResponse) ProtoMessage() {}
 
 func (x *GetCatalogueServiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[8]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -601,7 +777,7 @@ func (x *GetCatalogueServiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCatalogueServiceResponse.ProtoReflect.Descriptor instead.
 func (*GetCatalogueServiceResponse) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{8}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetCatalogueServiceResponse) GetService() *DetailingService {
@@ -628,7 +804,7 @@ type CreateServiceRequest struct {
 
 func (x *CreateServiceRequest) Reset() {
 	*x = CreateServiceRequest{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[9]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -640,7 +816,7 @@ func (x *CreateServiceRequest) String() string {
 func (*CreateServiceRequest) ProtoMessage() {}
 
 func (x *CreateServiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[9]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -653,7 +829,7 @@ func (x *CreateServiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateServiceRequest.ProtoReflect.Descriptor instead.
 func (*CreateServiceRequest) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{9}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CreateServiceRequest) GetCategoryId() int64 {
@@ -728,7 +904,7 @@ type CreateServiceResponse struct {
 
 func (x *CreateServiceResponse) Reset() {
 	*x = CreateServiceResponse{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[10]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -740,7 +916,7 @@ func (x *CreateServiceResponse) String() string {
 func (*CreateServiceResponse) ProtoMessage() {}
 
 func (x *CreateServiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[10]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -753,7 +929,7 @@ func (x *CreateServiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateServiceResponse.ProtoReflect.Descriptor instead.
 func (*CreateServiceResponse) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{10}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *CreateServiceResponse) GetService() *DetailingService {
@@ -781,7 +957,7 @@ type UpdateServiceRequest struct {
 
 func (x *UpdateServiceRequest) Reset() {
 	*x = UpdateServiceRequest{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[11]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -793,7 +969,7 @@ func (x *UpdateServiceRequest) String() string {
 func (*UpdateServiceRequest) ProtoMessage() {}
 
 func (x *UpdateServiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[11]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -806,7 +982,7 @@ func (x *UpdateServiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateServiceRequest.ProtoReflect.Descriptor instead.
 func (*UpdateServiceRequest) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{11}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UpdateServiceRequest) GetId() int64 {
@@ -888,7 +1064,7 @@ type UpdateServiceResponse struct {
 
 func (x *UpdateServiceResponse) Reset() {
 	*x = UpdateServiceResponse{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[12]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -900,7 +1076,7 @@ func (x *UpdateServiceResponse) String() string {
 func (*UpdateServiceResponse) ProtoMessage() {}
 
 func (x *UpdateServiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[12]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -913,7 +1089,7 @@ func (x *UpdateServiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateServiceResponse.ProtoReflect.Descriptor instead.
 func (*UpdateServiceResponse) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{12}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *UpdateServiceResponse) GetService() *DetailingService {
@@ -932,7 +1108,7 @@ type DeleteServiceRequest struct {
 
 func (x *DeleteServiceRequest) Reset() {
 	*x = DeleteServiceRequest{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[13]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -944,7 +1120,7 @@ func (x *DeleteServiceRequest) String() string {
 func (*DeleteServiceRequest) ProtoMessage() {}
 
 func (x *DeleteServiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[13]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -957,7 +1133,7 @@ func (x *DeleteServiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteServiceRequest.ProtoReflect.Descriptor instead.
 func (*DeleteServiceRequest) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{13}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DeleteServiceRequest) GetId() int64 {
@@ -976,7 +1152,7 @@ type DeleteServiceResponse struct {
 
 func (x *DeleteServiceResponse) Reset() {
 	*x = DeleteServiceResponse{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[14]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -988,7 +1164,7 @@ func (x *DeleteServiceResponse) String() string {
 func (*DeleteServiceResponse) ProtoMessage() {}
 
 func (x *DeleteServiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[14]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1001,7 +1177,7 @@ func (x *DeleteServiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteServiceResponse.ProtoReflect.Descriptor instead.
 func (*DeleteServiceResponse) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{14}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DeleteServiceResponse) GetSuccess() bool {
@@ -1025,7 +1201,7 @@ type AddServiceOptionRequest struct {
 
 func (x *AddServiceOptionRequest) Reset() {
 	*x = AddServiceOptionRequest{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[15]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1037,7 +1213,7 @@ func (x *AddServiceOptionRequest) String() string {
 func (*AddServiceOptionRequest) ProtoMessage() {}
 
 func (x *AddServiceOptionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[15]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1050,7 +1226,7 @@ func (x *AddServiceOptionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddServiceOptionRequest.ProtoReflect.Descriptor instead.
 func (*AddServiceOptionRequest) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{15}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *AddServiceOptionRequest) GetServiceId() int64 {
@@ -1104,7 +1280,7 @@ type AddServiceOptionResponse struct {
 
 func (x *AddServiceOptionResponse) Reset() {
 	*x = AddServiceOptionResponse{}
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[16]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1116,7 +1292,7 @@ func (x *AddServiceOptionResponse) String() string {
 func (*AddServiceOptionResponse) ProtoMessage() {}
 
 func (x *AddServiceOptionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[16]
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1129,12 +1305,560 @@ func (x *AddServiceOptionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddServiceOptionResponse.ProtoReflect.Descriptor instead.
 func (*AddServiceOptionResponse) Descriptor() ([]byte, []int) {
-	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{16}
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *AddServiceOptionResponse) GetOption() *DetailingServiceOption {
 	if x != nil {
 		return x.Option
+	}
+	return nil
+}
+
+type ListVehicleCategoriesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListVehicleCategoriesRequest) Reset() {
+	*x = ListVehicleCategoriesRequest{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListVehicleCategoriesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListVehicleCategoriesRequest) ProtoMessage() {}
+
+func (x *ListVehicleCategoriesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListVehicleCategoriesRequest.ProtoReflect.Descriptor instead.
+func (*ListVehicleCategoriesRequest) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{19}
+}
+
+type ListVehicleCategoriesResponse struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	VehicleCategories []*VehicleCategory     `protobuf:"bytes,1,rep,name=vehicle_categories,json=vehicleCategories,proto3" json:"vehicle_categories,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *ListVehicleCategoriesResponse) Reset() {
+	*x = ListVehicleCategoriesResponse{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListVehicleCategoriesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListVehicleCategoriesResponse) ProtoMessage() {}
+
+func (x *ListVehicleCategoriesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListVehicleCategoriesResponse.ProtoReflect.Descriptor instead.
+func (*ListVehicleCategoriesResponse) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *ListVehicleCategoriesResponse) GetVehicleCategories() []*VehicleCategory {
+	if x != nil {
+		return x.VehicleCategories
+	}
+	return nil
+}
+
+type CreateVehicleCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Slug          string                 `protobuf:"bytes,2,opt,name=slug,proto3" json:"slug,omitempty"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	SortOrder     int32                  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateVehicleCategoryRequest) Reset() {
+	*x = CreateVehicleCategoryRequest{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateVehicleCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateVehicleCategoryRequest) ProtoMessage() {}
+
+func (x *CreateVehicleCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateVehicleCategoryRequest.ProtoReflect.Descriptor instead.
+func (*CreateVehicleCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *CreateVehicleCategoryRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateVehicleCategoryRequest) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
+}
+
+func (x *CreateVehicleCategoryRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *CreateVehicleCategoryRequest) GetSortOrder() int32 {
+	if x != nil {
+		return x.SortOrder
+	}
+	return 0
+}
+
+type CreateVehicleCategoryResponse struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	VehicleCategory *VehicleCategory       `protobuf:"bytes,1,opt,name=vehicle_category,json=vehicleCategory,proto3" json:"vehicle_category,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *CreateVehicleCategoryResponse) Reset() {
+	*x = CreateVehicleCategoryResponse{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateVehicleCategoryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateVehicleCategoryResponse) ProtoMessage() {}
+
+func (x *CreateVehicleCategoryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateVehicleCategoryResponse.ProtoReflect.Descriptor instead.
+func (*CreateVehicleCategoryResponse) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *CreateVehicleCategoryResponse) GetVehicleCategory() *VehicleCategory {
+	if x != nil {
+		return x.VehicleCategory
+	}
+	return nil
+}
+
+type UpdateVehicleCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Slug          string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
+	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	SortOrder     int32                  `protobuf:"varint,5,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateVehicleCategoryRequest) Reset() {
+	*x = UpdateVehicleCategoryRequest{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateVehicleCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateVehicleCategoryRequest) ProtoMessage() {}
+
+func (x *UpdateVehicleCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateVehicleCategoryRequest.ProtoReflect.Descriptor instead.
+func (*UpdateVehicleCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *UpdateVehicleCategoryRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateVehicleCategoryRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *UpdateVehicleCategoryRequest) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
+}
+
+func (x *UpdateVehicleCategoryRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *UpdateVehicleCategoryRequest) GetSortOrder() int32 {
+	if x != nil {
+		return x.SortOrder
+	}
+	return 0
+}
+
+type UpdateVehicleCategoryResponse struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	VehicleCategory *VehicleCategory       `protobuf:"bytes,1,opt,name=vehicle_category,json=vehicleCategory,proto3" json:"vehicle_category,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UpdateVehicleCategoryResponse) Reset() {
+	*x = UpdateVehicleCategoryResponse{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateVehicleCategoryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateVehicleCategoryResponse) ProtoMessage() {}
+
+func (x *UpdateVehicleCategoryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateVehicleCategoryResponse.ProtoReflect.Descriptor instead.
+func (*UpdateVehicleCategoryResponse) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *UpdateVehicleCategoryResponse) GetVehicleCategory() *VehicleCategory {
+	if x != nil {
+		return x.VehicleCategory
+	}
+	return nil
+}
+
+type DeleteVehicleCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteVehicleCategoryRequest) Reset() {
+	*x = DeleteVehicleCategoryRequest{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteVehicleCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteVehicleCategoryRequest) ProtoMessage() {}
+
+func (x *DeleteVehicleCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteVehicleCategoryRequest.ProtoReflect.Descriptor instead.
+func (*DeleteVehicleCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *DeleteVehicleCategoryRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type DeleteVehicleCategoryResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteVehicleCategoryResponse) Reset() {
+	*x = DeleteVehicleCategoryResponse{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteVehicleCategoryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteVehicleCategoryResponse) ProtoMessage() {}
+
+func (x *DeleteVehicleCategoryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteVehicleCategoryResponse.ProtoReflect.Descriptor instead.
+func (*DeleteVehicleCategoryResponse) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *DeleteVehicleCategoryResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type PriceTierInput struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	VehicleCategoryId int64                  `protobuf:"varint,1,opt,name=vehicle_category_id,json=vehicleCategoryId,proto3" json:"vehicle_category_id,omitempty"`
+	Price             int64                  `protobuf:"varint,2,opt,name=price,proto3" json:"price,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *PriceTierInput) Reset() {
+	*x = PriceTierInput{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PriceTierInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PriceTierInput) ProtoMessage() {}
+
+func (x *PriceTierInput) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PriceTierInput.ProtoReflect.Descriptor instead.
+func (*PriceTierInput) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *PriceTierInput) GetVehicleCategoryId() int64 {
+	if x != nil {
+		return x.VehicleCategoryId
+	}
+	return 0
+}
+
+func (x *PriceTierInput) GetPrice() int64 {
+	if x != nil {
+		return x.Price
+	}
+	return 0
+}
+
+type SetServicePriceTiersRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ServiceId     int64                  `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	Tiers         []*PriceTierInput      `protobuf:"bytes,2,rep,name=tiers,proto3" json:"tiers,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetServicePriceTiersRequest) Reset() {
+	*x = SetServicePriceTiersRequest{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetServicePriceTiersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetServicePriceTiersRequest) ProtoMessage() {}
+
+func (x *SetServicePriceTiersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetServicePriceTiersRequest.ProtoReflect.Descriptor instead.
+func (*SetServicePriceTiersRequest) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *SetServicePriceTiersRequest) GetServiceId() int64 {
+	if x != nil {
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *SetServicePriceTiersRequest) GetTiers() []*PriceTierInput {
+	if x != nil {
+		return x.Tiers
+	}
+	return nil
+}
+
+type SetServicePriceTiersResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PriceTiers    []*ServicePriceTier    `protobuf:"bytes,1,rep,name=price_tiers,json=priceTiers,proto3" json:"price_tiers,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetServicePriceTiersResponse) Reset() {
+	*x = SetServicePriceTiersResponse{}
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetServicePriceTiersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetServicePriceTiersResponse) ProtoMessage() {}
+
+func (x *SetServicePriceTiersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_catalogue_service_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetServicePriceTiersResponse.ProtoReflect.Descriptor instead.
+func (*SetServicePriceTiersResponse) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_catalogue_service_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *SetServicePriceTiersResponse) GetPriceTiers() []*ServicePriceTier {
+	if x != nil {
+		return x.PriceTiers
 	}
 	return nil
 }
@@ -1155,7 +1879,7 @@ const file_degrees_v1_catalogue_service_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x8b\x04\n" +
+	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xca\x04\n" +
 	"\x10DetailingService\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
 	"\vcategory_id\x18\x02 \x01(\x03R\n" +
@@ -1177,7 +1901,27 @@ const file_degrees_v1_catalogue_service_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x8a\x02\n" +
+	"updated_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12=\n" +
+	"\vprice_tiers\x18\x0f \x03(\v2\x1c.degrees.v1.ServicePriceTierR\n" +
+	"priceTiers\"\x80\x02\n" +
+	"\x0fVehicleCategory\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
+	"\x04slug\x18\x03 \x01(\tR\x04slug\x12 \n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x05 \x01(\x05R\tsortOrder\x129\n" +
+	"\n" +
+	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xc1\x01\n" +
+	"\x10ServicePriceTier\x12\x1d\n" +
+	"\n" +
+	"service_id\x18\x01 \x01(\x03R\tserviceId\x12.\n" +
+	"\x13vehicle_category_id\x18\x02 \x01(\x03R\x11vehicleCategoryId\x12#\n" +
+	"\rcategory_name\x18\x03 \x01(\tR\fcategoryName\x12#\n" +
+	"\rcategory_slug\x18\x04 \x01(\tR\fcategorySlug\x12\x14\n" +
+	"\x05price\x18\x05 \x01(\x03R\x05price\"\x8a\x02\n" +
 	"\x16DetailingServiceOption\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
@@ -1250,7 +1994,41 @@ const file_degrees_v1_catalogue_service_proto_rawDesc = "" +
 	"\n" +
 	"sort_order\x18\x06 \x01(\x05R\tsortOrder\"V\n" +
 	"\x18AddServiceOptionResponse\x12:\n" +
-	"\x06option\x18\x01 \x01(\v2\".degrees.v1.DetailingServiceOptionR\x06option2\x9c\a\n" +
+	"\x06option\x18\x01 \x01(\v2\".degrees.v1.DetailingServiceOptionR\x06option\"\x1e\n" +
+	"\x1cListVehicleCategoriesRequest\"k\n" +
+	"\x1dListVehicleCategoriesResponse\x12J\n" +
+	"\x12vehicle_categories\x18\x01 \x03(\v2\x1b.degrees.v1.VehicleCategoryR\x11vehicleCategories\"\x87\x01\n" +
+	"\x1cCreateVehicleCategoryRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
+	"\x04slug\x18\x02 \x01(\tR\x04slug\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x04 \x01(\x05R\tsortOrder\"g\n" +
+	"\x1dCreateVehicleCategoryResponse\x12F\n" +
+	"\x10vehicle_category\x18\x01 \x01(\v2\x1b.degrees.v1.VehicleCategoryR\x0fvehicleCategory\"\x97\x01\n" +
+	"\x1cUpdateVehicleCategoryRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
+	"\x04slug\x18\x03 \x01(\tR\x04slug\x12 \n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x05 \x01(\x05R\tsortOrder\"g\n" +
+	"\x1dUpdateVehicleCategoryResponse\x12F\n" +
+	"\x10vehicle_category\x18\x01 \x01(\v2\x1b.degrees.v1.VehicleCategoryR\x0fvehicleCategory\".\n" +
+	"\x1cDeleteVehicleCategoryRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"9\n" +
+	"\x1dDeleteVehicleCategoryResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"V\n" +
+	"\x0ePriceTierInput\x12.\n" +
+	"\x13vehicle_category_id\x18\x01 \x01(\x03R\x11vehicleCategoryId\x12\x14\n" +
+	"\x05price\x18\x02 \x01(\x03R\x05price\"n\n" +
+	"\x1bSetServicePriceTiersRequest\x12\x1d\n" +
+	"\n" +
+	"service_id\x18\x01 \x01(\x03R\tserviceId\x120\n" +
+	"\x05tiers\x18\x02 \x03(\v2\x1a.degrees.v1.PriceTierInputR\x05tiers\"]\n" +
+	"\x1cSetServicePriceTiersResponse\x12=\n" +
+	"\vprice_tiers\x18\x01 \x03(\v2\x1c.degrees.v1.ServicePriceTierR\n" +
+	"priceTiers2\xbc\r\n" +
 	"\x10CatalogueService\x12}\n" +
 	"\x0eListCategories\x12!.degrees.v1.ListCategoriesRequest\x1a\".degrees.v1.ListCategoriesResponse\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/api/v1/catalogue/categories\x12~\n" +
 	"\fListServices\x12(.degrees.v1.ListCatalogueServicesRequest\x1a).degrees.v1.ListCatalogueServicesResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/api/v1/catalogue\x12\x7f\n" +
@@ -1259,7 +2037,12 @@ const file_degrees_v1_catalogue_service_proto_rawDesc = "" +
 	"\rCreateService\x12 .degrees.v1.CreateServiceRequest\x1a!.degrees.v1.CreateServiceResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/admin/services\x12|\n" +
 	"\rUpdateService\x12 .degrees.v1.UpdateServiceRequest\x1a!.degrees.v1.UpdateServiceResponse\"&\x82\xd3\xe4\x93\x02 :\x01*\x1a\x1b/api/v1/admin/services/{id}\x12y\n" +
 	"\rDeleteService\x12 .degrees.v1.DeleteServiceRequest\x1a!.degrees.v1.DeleteServiceResponse\"#\x82\xd3\xe4\x93\x02\x1d*\x1b/api/v1/admin/services/{id}\x12\x95\x01\n" +
-	"\x10AddServiceOption\x12#.degrees.v1.AddServiceOptionRequest\x1a$.degrees.v1.AddServiceOptionResponse\"6\x82\xd3\xe4\x93\x020:\x01*\"+/api/v1/admin/services/{service_id}/optionsB\xb3\x01\n" +
+	"\x10AddServiceOption\x12#.degrees.v1.AddServiceOptionRequest\x1a$.degrees.v1.AddServiceOptionResponse\"6\x82\xd3\xe4\x93\x020:\x01*\"+/api/v1/admin/services/{service_id}/options\x12\x9a\x01\n" +
+	"\x15ListVehicleCategories\x12(.degrees.v1.ListVehicleCategoriesRequest\x1a).degrees.v1.ListVehicleCategoriesResponse\",\x82\xd3\xe4\x93\x02&\x12$/api/v1/catalogue/vehicle-categories\x12\x99\x01\n" +
+	"\x15CreateVehicleCategory\x12(.degrees.v1.CreateVehicleCategoryRequest\x1a).degrees.v1.CreateVehicleCategoryResponse\"+\x82\xd3\xe4\x93\x02%:\x01*\" /api/v1/admin/vehicle-categories\x12\x9e\x01\n" +
+	"\x15UpdateVehicleCategory\x12(.degrees.v1.UpdateVehicleCategoryRequest\x1a).degrees.v1.UpdateVehicleCategoryResponse\"0\x82\xd3\xe4\x93\x02*:\x01*\x1a%/api/v1/admin/vehicle-categories/{id}\x12\x9b\x01\n" +
+	"\x15DeleteVehicleCategory\x12(.degrees.v1.DeleteVehicleCategoryRequest\x1a).degrees.v1.DeleteVehicleCategoryResponse\"-\x82\xd3\xe4\x93\x02'*%/api/v1/admin/vehicle-categories/{id}\x12\xa5\x01\n" +
+	"\x14SetServicePriceTiers\x12'.degrees.v1.SetServicePriceTiersRequest\x1a(.degrees.v1.SetServicePriceTiersResponse\":\x82\xd3\xe4\x93\x024:\x01*\x1a//api/v1/admin/services/{service_id}/price-tiersB\xb3\x01\n" +
 	"\x0ecom.degrees.v1B\x15CatalogueServiceProtoP\x01ZAgithub.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1\xa2\x02\x03DXX\xaa\x02\n" +
 	"Degrees.V1\xca\x02\n" +
 	"Degrees\\V1\xe2\x02\x16Degrees\\V1\\GPBMetadata\xea\x02\vDegrees::V1b\x06proto3"
@@ -1276,59 +2059,90 @@ func file_degrees_v1_catalogue_service_proto_rawDescGZIP() []byte {
 	return file_degrees_v1_catalogue_service_proto_rawDescData
 }
 
-var file_degrees_v1_catalogue_service_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_degrees_v1_catalogue_service_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_degrees_v1_catalogue_service_proto_goTypes = []any{
 	(*ServiceCategory)(nil),               // 0: degrees.v1.ServiceCategory
 	(*DetailingService)(nil),              // 1: degrees.v1.DetailingService
-	(*DetailingServiceOption)(nil),        // 2: degrees.v1.DetailingServiceOption
-	(*ListCategoriesRequest)(nil),         // 3: degrees.v1.ListCategoriesRequest
-	(*ListCategoriesResponse)(nil),        // 4: degrees.v1.ListCategoriesResponse
-	(*ListCatalogueServicesRequest)(nil),  // 5: degrees.v1.ListCatalogueServicesRequest
-	(*ListCatalogueServicesResponse)(nil), // 6: degrees.v1.ListCatalogueServicesResponse
-	(*GetCatalogueServiceRequest)(nil),    // 7: degrees.v1.GetCatalogueServiceRequest
-	(*GetCatalogueServiceResponse)(nil),   // 8: degrees.v1.GetCatalogueServiceResponse
-	(*CreateServiceRequest)(nil),          // 9: degrees.v1.CreateServiceRequest
-	(*CreateServiceResponse)(nil),         // 10: degrees.v1.CreateServiceResponse
-	(*UpdateServiceRequest)(nil),          // 11: degrees.v1.UpdateServiceRequest
-	(*UpdateServiceResponse)(nil),         // 12: degrees.v1.UpdateServiceResponse
-	(*DeleteServiceRequest)(nil),          // 13: degrees.v1.DeleteServiceRequest
-	(*DeleteServiceResponse)(nil),         // 14: degrees.v1.DeleteServiceResponse
-	(*AddServiceOptionRequest)(nil),       // 15: degrees.v1.AddServiceOptionRequest
-	(*AddServiceOptionResponse)(nil),      // 16: degrees.v1.AddServiceOptionResponse
-	(*timestamppb.Timestamp)(nil),         // 17: google.protobuf.Timestamp
+	(*VehicleCategory)(nil),               // 2: degrees.v1.VehicleCategory
+	(*ServicePriceTier)(nil),              // 3: degrees.v1.ServicePriceTier
+	(*DetailingServiceOption)(nil),        // 4: degrees.v1.DetailingServiceOption
+	(*ListCategoriesRequest)(nil),         // 5: degrees.v1.ListCategoriesRequest
+	(*ListCategoriesResponse)(nil),        // 6: degrees.v1.ListCategoriesResponse
+	(*ListCatalogueServicesRequest)(nil),  // 7: degrees.v1.ListCatalogueServicesRequest
+	(*ListCatalogueServicesResponse)(nil), // 8: degrees.v1.ListCatalogueServicesResponse
+	(*GetCatalogueServiceRequest)(nil),    // 9: degrees.v1.GetCatalogueServiceRequest
+	(*GetCatalogueServiceResponse)(nil),   // 10: degrees.v1.GetCatalogueServiceResponse
+	(*CreateServiceRequest)(nil),          // 11: degrees.v1.CreateServiceRequest
+	(*CreateServiceResponse)(nil),         // 12: degrees.v1.CreateServiceResponse
+	(*UpdateServiceRequest)(nil),          // 13: degrees.v1.UpdateServiceRequest
+	(*UpdateServiceResponse)(nil),         // 14: degrees.v1.UpdateServiceResponse
+	(*DeleteServiceRequest)(nil),          // 15: degrees.v1.DeleteServiceRequest
+	(*DeleteServiceResponse)(nil),         // 16: degrees.v1.DeleteServiceResponse
+	(*AddServiceOptionRequest)(nil),       // 17: degrees.v1.AddServiceOptionRequest
+	(*AddServiceOptionResponse)(nil),      // 18: degrees.v1.AddServiceOptionResponse
+	(*ListVehicleCategoriesRequest)(nil),  // 19: degrees.v1.ListVehicleCategoriesRequest
+	(*ListVehicleCategoriesResponse)(nil), // 20: degrees.v1.ListVehicleCategoriesResponse
+	(*CreateVehicleCategoryRequest)(nil),  // 21: degrees.v1.CreateVehicleCategoryRequest
+	(*CreateVehicleCategoryResponse)(nil), // 22: degrees.v1.CreateVehicleCategoryResponse
+	(*UpdateVehicleCategoryRequest)(nil),  // 23: degrees.v1.UpdateVehicleCategoryRequest
+	(*UpdateVehicleCategoryResponse)(nil), // 24: degrees.v1.UpdateVehicleCategoryResponse
+	(*DeleteVehicleCategoryRequest)(nil),  // 25: degrees.v1.DeleteVehicleCategoryRequest
+	(*DeleteVehicleCategoryResponse)(nil), // 26: degrees.v1.DeleteVehicleCategoryResponse
+	(*PriceTierInput)(nil),                // 27: degrees.v1.PriceTierInput
+	(*SetServicePriceTiersRequest)(nil),   // 28: degrees.v1.SetServicePriceTiersRequest
+	(*SetServicePriceTiersResponse)(nil),  // 29: degrees.v1.SetServicePriceTiersResponse
+	(*timestamppb.Timestamp)(nil),         // 30: google.protobuf.Timestamp
 }
 var file_degrees_v1_catalogue_service_proto_depIdxs = []int32{
-	17, // 0: degrees.v1.ServiceCategory.created_at:type_name -> google.protobuf.Timestamp
-	17, // 1: degrees.v1.ServiceCategory.updated_at:type_name -> google.protobuf.Timestamp
-	2,  // 2: degrees.v1.DetailingService.options:type_name -> degrees.v1.DetailingServiceOption
-	17, // 3: degrees.v1.DetailingService.created_at:type_name -> google.protobuf.Timestamp
-	17, // 4: degrees.v1.DetailingService.updated_at:type_name -> google.protobuf.Timestamp
-	17, // 5: degrees.v1.DetailingServiceOption.created_at:type_name -> google.protobuf.Timestamp
-	0,  // 6: degrees.v1.ListCategoriesResponse.categories:type_name -> degrees.v1.ServiceCategory
-	1,  // 7: degrees.v1.ListCatalogueServicesResponse.services:type_name -> degrees.v1.DetailingService
-	1,  // 8: degrees.v1.GetCatalogueServiceResponse.service:type_name -> degrees.v1.DetailingService
-	1,  // 9: degrees.v1.CreateServiceResponse.service:type_name -> degrees.v1.DetailingService
-	1,  // 10: degrees.v1.UpdateServiceResponse.service:type_name -> degrees.v1.DetailingService
-	2,  // 11: degrees.v1.AddServiceOptionResponse.option:type_name -> degrees.v1.DetailingServiceOption
-	3,  // 12: degrees.v1.CatalogueService.ListCategories:input_type -> degrees.v1.ListCategoriesRequest
-	5,  // 13: degrees.v1.CatalogueService.ListServices:input_type -> degrees.v1.ListCatalogueServicesRequest
-	7,  // 14: degrees.v1.CatalogueService.GetService:input_type -> degrees.v1.GetCatalogueServiceRequest
-	9,  // 15: degrees.v1.CatalogueService.CreateService:input_type -> degrees.v1.CreateServiceRequest
-	11, // 16: degrees.v1.CatalogueService.UpdateService:input_type -> degrees.v1.UpdateServiceRequest
-	13, // 17: degrees.v1.CatalogueService.DeleteService:input_type -> degrees.v1.DeleteServiceRequest
-	15, // 18: degrees.v1.CatalogueService.AddServiceOption:input_type -> degrees.v1.AddServiceOptionRequest
-	4,  // 19: degrees.v1.CatalogueService.ListCategories:output_type -> degrees.v1.ListCategoriesResponse
-	6,  // 20: degrees.v1.CatalogueService.ListServices:output_type -> degrees.v1.ListCatalogueServicesResponse
-	8,  // 21: degrees.v1.CatalogueService.GetService:output_type -> degrees.v1.GetCatalogueServiceResponse
-	10, // 22: degrees.v1.CatalogueService.CreateService:output_type -> degrees.v1.CreateServiceResponse
-	12, // 23: degrees.v1.CatalogueService.UpdateService:output_type -> degrees.v1.UpdateServiceResponse
-	14, // 24: degrees.v1.CatalogueService.DeleteService:output_type -> degrees.v1.DeleteServiceResponse
-	16, // 25: degrees.v1.CatalogueService.AddServiceOption:output_type -> degrees.v1.AddServiceOptionResponse
-	19, // [19:26] is the sub-list for method output_type
-	12, // [12:19] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	30, // 0: degrees.v1.ServiceCategory.created_at:type_name -> google.protobuf.Timestamp
+	30, // 1: degrees.v1.ServiceCategory.updated_at:type_name -> google.protobuf.Timestamp
+	4,  // 2: degrees.v1.DetailingService.options:type_name -> degrees.v1.DetailingServiceOption
+	30, // 3: degrees.v1.DetailingService.created_at:type_name -> google.protobuf.Timestamp
+	30, // 4: degrees.v1.DetailingService.updated_at:type_name -> google.protobuf.Timestamp
+	3,  // 5: degrees.v1.DetailingService.price_tiers:type_name -> degrees.v1.ServicePriceTier
+	30, // 6: degrees.v1.VehicleCategory.created_at:type_name -> google.protobuf.Timestamp
+	30, // 7: degrees.v1.VehicleCategory.updated_at:type_name -> google.protobuf.Timestamp
+	30, // 8: degrees.v1.DetailingServiceOption.created_at:type_name -> google.protobuf.Timestamp
+	0,  // 9: degrees.v1.ListCategoriesResponse.categories:type_name -> degrees.v1.ServiceCategory
+	1,  // 10: degrees.v1.ListCatalogueServicesResponse.services:type_name -> degrees.v1.DetailingService
+	1,  // 11: degrees.v1.GetCatalogueServiceResponse.service:type_name -> degrees.v1.DetailingService
+	1,  // 12: degrees.v1.CreateServiceResponse.service:type_name -> degrees.v1.DetailingService
+	1,  // 13: degrees.v1.UpdateServiceResponse.service:type_name -> degrees.v1.DetailingService
+	4,  // 14: degrees.v1.AddServiceOptionResponse.option:type_name -> degrees.v1.DetailingServiceOption
+	2,  // 15: degrees.v1.ListVehicleCategoriesResponse.vehicle_categories:type_name -> degrees.v1.VehicleCategory
+	2,  // 16: degrees.v1.CreateVehicleCategoryResponse.vehicle_category:type_name -> degrees.v1.VehicleCategory
+	2,  // 17: degrees.v1.UpdateVehicleCategoryResponse.vehicle_category:type_name -> degrees.v1.VehicleCategory
+	27, // 18: degrees.v1.SetServicePriceTiersRequest.tiers:type_name -> degrees.v1.PriceTierInput
+	3,  // 19: degrees.v1.SetServicePriceTiersResponse.price_tiers:type_name -> degrees.v1.ServicePriceTier
+	5,  // 20: degrees.v1.CatalogueService.ListCategories:input_type -> degrees.v1.ListCategoriesRequest
+	7,  // 21: degrees.v1.CatalogueService.ListServices:input_type -> degrees.v1.ListCatalogueServicesRequest
+	9,  // 22: degrees.v1.CatalogueService.GetService:input_type -> degrees.v1.GetCatalogueServiceRequest
+	11, // 23: degrees.v1.CatalogueService.CreateService:input_type -> degrees.v1.CreateServiceRequest
+	13, // 24: degrees.v1.CatalogueService.UpdateService:input_type -> degrees.v1.UpdateServiceRequest
+	15, // 25: degrees.v1.CatalogueService.DeleteService:input_type -> degrees.v1.DeleteServiceRequest
+	17, // 26: degrees.v1.CatalogueService.AddServiceOption:input_type -> degrees.v1.AddServiceOptionRequest
+	19, // 27: degrees.v1.CatalogueService.ListVehicleCategories:input_type -> degrees.v1.ListVehicleCategoriesRequest
+	21, // 28: degrees.v1.CatalogueService.CreateVehicleCategory:input_type -> degrees.v1.CreateVehicleCategoryRequest
+	23, // 29: degrees.v1.CatalogueService.UpdateVehicleCategory:input_type -> degrees.v1.UpdateVehicleCategoryRequest
+	25, // 30: degrees.v1.CatalogueService.DeleteVehicleCategory:input_type -> degrees.v1.DeleteVehicleCategoryRequest
+	28, // 31: degrees.v1.CatalogueService.SetServicePriceTiers:input_type -> degrees.v1.SetServicePriceTiersRequest
+	6,  // 32: degrees.v1.CatalogueService.ListCategories:output_type -> degrees.v1.ListCategoriesResponse
+	8,  // 33: degrees.v1.CatalogueService.ListServices:output_type -> degrees.v1.ListCatalogueServicesResponse
+	10, // 34: degrees.v1.CatalogueService.GetService:output_type -> degrees.v1.GetCatalogueServiceResponse
+	12, // 35: degrees.v1.CatalogueService.CreateService:output_type -> degrees.v1.CreateServiceResponse
+	14, // 36: degrees.v1.CatalogueService.UpdateService:output_type -> degrees.v1.UpdateServiceResponse
+	16, // 37: degrees.v1.CatalogueService.DeleteService:output_type -> degrees.v1.DeleteServiceResponse
+	18, // 38: degrees.v1.CatalogueService.AddServiceOption:output_type -> degrees.v1.AddServiceOptionResponse
+	20, // 39: degrees.v1.CatalogueService.ListVehicleCategories:output_type -> degrees.v1.ListVehicleCategoriesResponse
+	22, // 40: degrees.v1.CatalogueService.CreateVehicleCategory:output_type -> degrees.v1.CreateVehicleCategoryResponse
+	24, // 41: degrees.v1.CatalogueService.UpdateVehicleCategory:output_type -> degrees.v1.UpdateVehicleCategoryResponse
+	26, // 42: degrees.v1.CatalogueService.DeleteVehicleCategory:output_type -> degrees.v1.DeleteVehicleCategoryResponse
+	29, // 43: degrees.v1.CatalogueService.SetServicePriceTiers:output_type -> degrees.v1.SetServicePriceTiersResponse
+	32, // [32:44] is the sub-list for method output_type
+	20, // [20:32] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_degrees_v1_catalogue_service_proto_init() }
@@ -1342,7 +2156,7 @@ func file_degrees_v1_catalogue_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_degrees_v1_catalogue_service_proto_rawDesc), len(file_degrees_v1_catalogue_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

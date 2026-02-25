@@ -47,6 +47,25 @@ export interface DetailingService {
   options: DetailingServiceOption[];
   createdAt: string;
   updatedAt: string;
+  priceTiers: ServicePriceTier[];
+}
+
+export interface VehicleCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ServicePriceTier {
+  serviceId: string;
+  vehicleCategoryId: string;
+  categoryName: string;
+  categorySlug: string;
+  price: number;
 }
 
 export interface CartItem {
@@ -140,6 +159,7 @@ export interface Vehicle {
   paintType: string;
   conditionNotes: string;
   isPrimary: boolean;
+  vehicleCategoryId: string;
   createdAt: string;
   updatedAt: string;
 }

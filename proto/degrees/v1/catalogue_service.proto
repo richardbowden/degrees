@@ -36,6 +36,25 @@ message DetailingService {
   repeated DetailingServiceOption options = 12;
   google.protobuf.Timestamp created_at = 13;
   google.protobuf.Timestamp updated_at = 14;
+  repeated ServicePriceTier price_tiers = 15;
+}
+
+message VehicleCategory {
+  int64 id = 1;
+  string name = 2;
+  string slug = 3;
+  string description = 4;
+  int32 sort_order = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message ServicePriceTier {
+  int64 service_id = 1;
+  int64 vehicle_category_id = 2;
+  string category_name = 3;
+  string category_slug = 4;
+  int64 price = 5;
 }
 
 message DetailingServiceOption {
@@ -127,18 +146,66 @@ message AddServiceOptionResponse {
   DetailingServiceOption option = 1;
 }
 
+// Vehicle Category request/response messages
+
+message ListVehicleCategoriesRequest {}
+
+message ListVehicleCategoriesResponse {
+  repeated VehicleCategory vehicle_categories = 1;
+}
+
+message CreateVehicleCategoryRequest {
+  string name = 1;
+  string slug = 2;
+  string description = 3;
+  int32 sort_order = 4;
+}
+
+message CreateVehicleCategoryResponse {
+  VehicleCategory vehicle_category = 1;
+}
+
+message UpdateVehicleCategoryRequest {
+  int64 id = 1;
+  string name = 2;
+  string slug = 3;
+  string description = 4;
+  int32 sort_order = 5;
+}
+
+message UpdateVehicleCategoryResponse {
+  VehicleCategory vehicle_category = 1;
+}
+
+message DeleteVehicleCategoryRequest {
+  int64 id = 1;
+}
+
+message DeleteVehicleCategoryResponse {
+  bool success = 1;
+}
+
+// Price Tier request/response messages
+
+message PriceTierInput {
+  int64 vehicle_category_id = 1;
+  int64 price = 2;
+}
+
+message SetServicePriceTiersRequest {
+  int64 service_id = 1;
+  repeated PriceTierInput tiers = 2;
+}
+
+message SetServicePriceTiersResponse {
+  repeated ServicePriceTier price_tiers = 1;
+}
+
 // ========================================
 // CatalogueService
 // ========================================
 
 service CatalogueService {
-  // List all service categories
-  rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse) {
-    option (google.api.http) = {
-      get: "/api/v1/catalogue/categories"
-    };
-  }
-
   // List all active services
   rpc ListServices(ListCatalogueServicesRequest) returns (ListCatalogueServicesResponse) {
     option (google.api.http) = {
@@ -146,10 +213,24 @@ service CatalogueService {
     };
   }
 
-  // Get a service by slug
+  // Get a service by slug (wildcard — must be registered before literal sub-paths)
   rpc GetService(GetCatalogueServiceRequest) returns (GetCatalogueServiceResponse) {
     option (google.api.http) = {
       get: "/api/v1/catalogue/{slug}"
+    };
+  }
+
+  // List all service categories (literal path overrides wildcard above)
+  rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/catalogue/categories"
+    };
+  }
+
+  // List all vehicle categories (public)
+  rpc ListVehicleCategories(ListVehicleCategoriesRequest) returns (ListVehicleCategoriesResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/catalogue/vehicle-categories"
     };
   }
 
@@ -180,6 +261,37 @@ service CatalogueService {
   rpc AddServiceOption(AddServiceOptionRequest) returns (AddServiceOptionResponse) {
     option (google.api.http) = {
       post: "/api/v1/admin/services/{service_id}/options"
+      body: "*"
+    };
+  }
+
+  // Create a vehicle category (admin)
+  rpc CreateVehicleCategory(CreateVehicleCategoryRequest) returns (CreateVehicleCategoryResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/vehicle-categories"
+      body: "*"
+    };
+  }
+
+  // Update a vehicle category (admin)
+  rpc UpdateVehicleCategory(UpdateVehicleCategoryRequest) returns (UpdateVehicleCategoryResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/vehicle-categories/{id}"
+      body: "*"
+    };
+  }
+
+  // Delete a vehicle category (admin)
+  rpc DeleteVehicleCategory(DeleteVehicleCategoryRequest) returns (DeleteVehicleCategoryResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/admin/vehicle-categories/{id}"
+    };
+  }
+
+  // Set price tiers for a service (admin)
+  rpc SetServicePriceTiers(SetServicePriceTiersRequest) returns (SetServicePriceTiersResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/admin/services/{service_id}/price-tiers"
       body: "*"
     };
   }

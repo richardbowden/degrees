@@ -79,3 +79,64 @@ UPDATE service_options
 SET is_active = false
 WHERE id = $1
 RETURNING *;
+
+-- ========================================
+-- Vehicle Categories
+-- ========================================
+
+-- name: ListVehicleCategories :many
+SELECT * FROM vehicle_categories
+ORDER BY sort_order, name;
+
+-- name: GetVehicleCategoryByID :one
+SELECT * FROM vehicle_categories
+WHERE id = $1;
+
+-- name: CreateVehicleCategory :one
+INSERT INTO vehicle_categories (name, slug, description, sort_order)
+VALUES ($1, $2, $3, $4)
+RETURNING *;
+
+-- name: UpdateVehicleCategory :one
+UPDATE vehicle_categories
+SET name = $2, slug = $3, description = $4, sort_order = $5
+WHERE id = $1
+RETURNING *;
+
+-- name: DeleteVehicleCategory :exec
+DELETE FROM vehicle_categories
+WHERE id = $1;
+
+-- ========================================
+-- Service Price Tiers
+-- ========================================
+
+-- name: ListPriceTiersByService :many
+SELECT spt.id, spt.service_id, spt.vehicle_category_id, spt.price, spt.created_at,
+       vc.name AS category_name, vc.slug AS category_slug
+FROM service_price_tiers spt
+JOIN vehicle_categories vc ON vc.id = spt.vehicle_category_id
+WHERE spt.service_id = $1
+ORDER BY vc.sort_order, vc.name;
+
+-- name: UpsertPriceTier :one
+INSERT INTO service_price_tiers (service_id, vehicle_category_id, price)
+VALUES ($1, $2, $3)
+ON CONFLICT (service_id, vehicle_category_id)
+DO UPDATE SET price = EXCLUDED.price
+RETURNING *;
+
+-- name: DeletePriceTier :exec
+DELETE FROM service_price_tiers
+WHERE service_id = $1 AND vehicle_category_id = $2;
+
+-- name: GetPriceTier :one
+SELECT spt.id, spt.service_id, spt.vehicle_category_id, spt.price, spt.created_at,
+       vc.name AS category_name, vc.slug AS category_slug
+FROM service_price_tiers spt
+JOIN vehicle_categories vc ON vc.id = spt.vehicle_category_id
+WHERE spt.service_id = $1 AND spt.vehicle_category_id = $2;
+
+-- name: DeletePriceTiersByService :exec
+DELETE FROM service_price_tiers
+WHERE service_id = $1;

@@ -1,5 +1,5 @@
 import { api } from '@/lib/api';
-import { ServiceCard } from '@/components/service-card';
+import { PackageCard } from '@/components/package-card';
 import type { ServiceCategory, DetailingService } from '@/lib/types';
 
 interface Props {
@@ -32,14 +32,16 @@ export default async function ServicesPage({ searchParams }: Props) {
     : allServices;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Our Services</h1>
-      <p className="text-text-secondary mb-8">
-        Premium mobile car detailing across Perth, using Bowden&apos;s Own products.
-      </p>
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl md:text-4xl font-bold mb-4">Our Packages</h1>
+        <p className="text-text-secondary text-lg max-w-2xl mx-auto">
+          Choose the perfect package for your vehicle&apos;s needs
+        </p>
+      </div>
 
       {categories.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-10 justify-center">
           <a
             href="/services"
             className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
@@ -67,14 +69,40 @@ export default async function ServicesPage({ searchParams }: Props) {
       )}
 
       {services.length === 0 ? (
-        <p className="text-text-muted">No services found.</p>
+        <p className="text-text-muted text-center">No services found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {services.map(service => (
-            <ServiceCard key={service.id} service={service} />
+            <PackageCard key={service.id} service={service} />
           ))}
         </div>
       )}
+
+      <div className="mt-16 glass-card p-8">
+        <h3 className="text-lg font-semibold text-white mb-4">Important Notes</h3>
+        <ul className="space-y-3 text-sm text-text-secondary">
+          <li className="flex items-start gap-2">
+            <span className="text-brand-400 mt-0.5 shrink-0">&bull;</span>
+            <span>Prices include travel up to ~50km, all products used and results</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-brand-400 mt-0.5 shrink-0">&bull;</span>
+            <span>A travel charge of $30 may be added for &ldquo;Just Get It Clean&rdquo; package over 30km away</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-brand-400 mt-0.5 shrink-0">&bull;</span>
+            <span>Duration is approximate and may vary based on vehicle condition</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-brand-400 mt-0.5 shrink-0">&bull;</span>
+            <span>Work commences once walk-around and details have been agreed</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-brand-400 mt-0.5 shrink-0">&bull;</span>
+            <span>Access to standard hose connection and electrical outlet required</span>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

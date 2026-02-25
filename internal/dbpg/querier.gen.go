@@ -32,11 +32,14 @@ type Querier interface {
 	// First create the email, then create the user in separate operations
 	CreateUserEmail(ctx context.Context, arg CreateUserEmailParams) (UserEmail, error)
 	CreateVehicle(ctx context.Context, arg CreateVehicleParams) (Vehicle, error)
+	CreateVehicleCategory(ctx context.Context, arg CreateVehicleCategoryParams) (VehicleCategory, error)
 	CreateVerificationToken(ctx context.Context, arg CreateVerificationTokenParams) error
 	DeleteBlackout(ctx context.Context, arg DeleteBlackoutParams) error
 	DeleteExpiredPasswordResetTokens(ctx context.Context) error
 	DeleteExpiredSessions(ctx context.Context) error
 	DeletePasswordResetToken(ctx context.Context, arg DeletePasswordResetTokenParams) error
+	DeletePriceTier(ctx context.Context, arg DeletePriceTierParams) error
+	DeletePriceTiersByService(ctx context.Context, arg DeletePriceTiersByServiceParams) error
 	DeleteService(ctx context.Context, arg DeleteServiceParams) (Service, error)
 	DeleteServiceOption(ctx context.Context, arg DeleteServiceOptionParams) (ServiceOption, error)
 	DeleteSession(ctx context.Context, arg DeleteSessionParams) error
@@ -46,6 +49,7 @@ type Querier interface {
 	DeleteUserPasswordResetTokens(ctx context.Context, arg DeleteUserPasswordResetTokensParams) error
 	DeleteUserSessions(ctx context.Context, arg DeleteUserSessionsParams) error
 	DeleteVehicle(ctx context.Context, arg DeleteVehicleParams) error
+	DeleteVehicleCategory(ctx context.Context, arg DeleteVehicleCategoryParams) error
 	EmailExists(ctx context.Context, arg EmailExistsParams) (bool, error)
 	GetBookingByID(ctx context.Context, arg GetBookingByIDParams) (GetBookingByIDRow, error)
 	GetCartBySessionToken(ctx context.Context, arg GetCartBySessionTokenParams) (CartSession, error)
@@ -54,6 +58,7 @@ type Querier interface {
 	GetCustomerProfileByUserID(ctx context.Context, arg GetCustomerProfileByUserIDParams) (CustomerProfile, error)
 	GetNotificationTemplateByName(ctx context.Context, arg GetNotificationTemplateByNameParams) (string, error)
 	GetPasswordResetToken(ctx context.Context, arg GetPasswordResetTokenParams) (PasswordResetToken, error)
+	GetPriceTier(ctx context.Context, arg GetPriceTierParams) (GetPriceTierRow, error)
 	GetScheduleConfig(ctx context.Context) ([]ScheduleConfig, error)
 	GetScheduleConfigForDay(ctx context.Context, arg GetScheduleConfigForDayParams) (ScheduleConfig, error)
 	GetServiceByID(ctx context.Context, arg GetServiceByIDParams) (Service, error)
@@ -76,6 +81,7 @@ type Querier interface {
 	GetUserById(ctx context.Context, arg GetUserByIdParams) (User, error)
 	GetUserByUsername(ctx context.Context, arg GetUserByUsernameParams) (User, error)
 	GetVehicleByID(ctx context.Context, arg GetVehicleByIDParams) (Vehicle, error)
+	GetVehicleCategoryByID(ctx context.Context, arg GetVehicleCategoryByIDParams) (VehicleCategory, error)
 	IsDateBlackedOut(ctx context.Context, arg IsDateBlackedOutParams) (bool, error)
 	IsFirstUser(ctx context.Context) (bool, error)
 	// List all settings (for admin interface)
@@ -92,6 +98,10 @@ type Querier interface {
 	ListCustomers(ctx context.Context, arg ListCustomersParams) ([]CustomerProfile, error)
 	// List settings for a specific organization (including system defaults)
 	ListOrganizationSettings(ctx context.Context, arg ListOrganizationSettingsParams) ([]Setting, error)
+	// ========================================
+	// Service Price Tiers
+	// ========================================
+	ListPriceTiersByService(ctx context.Context, arg ListPriceTiersByServiceParams) ([]ListPriceTiersByServiceRow, error)
 	// List settings for a specific project (including org and system defaults)
 	// Note: Pass both project_id and org_id as parameters
 	ListProjectSettings(ctx context.Context, arg ListProjectSettingsParams) ([]Setting, error)
@@ -109,6 +119,10 @@ type Querier interface {
 	// List all system-level settings
 	ListSystemSettings(ctx context.Context) ([]Setting, error)
 	ListTemplates(ctx context.Context) ([]Template, error)
+	// ========================================
+	// Vehicle Categories
+	// ========================================
+	ListVehicleCategories(ctx context.Context) ([]VehicleCategory, error)
 	ListVehiclesByCustomer(ctx context.Context, arg ListVehiclesByCustomerParams) ([]Vehicle, error)
 	RemoveCartItem(ctx context.Context, arg RemoveCartItemParams) error
 	RemoveCartItemOption(ctx context.Context, arg RemoveCartItemOptionParams) error
@@ -128,8 +142,10 @@ type Querier interface {
 	UpdateUserSignUpStage(ctx context.Context, arg UpdateUserSignUpStageParams) (User, error)
 	UpdateUserSysop(ctx context.Context, arg UpdateUserSysopParams) (User, error)
 	UpdateVehicle(ctx context.Context, arg UpdateVehicleParams) (Vehicle, error)
+	UpdateVehicleCategory(ctx context.Context, arg UpdateVehicleCategoryParams) (VehicleCategory, error)
 	// Create or update an organization-level setting
 	UpsertOrganizationSetting(ctx context.Context, arg UpsertOrganizationSettingParams) (Setting, error)
+	UpsertPriceTier(ctx context.Context, arg UpsertPriceTierParams) (ServicePriceTier, error)
 	// Create or update a project-level setting
 	UpsertProjectSetting(ctx context.Context, arg UpsertProjectSettingParams) (Setting, error)
 	// Create or update a system-level setting

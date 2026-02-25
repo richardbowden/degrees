@@ -28,6 +28,8 @@ type BookingRepository interface {
 	ClearCart(ctx context.Context, cartSessionID int64) error
 	GetCustomerProfileByUserID(ctx context.Context, userID int64) (dbpg.CustomerProfile, error)
 	GetServiceByID(ctx context.Context, serviceID int64) (dbpg.Service, error)
+	GetVehicleByID(ctx context.Context, vehicleID int64) (Vehicle, error)
+	GetPriceTier(ctx context.Context, serviceID, vehicleCategoryID int64) (dbpg.GetPriceTierRow, error)
 }
 
 const DepositPercentage = 30
@@ -94,7 +96,16 @@ func (s *BookingService) CreateBookingFromCart(ctx context.Context, params Creat
 		return nil, problems.New(problems.InvalidRequest, "cart is empty")
 	}
 
-	// Calculate totals and estimated duration from current service prices
+	// Resolve vehicle category for tier-based pricing
+	var vehicleCategoryID int64
+	if params.VehicleID > 0 {
+		vehicle, vErr := s.repo.GetVehicleByID(ctx, params.VehicleID)
+		if vErr == nil && vehicle.VehicleCategoryID > 0 {
+			vehicleCategoryID = vehicle.VehicleCategoryID
+		}
+	}
+
+	// Calculate totals and estimated duration, using tier price when available
 	var subtotal int64
 	var totalDuration int32
 	for _, item := range cartItems {
@@ -102,7 +113,14 @@ func (s *BookingService) CreateBookingFromCart(ctx context.Context, params Creat
 		if err != nil {
 			return nil, problems.New(problems.Database, fmt.Sprintf("failed to get service %d", item.ServiceID), err)
 		}
-		subtotal += svc.BasePrice * int64(item.Quantity)
+		price := svc.BasePrice
+		if vehicleCategoryID > 0 {
+			tier, tErr := s.repo.GetPriceTier(ctx, item.ServiceID, vehicleCategoryID)
+			if tErr == nil {
+				price = tier.Price
+			}
+		}
+		subtotal += price * int64(item.Quantity)
 		totalDuration += svc.DurationMinutes * item.Quantity
 	}
 
@@ -137,14 +155,21 @@ func (s *BookingService) CreateBookingFromCart(ctx context.Context, params Creat
 		return nil, problems.New(problems.Database, "failed to create booking", err)
 	}
 
-	// Snapshot cart items into booking_services
+	// Snapshot cart items into booking_services with tier-adjusted pricing
 	for _, item := range cartItems {
 		svc, _ := s.repo.GetServiceByID(ctx, item.ServiceID)
+		price := svc.BasePrice
+		if vehicleCategoryID > 0 {
+			tier, tErr := s.repo.GetPriceTier(ctx, item.ServiceID, vehicleCategoryID)
+			if tErr == nil {
+				price = tier.Price
+			}
+		}
 		for q := int32(0); q < item.Quantity; q++ {
 			_, err := s.repo.CreateBookingService(ctx, dbpg.CreateBookingServiceParams{
 				BookingID:      booking.ID,
 				ServiceID:      item.ServiceID,
-				PriceAtBooking: svc.BasePrice,
+				PriceAtBooking: price,
 			})
 			if err != nil {
 				return nil, problems.New(problems.Database, "failed to create booking service", err)

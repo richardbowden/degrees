@@ -139,3 +139,32 @@ func (r *Bookings) GetServiceByID(ctx context.Context, serviceID int64) (dbpg.Se
 	}
 	return svc, nil
 }
+
+func (r *Bookings) GetVehicleByID(ctx context.Context, vehicleID int64) (services.Vehicle, error) {
+	v, err := r.store.GetVehicleByID(ctx, dbpg.GetVehicleByIDParams{ID: vehicleID})
+	if err != nil {
+		if dbpg.IsErrNoRows(err) {
+			return services.Vehicle{}, services.ErrNoRecord
+		}
+		return services.Vehicle{}, err
+	}
+	return services.Vehicle{
+		ID:                v.ID,
+		CustomerID:        v.CustomerID,
+		VehicleCategoryID: v.VehicleCategoryID.Int64,
+	}, nil
+}
+
+func (r *Bookings) GetPriceTier(ctx context.Context, serviceID, vehicleCategoryID int64) (dbpg.GetPriceTierRow, error) {
+	row, err := r.store.GetPriceTier(ctx, dbpg.GetPriceTierParams{
+		ServiceID:         serviceID,
+		VehicleCategoryID: vehicleCategoryID,
+	})
+	if err != nil {
+		if dbpg.IsErrNoRows(err) {
+			return dbpg.GetPriceTierRow{}, services.ErrNoRecord
+		}
+		return dbpg.GetPriceTierRow{}, err
+	}
+	return row, nil
+}

@@ -19,13 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CatalogueService_ListCategories_FullMethodName   = "/degrees.v1.CatalogueService/ListCategories"
-	CatalogueService_ListServices_FullMethodName     = "/degrees.v1.CatalogueService/ListServices"
-	CatalogueService_GetService_FullMethodName       = "/degrees.v1.CatalogueService/GetService"
-	CatalogueService_CreateService_FullMethodName    = "/degrees.v1.CatalogueService/CreateService"
-	CatalogueService_UpdateService_FullMethodName    = "/degrees.v1.CatalogueService/UpdateService"
-	CatalogueService_DeleteService_FullMethodName    = "/degrees.v1.CatalogueService/DeleteService"
-	CatalogueService_AddServiceOption_FullMethodName = "/degrees.v1.CatalogueService/AddServiceOption"
+	CatalogueService_ListCategories_FullMethodName        = "/degrees.v1.CatalogueService/ListCategories"
+	CatalogueService_ListServices_FullMethodName          = "/degrees.v1.CatalogueService/ListServices"
+	CatalogueService_GetService_FullMethodName            = "/degrees.v1.CatalogueService/GetService"
+	CatalogueService_CreateService_FullMethodName         = "/degrees.v1.CatalogueService/CreateService"
+	CatalogueService_UpdateService_FullMethodName         = "/degrees.v1.CatalogueService/UpdateService"
+	CatalogueService_DeleteService_FullMethodName         = "/degrees.v1.CatalogueService/DeleteService"
+	CatalogueService_AddServiceOption_FullMethodName      = "/degrees.v1.CatalogueService/AddServiceOption"
+	CatalogueService_ListVehicleCategories_FullMethodName = "/degrees.v1.CatalogueService/ListVehicleCategories"
+	CatalogueService_CreateVehicleCategory_FullMethodName = "/degrees.v1.CatalogueService/CreateVehicleCategory"
+	CatalogueService_UpdateVehicleCategory_FullMethodName = "/degrees.v1.CatalogueService/UpdateVehicleCategory"
+	CatalogueService_DeleteVehicleCategory_FullMethodName = "/degrees.v1.CatalogueService/DeleteVehicleCategory"
+	CatalogueService_SetServicePriceTiers_FullMethodName  = "/degrees.v1.CatalogueService/SetServicePriceTiers"
 )
 
 // CatalogueServiceClient is the client API for CatalogueService service.
@@ -46,6 +51,16 @@ type CatalogueServiceClient interface {
 	DeleteService(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
 	// Add an option to a service (admin)
 	AddServiceOption(ctx context.Context, in *AddServiceOptionRequest, opts ...grpc.CallOption) (*AddServiceOptionResponse, error)
+	// List all vehicle categories (public)
+	ListVehicleCategories(ctx context.Context, in *ListVehicleCategoriesRequest, opts ...grpc.CallOption) (*ListVehicleCategoriesResponse, error)
+	// Create a vehicle category (admin)
+	CreateVehicleCategory(ctx context.Context, in *CreateVehicleCategoryRequest, opts ...grpc.CallOption) (*CreateVehicleCategoryResponse, error)
+	// Update a vehicle category (admin)
+	UpdateVehicleCategory(ctx context.Context, in *UpdateVehicleCategoryRequest, opts ...grpc.CallOption) (*UpdateVehicleCategoryResponse, error)
+	// Delete a vehicle category (admin)
+	DeleteVehicleCategory(ctx context.Context, in *DeleteVehicleCategoryRequest, opts ...grpc.CallOption) (*DeleteVehicleCategoryResponse, error)
+	// Set price tiers for a service (admin)
+	SetServicePriceTiers(ctx context.Context, in *SetServicePriceTiersRequest, opts ...grpc.CallOption) (*SetServicePriceTiersResponse, error)
 }
 
 type catalogueServiceClient struct {
@@ -126,6 +141,56 @@ func (c *catalogueServiceClient) AddServiceOption(ctx context.Context, in *AddSe
 	return out, nil
 }
 
+func (c *catalogueServiceClient) ListVehicleCategories(ctx context.Context, in *ListVehicleCategoriesRequest, opts ...grpc.CallOption) (*ListVehicleCategoriesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListVehicleCategoriesResponse)
+	err := c.cc.Invoke(ctx, CatalogueService_ListVehicleCategories_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *catalogueServiceClient) CreateVehicleCategory(ctx context.Context, in *CreateVehicleCategoryRequest, opts ...grpc.CallOption) (*CreateVehicleCategoryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateVehicleCategoryResponse)
+	err := c.cc.Invoke(ctx, CatalogueService_CreateVehicleCategory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *catalogueServiceClient) UpdateVehicleCategory(ctx context.Context, in *UpdateVehicleCategoryRequest, opts ...grpc.CallOption) (*UpdateVehicleCategoryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateVehicleCategoryResponse)
+	err := c.cc.Invoke(ctx, CatalogueService_UpdateVehicleCategory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *catalogueServiceClient) DeleteVehicleCategory(ctx context.Context, in *DeleteVehicleCategoryRequest, opts ...grpc.CallOption) (*DeleteVehicleCategoryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteVehicleCategoryResponse)
+	err := c.cc.Invoke(ctx, CatalogueService_DeleteVehicleCategory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *catalogueServiceClient) SetServicePriceTiers(ctx context.Context, in *SetServicePriceTiersRequest, opts ...grpc.CallOption) (*SetServicePriceTiersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetServicePriceTiersResponse)
+	err := c.cc.Invoke(ctx, CatalogueService_SetServicePriceTiers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CatalogueServiceServer is the server API for CatalogueService service.
 // All implementations should embed UnimplementedCatalogueServiceServer
 // for forward compatibility.
@@ -144,6 +209,16 @@ type CatalogueServiceServer interface {
 	DeleteService(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
 	// Add an option to a service (admin)
 	AddServiceOption(context.Context, *AddServiceOptionRequest) (*AddServiceOptionResponse, error)
+	// List all vehicle categories (public)
+	ListVehicleCategories(context.Context, *ListVehicleCategoriesRequest) (*ListVehicleCategoriesResponse, error)
+	// Create a vehicle category (admin)
+	CreateVehicleCategory(context.Context, *CreateVehicleCategoryRequest) (*CreateVehicleCategoryResponse, error)
+	// Update a vehicle category (admin)
+	UpdateVehicleCategory(context.Context, *UpdateVehicleCategoryRequest) (*UpdateVehicleCategoryResponse, error)
+	// Delete a vehicle category (admin)
+	DeleteVehicleCategory(context.Context, *DeleteVehicleCategoryRequest) (*DeleteVehicleCategoryResponse, error)
+	// Set price tiers for a service (admin)
+	SetServicePriceTiers(context.Context, *SetServicePriceTiersRequest) (*SetServicePriceTiersResponse, error)
 }
 
 // UnimplementedCatalogueServiceServer should be embedded to have
@@ -173,6 +248,21 @@ func (UnimplementedCatalogueServiceServer) DeleteService(context.Context, *Delet
 }
 func (UnimplementedCatalogueServiceServer) AddServiceOption(context.Context, *AddServiceOptionRequest) (*AddServiceOptionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddServiceOption not implemented")
+}
+func (UnimplementedCatalogueServiceServer) ListVehicleCategories(context.Context, *ListVehicleCategoriesRequest) (*ListVehicleCategoriesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListVehicleCategories not implemented")
+}
+func (UnimplementedCatalogueServiceServer) CreateVehicleCategory(context.Context, *CreateVehicleCategoryRequest) (*CreateVehicleCategoryResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateVehicleCategory not implemented")
+}
+func (UnimplementedCatalogueServiceServer) UpdateVehicleCategory(context.Context, *UpdateVehicleCategoryRequest) (*UpdateVehicleCategoryResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateVehicleCategory not implemented")
+}
+func (UnimplementedCatalogueServiceServer) DeleteVehicleCategory(context.Context, *DeleteVehicleCategoryRequest) (*DeleteVehicleCategoryResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteVehicleCategory not implemented")
+}
+func (UnimplementedCatalogueServiceServer) SetServicePriceTiers(context.Context, *SetServicePriceTiersRequest) (*SetServicePriceTiersResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetServicePriceTiers not implemented")
 }
 func (UnimplementedCatalogueServiceServer) testEmbeddedByValue() {}
 
@@ -320,6 +410,96 @@ func _CatalogueService_AddServiceOption_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CatalogueService_ListVehicleCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListVehicleCategoriesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogueServiceServer).ListVehicleCategories(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogueService_ListVehicleCategories_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogueServiceServer).ListVehicleCategories(ctx, req.(*ListVehicleCategoriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CatalogueService_CreateVehicleCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateVehicleCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogueServiceServer).CreateVehicleCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogueService_CreateVehicleCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogueServiceServer).CreateVehicleCategory(ctx, req.(*CreateVehicleCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CatalogueService_UpdateVehicleCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateVehicleCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogueServiceServer).UpdateVehicleCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogueService_UpdateVehicleCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogueServiceServer).UpdateVehicleCategory(ctx, req.(*UpdateVehicleCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CatalogueService_DeleteVehicleCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteVehicleCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogueServiceServer).DeleteVehicleCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogueService_DeleteVehicleCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogueServiceServer).DeleteVehicleCategory(ctx, req.(*DeleteVehicleCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CatalogueService_SetServicePriceTiers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetServicePriceTiersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogueServiceServer).SetServicePriceTiers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogueService_SetServicePriceTiers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogueServiceServer).SetServicePriceTiers(ctx, req.(*SetServicePriceTiersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CatalogueService_ServiceDesc is the grpc.ServiceDesc for CatalogueService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -354,6 +534,26 @@ var CatalogueService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddServiceOption",
 			Handler:    _CatalogueService_AddServiceOption_Handler,
+		},
+		{
+			MethodName: "ListVehicleCategories",
+			Handler:    _CatalogueService_ListVehicleCategories_Handler,
+		},
+		{
+			MethodName: "CreateVehicleCategory",
+			Handler:    _CatalogueService_CreateVehicleCategory_Handler,
+		},
+		{
+			MethodName: "UpdateVehicleCategory",
+			Handler:    _CatalogueService_UpdateVehicleCategory_Handler,
+		},
+		{
+			MethodName: "DeleteVehicleCategory",
+			Handler:    _CatalogueService_DeleteVehicleCategory_Handler,
+		},
+		{
+			MethodName: "SetServicePriceTiers",
+			Handler:    _CatalogueService_SetServicePriceTiers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

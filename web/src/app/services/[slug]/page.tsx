@@ -39,9 +39,26 @@ export default async function ServiceDetailPage({ params }: Props) {
 
           <MarkdownContent content={service.description} />
 
+          {service.priceTiers && service.priceTiers.length > 0 && (
+            <div className="mt-8 rounded-lg bg-brand-500/5 border border-brand-500/20 overflow-hidden">
+              <div className="px-4 py-2 border-b border-brand-500/10">
+                <p className="text-xs font-medium text-text-muted">Pricing by Vehicle Size</p>
+              </div>
+              {service.priceTiers.map(tier => (
+                <div
+                  key={tier.vehicleCategoryId}
+                  className="flex items-center justify-between px-4 py-3 border-t border-brand-500/10 first:border-t-0"
+                >
+                  <span className="text-sm text-text-secondary">{tier.categoryName}</span>
+                  <span className="text-lg font-bold text-brand-400">{formatPrice(tier.price)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center gap-6 text-sm mt-8 pt-6 border-t border-border-subtle">
             <div>
-              <span className="text-text-muted">Starting from</span>
+              <span className="text-text-muted">{service.priceTiers && service.priceTiers.length > 0 ? 'From' : 'Starting from'}</span>
               <p className="text-2xl font-bold text-brand-400">{formatPrice(service.basePrice)}</p>
             </div>
             <div>
