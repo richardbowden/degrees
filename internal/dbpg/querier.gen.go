@@ -140,7 +140,6 @@ type Querier interface {
 	UpdateUserEnabled(ctx context.Context, arg UpdateUserEnabledParams) (User, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
 	UpdateUserSignUpStage(ctx context.Context, arg UpdateUserSignUpStageParams) (User, error)
-	UpdateUserSysop(ctx context.Context, arg UpdateUserSysopParams) (User, error)
 	UpdateVehicle(ctx context.Context, arg UpdateVehicleParams) (Vehicle, error)
 	UpdateVehicleCategory(ctx context.Context, arg UpdateVehicleCategoryParams) (VehicleCategory, error)
 	// Create or update an organization-level setting

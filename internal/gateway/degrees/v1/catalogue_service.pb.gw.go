@@ -36,27 +36,6 @@ var (
 	_ = metadata.Join
 )
 
-func request_CatalogueService_ListCategories_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.CatalogueServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq extDegreesv1.ListCategoriesRequest
-		metadata runtime.ServerMetadata
-	)
-	if req.Body != nil {
-		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	msg, err := client.ListCategories(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-}
-
-func local_request_CatalogueService_ListCategories_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.CatalogueServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq extDegreesv1.ListCategoriesRequest
-		metadata runtime.ServerMetadata
-	)
-	msg, err := server.ListCategories(ctx, &protoReq)
-	return msg, metadata, err
-}
-
 func request_CatalogueService_ListServices_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.CatalogueServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq extDegreesv1.ListCatalogueServicesRequest
@@ -114,6 +93,48 @@ func local_request_CatalogueService_GetService_0(ctx context.Context, marshaler 
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "slug", err)
 	}
 	msg, err := server.GetService(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_CatalogueService_ListCategories_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.CatalogueServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq extDegreesv1.ListCategoriesRequest
+		metadata runtime.ServerMetadata
+	)
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
+	msg, err := client.ListCategories(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_CatalogueService_ListCategories_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.CatalogueServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq extDegreesv1.ListCategoriesRequest
+		metadata runtime.ServerMetadata
+	)
+	msg, err := server.ListCategories(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_CatalogueService_ListVehicleCategories_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.CatalogueServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq extDegreesv1.ListVehicleCategoriesRequest
+		metadata runtime.ServerMetadata
+	)
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
+	msg, err := client.ListVehicleCategories(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_CatalogueService_ListVehicleCategories_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.CatalogueServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq extDegreesv1.ListVehicleCategoriesRequest
+		metadata runtime.ServerMetadata
+	)
+	msg, err := server.ListVehicleCategories(ctx, &protoReq)
 	return msg, metadata, err
 }
 
@@ -270,27 +291,6 @@ func local_request_CatalogueService_AddServiceOption_0(ctx context.Context, mars
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "service_id", err)
 	}
 	msg, err := server.AddServiceOption(ctx, &protoReq)
-	return msg, metadata, err
-}
-
-func request_CatalogueService_ListVehicleCategories_0(ctx context.Context, marshaler runtime.Marshaler, client extDegreesv1.CatalogueServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq extDegreesv1.ListVehicleCategoriesRequest
-		metadata runtime.ServerMetadata
-	)
-	if req.Body != nil {
-		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	msg, err := client.ListVehicleCategories(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-}
-
-func local_request_CatalogueService_ListVehicleCategories_0(ctx context.Context, marshaler runtime.Marshaler, server extDegreesv1.CatalogueServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq extDegreesv1.ListVehicleCategoriesRequest
-		metadata runtime.ServerMetadata
-	)
-	msg, err := server.ListVehicleCategories(ctx, &protoReq)
 	return msg, metadata, err
 }
 
@@ -516,6 +516,26 @@ func RegisterCatalogueServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		}
 		forward_CatalogueService_ListCategories_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodGet, pattern_CatalogueService_ListVehicleCategories_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.CatalogueService/ListVehicleCategories", runtime.WithHTTPPathPattern("/api/v1/catalogue/vehicle-categories"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_CatalogueService_ListVehicleCategories_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_CatalogueService_ListVehicleCategories_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_CatalogueService_CreateService_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -595,26 +615,6 @@ func RegisterCatalogueServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 		forward_CatalogueService_AddServiceOption_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-	})
-	mux.Handle(http.MethodGet, pattern_CatalogueService_ListVehicleCategories_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		var stream runtime.ServerTransportStream
-		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/degrees.v1.CatalogueService/ListVehicleCategories", runtime.WithHTTPPathPattern("/api/v1/catalogue/vehicle-categories"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := local_request_CatalogueService_ListVehicleCategories_0(annotatedContext, inboundMarshaler, server, req, pathParams)
-		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		forward_CatalogueService_ListVehicleCategories_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_CatalogueService_CreateVehicleCategory_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -787,6 +787,23 @@ func RegisterCatalogueServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		}
 		forward_CatalogueService_ListCategories_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodGet, pattern_CatalogueService_ListVehicleCategories_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.CatalogueService/ListVehicleCategories", runtime.WithHTTPPathPattern("/api/v1/catalogue/vehicle-categories"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_CatalogueService_ListVehicleCategories_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_CatalogueService_ListVehicleCategories_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodPost, pattern_CatalogueService_CreateService_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -854,23 +871,6 @@ func RegisterCatalogueServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 			return
 		}
 		forward_CatalogueService_AddServiceOption_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-	})
-	mux.Handle(http.MethodGet, pattern_CatalogueService_ListVehicleCategories_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/degrees.v1.CatalogueService/ListVehicleCategories", runtime.WithHTTPPathPattern("/api/v1/catalogue/vehicle-categories"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := request_CatalogueService_ListVehicleCategories_0(annotatedContext, inboundMarshaler, client, req, pathParams)
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		forward_CatalogueService_ListVehicleCategories_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_CatalogueService_CreateVehicleCategory_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -944,14 +944,14 @@ func RegisterCatalogueServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 }
 
 var (
-	pattern_CatalogueService_ListCategories_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "catalogue", "categories"}, ""))
 	pattern_CatalogueService_ListServices_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "catalogue"}, ""))
 	pattern_CatalogueService_GetService_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "catalogue", "slug"}, ""))
+	pattern_CatalogueService_ListCategories_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "catalogue", "categories"}, ""))
+	pattern_CatalogueService_ListVehicleCategories_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "catalogue", "vehicle-categories"}, ""))
 	pattern_CatalogueService_CreateService_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "admin", "services"}, ""))
 	pattern_CatalogueService_UpdateService_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "admin", "services", "id"}, ""))
 	pattern_CatalogueService_DeleteService_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "admin", "services", "id"}, ""))
 	pattern_CatalogueService_AddServiceOption_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"api", "v1", "admin", "services", "service_id", "options"}, ""))
-	pattern_CatalogueService_ListVehicleCategories_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "catalogue", "vehicle-categories"}, ""))
 	pattern_CatalogueService_CreateVehicleCategory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "admin", "vehicle-categories"}, ""))
 	pattern_CatalogueService_UpdateVehicleCategory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "admin", "vehicle-categories", "id"}, ""))
 	pattern_CatalogueService_DeleteVehicleCategory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "admin", "vehicle-categories", "id"}, ""))
@@ -959,14 +959,14 @@ var (
 )
 
 var (
-	forward_CatalogueService_ListCategories_0        = runtime.ForwardResponseMessage
 	forward_CatalogueService_ListServices_0          = runtime.ForwardResponseMessage
 	forward_CatalogueService_GetService_0            = runtime.ForwardResponseMessage
+	forward_CatalogueService_ListCategories_0        = runtime.ForwardResponseMessage
+	forward_CatalogueService_ListVehicleCategories_0 = runtime.ForwardResponseMessage
 	forward_CatalogueService_CreateService_0         = runtime.ForwardResponseMessage
 	forward_CatalogueService_UpdateService_0         = runtime.ForwardResponseMessage
 	forward_CatalogueService_DeleteService_0         = runtime.ForwardResponseMessage
 	forward_CatalogueService_AddServiceOption_0      = runtime.ForwardResponseMessage
-	forward_CatalogueService_ListVehicleCategories_0 = runtime.ForwardResponseMessage
 	forward_CatalogueService_CreateVehicleCategory_0 = runtime.ForwardResponseMessage
 	forward_CatalogueService_UpdateVehicleCategory_0 = runtime.ForwardResponseMessage
 	forward_CatalogueService_DeleteVehicleCategory_0 = runtime.ForwardResponseMessage

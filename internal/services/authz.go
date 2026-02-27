@@ -70,6 +70,23 @@ func (az *AuthzSvc) IsSysop(ctx context.Context, userID int64) (bool, error) {
 	return allowed, nil
 }
 
+// ListSysopUserIDs returns a set of user IDs that have sysop privileges, keyed from FGA
+func (az *AuthzSvc) ListSysopUserIDs(ctx context.Context) (map[int64]bool, error) {
+	users, err := az.ac.ListSysopUsers(ctx)
+	if err != nil {
+		return nil, problems.New(problems.Internal, "failed to list sysop users", err)
+	}
+	ids := make(map[int64]bool, len(users))
+	for _, u := range users {
+		var id int64
+		fmt.Sscanf(u, "user:%d", &id)
+		if id > 0 {
+			ids[id] = true
+		}
+	}
+	return ids, nil
+}
+
 // IsSystemAdmin checks if a user has system admin privileges (sysop or admin)
 func (az *AuthzSvc) IsSystemAdmin(ctx context.Context, userID int64) (bool, error) {
 	user := fmt.Sprintf("user:%d", userID)

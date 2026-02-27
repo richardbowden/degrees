@@ -377,7 +377,6 @@ type User struct {
 	SignUpStage    string
 	PasswordHash   string
 	Enabled        bool
-	Sysop          bool
 	CreatedOn      pgtype.Timestamptz
 	UpdatedAt      pgtype.Timestamptz
 }

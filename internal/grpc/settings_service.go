@@ -19,15 +19,15 @@ type SettingsServiceServer struct {
 	pb.UnimplementedSettingsServiceServer
 	settingsService *settings.Service
 	settingsRepo    *repos.Settings
-	authSvc         *services.AuthN
+	authzSvc        *services.AuthzSvc
 }
 
 // NewSettingsServiceServer creates a new settings service gRPC server
-func NewSettingsServiceServer(settingsService *settings.Service, settingsRepo *repos.Settings, authSvc *services.AuthN) *SettingsServiceServer {
+func NewSettingsServiceServer(settingsService *settings.Service, settingsRepo *repos.Settings, authzSvc *services.AuthzSvc) *SettingsServiceServer {
 	return &SettingsServiceServer{
 		settingsService: settingsService,
 		settingsRepo:    settingsRepo,
-		authSvc:         authSvc,
+		authzSvc:        authzSvc,
 	}
 }
 
@@ -56,7 +56,7 @@ func (s *SettingsServiceServer) GetSystemSettings(ctx context.Context, req *pb.G
 
 // SetSystemSetting sets a system-level setting
 func (s *SettingsServiceServer) SetSystemSetting(ctx context.Context, req *pb.SetSystemSettingRequest) (*pb.SetSettingResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -128,7 +128,7 @@ func (s *SettingsServiceServer) GetOrganizationSettings(ctx context.Context, req
 
 // SetOrganizationSetting sets an organization-level setting
 func (s *SettingsServiceServer) SetOrganizationSetting(ctx context.Context, req *pb.SetOrganizationSettingRequest) (*pb.SetSettingResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -201,7 +201,7 @@ func (s *SettingsServiceServer) GetProjectSettings(ctx context.Context, req *pb.
 
 // SetProjectSetting sets a project-level setting
 func (s *SettingsServiceServer) SetProjectSetting(ctx context.Context, req *pb.SetProjectSettingRequest) (*pb.SetSettingResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -274,7 +274,7 @@ func (s *SettingsServiceServer) GetUserSettings(ctx context.Context, req *pb.Get
 
 // SetUserSetting sets a user-level setting
 func (s *SettingsServiceServer) SetUserSetting(ctx context.Context, req *pb.SetUserSettingRequest) (*pb.SetSettingResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -322,7 +322,7 @@ func (s *SettingsServiceServer) SetUserSetting(ctx context.Context, req *pb.SetU
 
 // DeleteSetting deletes a setting by ID
 func (s *SettingsServiceServer) DeleteSetting(ctx context.Context, req *pb.DeleteSettingRequest) (*pb.DeleteSettingResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -342,7 +342,7 @@ func (s *SettingsServiceServer) DeleteSetting(ctx context.Context, req *pb.Delet
 
 // ListAllSettings lists all settings (for admin interface)
 func (s *SettingsServiceServer) ListAllSettings(ctx context.Context, req *pb.ListAllSettingsRequest) (*pb.ListAllSettingsResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 

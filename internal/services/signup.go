@@ -88,12 +88,6 @@ func (s *SignUp) Register(ctx context.Context, newUser *NewUserRequest) error {
 	} else if isFirstUser {
 		log.Info().Int64("user_id", user.ID).Msg("first user detected - granting sysop privileges and auto-verifying")
 
-		// Update database sysop flag
-		if err := s.user.SetUserSysop(ctx, user.ID, true); err != nil {
-			log.Error().Err(err).Msg("failed to set sysop flag in database for first user")
-			// Don't fail signup, but log the error
-		}
-
 		// Grant sysop role in FGA
 		if err := s.authz.SetUserAsSysop(ctx, user.ID); err != nil {
 			log.Error().Err(err).Msg("failed to set sysop role in FGA for first user")

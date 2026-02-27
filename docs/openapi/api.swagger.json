@@ -1710,7 +1710,7 @@
     },
     "/api/v1/catalogue/categories": {
       "get": {
-        "summary": "List all service categories",
+        "summary": "List all service categories (literal path overrides wildcard above)",
         "operationId": "CatalogueService_ListCategories",
         "responses": {
           "200": {
@@ -1756,7 +1756,7 @@
     },
     "/api/v1/catalogue/{slug}": {
       "get": {
-        "summary": "Get a service by slug",
+        "summary": "Get a service by slug (wildcard — must be registered before literal sub-paths)",
         "operationId": "CatalogueService_GetService",
         "responses": {
           "200": {

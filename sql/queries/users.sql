@@ -68,13 +68,6 @@ UPDATE users
 set password_hash = $2
 where id = $1;
 
--- name: UpdateUserSysop :one
-UPDATE users
-SET sysop = $2,
-    updated_at = NOW()
-WHERE id = $1
-    RETURNING *;
-
 -- name: IsFirstUser :one
 SELECT (COUNT(*) = 1) AS is_first_user FROM users;
 

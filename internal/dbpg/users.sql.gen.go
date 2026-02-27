@@ -22,7 +22,7 @@ INSERT INTO users (
     password_hash,
     sign_up_stage
 ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at
+    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, created_on, updated_at
 `
 
 type CreateUserParams struct {
@@ -59,7 +59,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.SignUpStage,
 		&i.PasswordHash,
 		&i.Enabled,
-		&i.Sysop,
 		&i.CreatedOn,
 		&i.UpdatedAt,
 	)
@@ -121,7 +120,7 @@ func (q *Queries) EmailExists(ctx context.Context, arg EmailExistsParams) (bool,
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at FROM users WHERE login_email = $1
+SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, created_on, updated_at FROM users WHERE login_email = $1
 `
 
 type GetUserByEmailParams struct {
@@ -142,7 +141,6 @@ func (q *Queries) GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) 
 		&i.SignUpStage,
 		&i.PasswordHash,
 		&i.Enabled,
-		&i.Sysop,
 		&i.CreatedOn,
 		&i.UpdatedAt,
 	)
@@ -150,7 +148,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) 
 }
 
 const getUserById = `-- name: GetUserById :one
-SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at FROM users WHERE id = $1
+SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, created_on, updated_at FROM users WHERE id = $1
 `
 
 type GetUserByIdParams struct {
@@ -171,7 +169,6 @@ func (q *Queries) GetUserById(ctx context.Context, arg GetUserByIdParams) (User,
 		&i.SignUpStage,
 		&i.PasswordHash,
 		&i.Enabled,
-		&i.Sysop,
 		&i.CreatedOn,
 		&i.UpdatedAt,
 	)
@@ -179,7 +176,7 @@ func (q *Queries) GetUserById(ctx context.Context, arg GetUserByIdParams) (User,
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at FROM users WHERE username = $1
+SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, created_on, updated_at FROM users WHERE username = $1
 `
 
 type GetUserByUsernameParams struct {
@@ -200,7 +197,6 @@ func (q *Queries) GetUserByUsername(ctx context.Context, arg GetUserByUsernamePa
 		&i.SignUpStage,
 		&i.PasswordHash,
 		&i.Enabled,
-		&i.Sysop,
 		&i.CreatedOn,
 		&i.UpdatedAt,
 	)
@@ -219,7 +215,7 @@ func (q *Queries) IsFirstUser(ctx context.Context) (bool, error) {
 }
 
 const listAllUsers = `-- name: ListAllUsers :many
-SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at FROM users
+SELECT id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, created_on, updated_at FROM users
 ORDER BY created_on DESC
 `
 
@@ -243,7 +239,6 @@ func (q *Queries) ListAllUsers(ctx context.Context) ([]User, error) {
 			&i.SignUpStage,
 			&i.PasswordHash,
 			&i.Enabled,
-			&i.Sysop,
 			&i.CreatedOn,
 			&i.UpdatedAt,
 		); err != nil {
@@ -265,7 +260,7 @@ SET
     surname = $4,
     updated_at = NOW()
 WHERE id = $1
-    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at
+    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, created_on, updated_at
 `
 
 type UpdateUserParams struct {
@@ -294,7 +289,6 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.SignUpStage,
 		&i.PasswordHash,
 		&i.Enabled,
-		&i.Sysop,
 		&i.CreatedOn,
 		&i.UpdatedAt,
 	)
@@ -306,7 +300,7 @@ UPDATE users
 SET enabled = $2,
     updated_at = NOW()
 WHERE id = $1
-    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at
+    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, created_on, updated_at
 `
 
 type UpdateUserEnabledParams struct {
@@ -328,7 +322,6 @@ func (q *Queries) UpdateUserEnabled(ctx context.Context, arg UpdateUserEnabledPa
 		&i.SignUpStage,
 		&i.PasswordHash,
 		&i.Enabled,
-		&i.Sysop,
 		&i.CreatedOn,
 		&i.UpdatedAt,
 	)
@@ -356,7 +349,7 @@ UPDATE users
 SET sign_up_stage = $2,
     updated_at = NOW()
 WHERE id = $1
-    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at
+    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, created_on, updated_at
 `
 
 type UpdateUserSignUpStageParams struct {
@@ -378,41 +371,6 @@ func (q *Queries) UpdateUserSignUpStage(ctx context.Context, arg UpdateUserSignU
 		&i.SignUpStage,
 		&i.PasswordHash,
 		&i.Enabled,
-		&i.Sysop,
-		&i.CreatedOn,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const updateUserSysop = `-- name: UpdateUserSysop :one
-UPDATE users
-SET sysop = $2,
-    updated_at = NOW()
-WHERE id = $1
-    RETURNING id, first_name, middle_name, surname, username, login_email, primary_email_id, sign_up_stage, password_hash, enabled, sysop, created_on, updated_at
-`
-
-type UpdateUserSysopParams struct {
-	ID    int64
-	Sysop bool
-}
-
-func (q *Queries) UpdateUserSysop(ctx context.Context, arg UpdateUserSysopParams) (User, error) {
-	row := q.db.QueryRow(ctx, updateUserSysop, arg.ID, arg.Sysop)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.FirstName,
-		&i.MiddleName,
-		&i.Surname,
-		&i.Username,
-		&i.LoginEmail,
-		&i.PrimaryEmailID,
-		&i.SignUpStage,
-		&i.PasswordHash,
-		&i.Enabled,
-		&i.Sysop,
 		&i.CreatedOn,
 		&i.UpdatedAt,
 	)

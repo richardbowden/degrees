@@ -130,7 +130,6 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*p
 			Surname:    user.Surname.String,
 			Email:      user.LoginEmail,
 			Enabled:    user.Enabled,
-			Sysop:      user.Sysop,
 		},
 		Message: "login successful",
 	}, nil

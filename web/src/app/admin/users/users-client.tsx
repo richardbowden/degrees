@@ -39,6 +39,23 @@ export function UsersClient({ token }: { token: string }) {
     }
   }
 
+  async function toggleSysop(user: User) {
+    setActionLoading(`sysop-${user.id}`);
+    setError('');
+    try {
+      await api(`/user/${user.id}/sysop`, {
+        method: 'POST',
+        body: { sysop: !user.sysop },
+        token,
+      });
+      setUsers(prev => prev.map(u => u.id === user.id ? { ...u, sysop: !u.sysop } : u));
+    } catch (err: unknown) {
+      setError((err as ApiError).detail || 'Failed to update role');
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   if (loading) {
     return <p className="text-text-muted text-sm">Loading users...</p>;
   }
@@ -82,11 +99,22 @@ export function UsersClient({ token }: { token: string }) {
                   </span>
                 </td>
                 <td className="py-3 px-4">
-                  {user.sysop && (
-                    <span className="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-purple-500/20 text-purple-400">
-                      Admin
-                    </span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {user.sysop && (
+                      <span className="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-purple-500/20 text-purple-400">
+                        Admin
+                      </span>
+                    )}
+                    <button
+                      onClick={() => toggleSysop(user)}
+                      disabled={actionLoading === `sysop-${user.id}`}
+                      className="text-xs text-text-muted hover:text-white disabled:opacity-50"
+                    >
+                      {actionLoading === `sysop-${user.id}`
+                        ? '...'
+                        : user.sysop ? 'Remove' : 'Make Admin'}
+                    </button>
+                  </div>
                 </td>
                 <td className="py-3 px-4 text-right">
                   <button

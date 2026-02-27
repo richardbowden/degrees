@@ -29,8 +29,9 @@ export function CustomersClient({ token }: { token: string }) {
         setCustomers(list);
         setOffset(PAGE_SIZE);
         setHasMore(list.length === PAGE_SIZE);
-      } catch {
-        setError('Failed to load customers');
+      } catch (err: unknown) {
+        const apiErr = err as { status?: number; detail?: string; message?: string };
+        setError(apiErr?.detail || apiErr?.message || 'Failed to load customers');
       } finally {
         setLoading(false);
       }
@@ -49,8 +50,9 @@ export function CustomersClient({ token }: { token: string }) {
       setCustomers(prev => [...prev, ...list]);
       setOffset(prev => prev + PAGE_SIZE);
       setHasMore(list.length === PAGE_SIZE);
-    } catch {
-      setError('Failed to load more customers');
+    } catch (err: unknown) {
+      const apiErr = err as { status?: number; detail?: string; message?: string };
+      setError(apiErr?.detail || apiErr?.message || 'Failed to load more customers');
     } finally {
       setLoadingMore(false);
     }

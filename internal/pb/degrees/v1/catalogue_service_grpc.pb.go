@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CatalogueService_ListCategories_FullMethodName        = "/degrees.v1.CatalogueService/ListCategories"
 	CatalogueService_ListServices_FullMethodName          = "/degrees.v1.CatalogueService/ListServices"
 	CatalogueService_GetService_FullMethodName            = "/degrees.v1.CatalogueService/GetService"
+	CatalogueService_ListCategories_FullMethodName        = "/degrees.v1.CatalogueService/ListCategories"
+	CatalogueService_ListVehicleCategories_FullMethodName = "/degrees.v1.CatalogueService/ListVehicleCategories"
 	CatalogueService_CreateService_FullMethodName         = "/degrees.v1.CatalogueService/CreateService"
 	CatalogueService_UpdateService_FullMethodName         = "/degrees.v1.CatalogueService/UpdateService"
 	CatalogueService_DeleteService_FullMethodName         = "/degrees.v1.CatalogueService/DeleteService"
 	CatalogueService_AddServiceOption_FullMethodName      = "/degrees.v1.CatalogueService/AddServiceOption"
-	CatalogueService_ListVehicleCategories_FullMethodName = "/degrees.v1.CatalogueService/ListVehicleCategories"
 	CatalogueService_CreateVehicleCategory_FullMethodName = "/degrees.v1.CatalogueService/CreateVehicleCategory"
 	CatalogueService_UpdateVehicleCategory_FullMethodName = "/degrees.v1.CatalogueService/UpdateVehicleCategory"
 	CatalogueService_DeleteVehicleCategory_FullMethodName = "/degrees.v1.CatalogueService/DeleteVehicleCategory"
@@ -37,12 +37,14 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CatalogueServiceClient interface {
-	// List all service categories
-	ListCategories(ctx context.Context, in *ListCategoriesRequest, opts ...grpc.CallOption) (*ListCategoriesResponse, error)
 	// List all active services
 	ListServices(ctx context.Context, in *ListCatalogueServicesRequest, opts ...grpc.CallOption) (*ListCatalogueServicesResponse, error)
-	// Get a service by slug
+	// Get a service by slug (wildcard — must be registered before literal sub-paths)
 	GetService(ctx context.Context, in *GetCatalogueServiceRequest, opts ...grpc.CallOption) (*GetCatalogueServiceResponse, error)
+	// List all service categories (literal path overrides wildcard above)
+	ListCategories(ctx context.Context, in *ListCategoriesRequest, opts ...grpc.CallOption) (*ListCategoriesResponse, error)
+	// List all vehicle categories (public)
+	ListVehicleCategories(ctx context.Context, in *ListVehicleCategoriesRequest, opts ...grpc.CallOption) (*ListVehicleCategoriesResponse, error)
 	// Create a new service (admin)
 	CreateService(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error)
 	// Update a service (admin)
@@ -51,8 +53,6 @@ type CatalogueServiceClient interface {
 	DeleteService(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
 	// Add an option to a service (admin)
 	AddServiceOption(ctx context.Context, in *AddServiceOptionRequest, opts ...grpc.CallOption) (*AddServiceOptionResponse, error)
-	// List all vehicle categories (public)
-	ListVehicleCategories(ctx context.Context, in *ListVehicleCategoriesRequest, opts ...grpc.CallOption) (*ListVehicleCategoriesResponse, error)
 	// Create a vehicle category (admin)
 	CreateVehicleCategory(ctx context.Context, in *CreateVehicleCategoryRequest, opts ...grpc.CallOption) (*CreateVehicleCategoryResponse, error)
 	// Update a vehicle category (admin)
@@ -71,16 +71,6 @@ func NewCatalogueServiceClient(cc grpc.ClientConnInterface) CatalogueServiceClie
 	return &catalogueServiceClient{cc}
 }
 
-func (c *catalogueServiceClient) ListCategories(ctx context.Context, in *ListCategoriesRequest, opts ...grpc.CallOption) (*ListCategoriesResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListCategoriesResponse)
-	err := c.cc.Invoke(ctx, CatalogueService_ListCategories_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *catalogueServiceClient) ListServices(ctx context.Context, in *ListCatalogueServicesRequest, opts ...grpc.CallOption) (*ListCatalogueServicesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListCatalogueServicesResponse)
@@ -95,6 +85,26 @@ func (c *catalogueServiceClient) GetService(ctx context.Context, in *GetCatalogu
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetCatalogueServiceResponse)
 	err := c.cc.Invoke(ctx, CatalogueService_GetService_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *catalogueServiceClient) ListCategories(ctx context.Context, in *ListCategoriesRequest, opts ...grpc.CallOption) (*ListCategoriesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListCategoriesResponse)
+	err := c.cc.Invoke(ctx, CatalogueService_ListCategories_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *catalogueServiceClient) ListVehicleCategories(ctx context.Context, in *ListVehicleCategoriesRequest, opts ...grpc.CallOption) (*ListVehicleCategoriesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListVehicleCategoriesResponse)
+	err := c.cc.Invoke(ctx, CatalogueService_ListVehicleCategories_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -135,16 +145,6 @@ func (c *catalogueServiceClient) AddServiceOption(ctx context.Context, in *AddSe
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddServiceOptionResponse)
 	err := c.cc.Invoke(ctx, CatalogueService_AddServiceOption_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *catalogueServiceClient) ListVehicleCategories(ctx context.Context, in *ListVehicleCategoriesRequest, opts ...grpc.CallOption) (*ListVehicleCategoriesResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListVehicleCategoriesResponse)
-	err := c.cc.Invoke(ctx, CatalogueService_ListVehicleCategories_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -195,12 +195,14 @@ func (c *catalogueServiceClient) SetServicePriceTiers(ctx context.Context, in *S
 // All implementations should embed UnimplementedCatalogueServiceServer
 // for forward compatibility.
 type CatalogueServiceServer interface {
-	// List all service categories
-	ListCategories(context.Context, *ListCategoriesRequest) (*ListCategoriesResponse, error)
 	// List all active services
 	ListServices(context.Context, *ListCatalogueServicesRequest) (*ListCatalogueServicesResponse, error)
-	// Get a service by slug
+	// Get a service by slug (wildcard — must be registered before literal sub-paths)
 	GetService(context.Context, *GetCatalogueServiceRequest) (*GetCatalogueServiceResponse, error)
+	// List all service categories (literal path overrides wildcard above)
+	ListCategories(context.Context, *ListCategoriesRequest) (*ListCategoriesResponse, error)
+	// List all vehicle categories (public)
+	ListVehicleCategories(context.Context, *ListVehicleCategoriesRequest) (*ListVehicleCategoriesResponse, error)
 	// Create a new service (admin)
 	CreateService(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error)
 	// Update a service (admin)
@@ -209,8 +211,6 @@ type CatalogueServiceServer interface {
 	DeleteService(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
 	// Add an option to a service (admin)
 	AddServiceOption(context.Context, *AddServiceOptionRequest) (*AddServiceOptionResponse, error)
-	// List all vehicle categories (public)
-	ListVehicleCategories(context.Context, *ListVehicleCategoriesRequest) (*ListVehicleCategoriesResponse, error)
 	// Create a vehicle category (admin)
 	CreateVehicleCategory(context.Context, *CreateVehicleCategoryRequest) (*CreateVehicleCategoryResponse, error)
 	// Update a vehicle category (admin)
@@ -228,14 +228,17 @@ type CatalogueServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCatalogueServiceServer struct{}
 
-func (UnimplementedCatalogueServiceServer) ListCategories(context.Context, *ListCategoriesRequest) (*ListCategoriesResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListCategories not implemented")
-}
 func (UnimplementedCatalogueServiceServer) ListServices(context.Context, *ListCatalogueServicesRequest) (*ListCatalogueServicesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListServices not implemented")
 }
 func (UnimplementedCatalogueServiceServer) GetService(context.Context, *GetCatalogueServiceRequest) (*GetCatalogueServiceResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetService not implemented")
+}
+func (UnimplementedCatalogueServiceServer) ListCategories(context.Context, *ListCategoriesRequest) (*ListCategoriesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListCategories not implemented")
+}
+func (UnimplementedCatalogueServiceServer) ListVehicleCategories(context.Context, *ListVehicleCategoriesRequest) (*ListVehicleCategoriesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListVehicleCategories not implemented")
 }
 func (UnimplementedCatalogueServiceServer) CreateService(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateService not implemented")
@@ -248,9 +251,6 @@ func (UnimplementedCatalogueServiceServer) DeleteService(context.Context, *Delet
 }
 func (UnimplementedCatalogueServiceServer) AddServiceOption(context.Context, *AddServiceOptionRequest) (*AddServiceOptionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddServiceOption not implemented")
-}
-func (UnimplementedCatalogueServiceServer) ListVehicleCategories(context.Context, *ListVehicleCategoriesRequest) (*ListVehicleCategoriesResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListVehicleCategories not implemented")
 }
 func (UnimplementedCatalogueServiceServer) CreateVehicleCategory(context.Context, *CreateVehicleCategoryRequest) (*CreateVehicleCategoryResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateVehicleCategory not implemented")
@@ -282,24 +282,6 @@ func RegisterCatalogueServiceServer(s grpc.ServiceRegistrar, srv CatalogueServic
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&CatalogueService_ServiceDesc, srv)
-}
-
-func _CatalogueService_ListCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListCategoriesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CatalogueServiceServer).ListCategories(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CatalogueService_ListCategories_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogueServiceServer).ListCategories(ctx, req.(*ListCategoriesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _CatalogueService_ListServices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -334,6 +316,42 @@ func _CatalogueService_GetService_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CatalogueServiceServer).GetService(ctx, req.(*GetCatalogueServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CatalogueService_ListCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCategoriesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogueServiceServer).ListCategories(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogueService_ListCategories_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogueServiceServer).ListCategories(ctx, req.(*ListCategoriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CatalogueService_ListVehicleCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListVehicleCategoriesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogueServiceServer).ListVehicleCategories(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogueService_ListVehicleCategories_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogueServiceServer).ListVehicleCategories(ctx, req.(*ListVehicleCategoriesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -406,24 +424,6 @@ func _CatalogueService_AddServiceOption_Handler(srv interface{}, ctx context.Con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CatalogueServiceServer).AddServiceOption(ctx, req.(*AddServiceOptionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _CatalogueService_ListVehicleCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListVehicleCategoriesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CatalogueServiceServer).ListVehicleCategories(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CatalogueService_ListVehicleCategories_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogueServiceServer).ListVehicleCategories(ctx, req.(*ListVehicleCategoriesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -508,16 +508,20 @@ var CatalogueService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*CatalogueServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListCategories",
-			Handler:    _CatalogueService_ListCategories_Handler,
-		},
-		{
 			MethodName: "ListServices",
 			Handler:    _CatalogueService_ListServices_Handler,
 		},
 		{
 			MethodName: "GetService",
 			Handler:    _CatalogueService_GetService_Handler,
+		},
+		{
+			MethodName: "ListCategories",
+			Handler:    _CatalogueService_ListCategories_Handler,
+		},
+		{
+			MethodName: "ListVehicleCategories",
+			Handler:    _CatalogueService_ListVehicleCategories_Handler,
 		},
 		{
 			MethodName: "CreateService",
@@ -534,10 +538,6 @@ var CatalogueService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddServiceOption",
 			Handler:    _CatalogueService_AddServiceOption_Handler,
-		},
-		{
-			MethodName: "ListVehicleCategories",
-			Handler:    _CatalogueService_ListVehicleCategories_Handler,
 		},
 		{
 			MethodName: "CreateVehicleCategory",

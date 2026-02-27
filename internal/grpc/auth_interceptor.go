@@ -106,22 +106,21 @@ func GetUserIDFromContext(ctx context.Context) (int64, bool) {
 	return userID, ok
 }
 
-// RequireSysop checks if the user has sysop privileges
+// RequireSysop checks if the user has sysop privileges via FGA
 // This can be used in individual handler methods for additional authorization
-func RequireSysop(ctx context.Context, authSvc *services.AuthN) error {
+func RequireSysop(ctx context.Context, authz *services.AuthzSvc) error {
 	userID, ok := GetUserIDFromContext(ctx)
 	if !ok {
 		return status.Error(codes.Unauthenticated, "user not authenticated")
 	}
 
-	// Get user details to check sysop status
-	user, err := authSvc.GetUserByID(ctx, userID)
+	isSysop, err := authz.IsSysop(ctx, userID)
 	if err != nil {
-		log.Warn().Err(err).Int64("user_id", userID).Msg("failed to get user for sysop check")
-		return status.Error(codes.Internal, "failed to verify user permissions")
+		log.Warn().Err(err).Int64("user_id", userID).Msg("failed to check sysop permission")
+		return status.Error(codes.Internal, "failed to verify permissions")
 	}
 
-	if !user.Sysop {
+	if !isSysop {
 		log.Warn().Int64("user_id", userID).Msg("user attempted sysop-only action without privileges")
 		return status.Error(codes.PermissionDenied, "sysop privileges required")
 	}

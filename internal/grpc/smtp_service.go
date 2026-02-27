@@ -14,20 +14,20 @@ import (
 type SMTPServiceServer struct {
 	pb.UnimplementedSMTPServiceServer
 	smtpClient *fastmail.Client
-	authSvc    *services.AuthN
+	authzSvc   *services.AuthzSvc
 }
 
 // NewSMTPServiceServer creates a new SMTP service gRPC server
-func NewSMTPServiceServer(smtpClient *fastmail.Client, authSvc *services.AuthN) *SMTPServiceServer {
+func NewSMTPServiceServer(smtpClient *fastmail.Client, authzSvc *services.AuthzSvc) *SMTPServiceServer {
 	return &SMTPServiceServer{
 		smtpClient: smtpClient,
-		authSvc:    authSvc,
+		authzSvc:   authzSvc,
 	}
 }
 
 // ConfigureSMTP updates the SMTP configuration
 func (s *SMTPServiceServer) ConfigureSMTP(ctx context.Context, req *pb.ConfigureSMTPRequest) (*pb.ConfigureSMTPResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -57,7 +57,7 @@ func (s *SMTPServiceServer) ConfigureSMTP(ctx context.Context, req *pb.Configure
 
 // GetSMTPStatus returns the current SMTP configuration status
 func (s *SMTPServiceServer) GetSMTPStatus(ctx context.Context, req *pb.GetSMTPStatusRequest) (*pb.GetSMTPStatusResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 

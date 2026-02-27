@@ -245,17 +245,17 @@ func serverRun(ctx *cli.Context) error {
 	)
 
 	// Register gRPC services
-	userGrpcSvc := grpcsvr.NewUserServiceServer(userSvc, authNService)
+	userGrpcSvc := grpcsvr.NewUserServiceServer(userSvc, authzClient)
 	pb.RegisterUserServiceServer(grpcServer, userGrpcSvc)
 
 	authGrpcSvc := grpcsvr.NewAuthServiceServer(authNService, signUpSvc, config.BaseURL)
 	pb.RegisterAuthServiceServer(grpcServer, authGrpcSvc)
 
 	settingsRepo := repos.NewSettingsRepo(ds)
-	settingsGrpcSvc := grpcsvr.NewSettingsServiceServer(settingsService, settingsRepo, authNService)
+	settingsGrpcSvc := grpcsvr.NewSettingsServiceServer(settingsService, settingsRepo, authzClient)
 	pb.RegisterSettingsServiceServer(grpcServer, settingsGrpcSvc)
 
-	smtpGrpcSvc := grpcsvr.NewSMTPServiceServer(smtpClient, authNService)
+	smtpGrpcSvc := grpcsvr.NewSMTPServiceServer(smtpClient, authzClient)
 	pb.RegisterSMTPServiceServer(grpcServer, smtpGrpcSvc)
 
 	// Catalogue service

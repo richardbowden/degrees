@@ -46,7 +46,6 @@ type User struct {
 	EMail       string
 	SignUpStage string
 	Enabled     bool
-	Sysop       bool
 	CreatedOn   time.Time
 	UpdatedAt   time.Time
 }
@@ -66,7 +65,6 @@ type UserRepository interface {
 	DoesUserExist(ctx context.Context, email string, username string) (bool, bool, error)
 	GetUserByID(ctx context.Context, userID int64) (User, error)
 	UpdateUser(ctx context.Context, userID int64, firstName string, middleName string, surname string) (User, error)
-	UpdateSysop(ctx context.Context, userID int64, sysop bool) error
 	UpdateEnabled(ctx context.Context, userID int64, enabled bool) (User, error)
 	ListAllUsers(ctx context.Context) ([]User, error)
 	IsFirstUser(ctx context.Context) (bool, error)
@@ -91,11 +89,6 @@ type UserService struct {
 func NewUserService(repo UserRepository, authz *AuthzSvc, authn *AuthN) (*UserService, error) {
 	us := &UserService{repo: repo, ac: authz, authn: authn}
 	return us, nil
-}
-
-// SetUserSysop updates the sysop flag for a user
-func (us *UserService) SetUserSysop(ctx context.Context, userID int64, sysop bool) error {
-	return us.repo.UpdateSysop(ctx, userID, sysop)
 }
 
 // IsFirstUser returns true if there is exactly one user in the system

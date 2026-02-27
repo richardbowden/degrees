@@ -14,13 +14,13 @@ import (
 // UserServiceServer implements the gRPC UserService interface
 type UserServiceServer struct {
 	pb.UnimplementedUserServiceServer
-	userSvc *services.UserService
-	authSvc *services.AuthN
+	userSvc  *services.UserService
+	authzSvc *services.AuthzSvc
 }
 
 // NewUserServiceServer creates a new gRPC user service server
-func NewUserServiceServer(userSvc *services.UserService, authSvc *services.AuthN) *UserServiceServer {
-	return &UserServiceServer{userSvc: userSvc, authSvc: authSvc}
+func NewUserServiceServer(userSvc *services.UserService, authzSvc *services.AuthzSvc) *UserServiceServer {
+	return &UserServiceServer{userSvc: userSvc, authzSvc: authzSvc}
 }
 
 // GetUser retrieves a user by ID
@@ -35,7 +35,7 @@ func (s *UserServiceServer) GetUser(ctx context.Context, req *pb.GetUserRequest)
 		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
 	}
 	if callerID != req.UserId {
-		if err := RequireSysop(ctx, s.authSvc); err != nil {
+		if err := RequireSysop(ctx, s.authzSvc); err != nil {
 			return nil, err
 		}
 	}
@@ -45,6 +45,8 @@ func (s *UserServiceServer) GetUser(ctx context.Context, req *pb.GetUserRequest)
 		return nil, ToGRPCError(err)
 	}
 
+	isSysop, _ := s.authzSvc.IsSysop(ctx, req.UserId)
+
 	return &pb.GetUserResponse{
 		User: &pb.User{
 			Id:         user.ID,
@@ -53,7 +55,7 @@ func (s *UserServiceServer) GetUser(ctx context.Context, req *pb.GetUserRequest)
 			Surname:    user.Surname,
 			Email:      user.EMail,
 			Enabled:    user.Enabled,
-			Sysop:      user.Sysop,
+			Sysop:      isSysop,
 			CreatedOn:  timestamppb.New(user.CreatedOn),
 			UpdatedAt:  timestamppb.New(user.UpdatedAt),
 		},
@@ -72,7 +74,7 @@ func (s *UserServiceServer) UpdateUser(ctx context.Context, req *pb.UpdateUserRe
 		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
 	}
 	if callerID != req.UserId {
-		if err := RequireSysop(ctx, s.authSvc); err != nil {
+		if err := RequireSysop(ctx, s.authzSvc); err != nil {
 			return nil, err
 		}
 	}
@@ -96,7 +98,6 @@ func (s *UserServiceServer) UpdateUser(ctx context.Context, req *pb.UpdateUserRe
 			Surname:    user.Surname,
 			Email:      user.EMail,
 			Enabled:    user.Enabled,
-			Sysop:      user.Sysop,
 			CreatedOn:  timestamppb.New(user.CreatedOn),
 			UpdatedAt:  timestamppb.New(user.UpdatedAt),
 		},
@@ -106,7 +107,7 @@ func (s *UserServiceServer) UpdateUser(ctx context.Context, req *pb.UpdateUserRe
 
 // EnableUser enables a user account
 func (s *UserServiceServer) EnableUser(ctx context.Context, req *pb.EnableUserRequest) (*pb.EnableUserResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -126,7 +127,7 @@ func (s *UserServiceServer) EnableUser(ctx context.Context, req *pb.EnableUserRe
 
 // DisableUser disables a user account
 func (s *UserServiceServer) DisableUser(ctx context.Context, req *pb.DisableUserRequest) (*pb.DisableUserResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -144,9 +145,9 @@ func (s *UserServiceServer) DisableUser(ctx context.Context, req *pb.DisableUser
 	}, nil
 }
 
-// SetUserSysop sets sysop status for a user
+// SetUserSysop sets sysop status for a user via FGA
 func (s *UserServiceServer) SetUserSysop(ctx context.Context, req *pb.SetUserSysopRequest) (*pb.SetUserSysopResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -154,7 +155,12 @@ func (s *UserServiceServer) SetUserSysop(ctx context.Context, req *pb.SetUserSys
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
 	}
 
-	err := s.userSvc.SetUserSysop(ctx, req.UserId, req.Sysop)
+	var err error
+	if req.Sysop {
+		err = s.authzSvc.SetUserAsSysop(ctx, req.UserId)
+	} else {
+		err = s.authzSvc.RevokeUserSysop(ctx, req.UserId)
+	}
 	if err != nil {
 		return nil, ToGRPCError(err)
 	}
@@ -166,7 +172,7 @@ func (s *UserServiceServer) SetUserSysop(ctx context.Context, req *pb.SetUserSys
 
 // ListUsers lists all users
 func (s *UserServiceServer) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
-	if err := RequireSysop(ctx, s.authSvc); err != nil {
+	if err := RequireSysop(ctx, s.authzSvc); err != nil {
 		return nil, err
 	}
 
@@ -174,6 +180,8 @@ func (s *UserServiceServer) ListUsers(ctx context.Context, req *pb.ListUsersRequ
 	if err != nil {
 		return nil, ToGRPCError(err)
 	}
+
+	sysopIDs, _ := s.authzSvc.ListSysopUserIDs(ctx)
 
 	// Convert domain users to protobuf users
 	pbUsers := make([]*pb.User, len(users))
@@ -185,7 +193,7 @@ func (s *UserServiceServer) ListUsers(ctx context.Context, req *pb.ListUsersRequ
 			Surname:    user.Surname,
 			Email:      user.EMail,
 			Enabled:    user.Enabled,
-			Sysop:      user.Sysop,
+			Sysop:      sysopIDs[user.ID],
 			CreatedOn:  timestamppb.New(user.CreatedOn),
 			UpdatedAt:  timestamppb.New(user.UpdatedAt),
 		}

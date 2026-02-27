@@ -42,6 +42,7 @@ func New(ctx context.Context, pool *pgxpool.Pool, zerologger zerolog.Logger, set
 		ConnMaxIdleTime:       0,
 		ConnMaxLifetime:       0,
 		MaxTypesPerModelField: 100,
+		MaxTuplesPerWriteField: 100,
 	})
 
 	if err != nil {
@@ -246,6 +247,25 @@ func (f *AC) WriteRelationship(ctx context.Context, user, relation, object strin
 	}
 
 	return nil
+}
+
+// ListSysopUsers returns all "user:N" strings that have the sysop relation on system:main
+func (f *AC) ListSysopUsers(ctx context.Context) ([]string, error) {
+	resp, err := f.Server.Read(ctx, &openfgav1.ReadRequest{
+		StoreId: f.storeID,
+		TupleKey: &openfgav1.ReadRequestTupleKey{
+			Relation: "sysop",
+			Object:   "system:main",
+		},
+	})
+	if err != nil {
+		return nil, fmt.Errorf("fga read failed: %w", err)
+	}
+	out := make([]string, 0, len(resp.GetTuples()))
+	for _, t := range resp.GetTuples() {
+		out = append(out, t.GetKey().GetUser())
+	}
+	return out, nil
 }
 
 // DeleteRelationship removes a relationship tuple
