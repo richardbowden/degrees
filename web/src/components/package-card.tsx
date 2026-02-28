@@ -39,7 +39,7 @@ export function PackageCard({ service }: { service: DetailingService }) {
         <div className="border-l-2 border-brand-500 pl-4 mb-6 bg-brand-500/5 py-3 pr-4 rounded-r-lg space-y-1">
           {service.options.map(opt => (
             <p key={opt.id} className="text-sm text-text-secondary">
-              <strong className="text-white">{opt.name}:</strong> {opt.description}{' '}
+              <strong className="text-foreground">{opt.name}:</strong> {opt.description}{' '}
               <span className="text-brand-400 font-semibold">{formatPrice(opt.price)}</span>
             </p>
           ))}

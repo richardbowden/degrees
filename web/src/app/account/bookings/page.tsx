@@ -17,7 +17,7 @@ export default async function BookingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-white mb-6">Bookings</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-6">Bookings</h1>
 
       {sorted.length === 0 ? (
         <div className="text-center py-12">
@@ -32,7 +32,7 @@ export default async function BookingsPage() {
       ) : (
         <div className="border border-border-subtle rounded-lg overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-white/5">
+            <thead className="bg-surface-input">
               <tr>
                 <th className="text-left px-4 py-3 font-medium text-text-secondary">Date</th>
                 <th className="text-left px-4 py-3 font-medium text-text-secondary">Time</th>
@@ -44,8 +44,8 @@ export default async function BookingsPage() {
             </thead>
             <tbody className="divide-y divide-border-subtle">
               {sorted.map(booking => (
-                <tr key={booking.id} className="hover:bg-white/5">
-                  <td className="px-4 py-3 text-white">{formatDate(booking.scheduledDate)}</td>
+                <tr key={booking.id} className="hover:bg-surface-hover">
+                  <td className="px-4 py-3 text-foreground">{formatDate(booking.scheduledDate)}</td>
                   <td className="px-4 py-3 text-text-secondary">{formatTime(booking.scheduledTime)}</td>
                   <td className="px-4 py-3 text-text-secondary">
                     {booking.services?.map(s => s.serviceName).join(', ') || '-'}
@@ -53,13 +53,13 @@ export default async function BookingsPage() {
                   <td className="px-4 py-3">
                     <StatusBadge status={booking.status} />
                   </td>
-                  <td className="px-4 py-3 text-right text-white font-medium">
+                  <td className="px-4 py-3 text-right text-foreground font-medium">
                     {formatPrice(booking.totalAmount)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/account/bookings/${booking.id}`}
-                      className="text-text-secondary hover:text-white font-medium"
+                      className="text-text-secondary hover:text-foreground font-medium"
                     >
                       View
                     </Link>

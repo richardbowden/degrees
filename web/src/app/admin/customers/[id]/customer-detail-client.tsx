@@ -38,17 +38,17 @@ export function CustomerDetailClient({ profile, vehicles, initialRecords, token 
   return (
     <div>
       <div className="flex items-center gap-4 mb-6">
-        <Link href="/admin/customers" className="text-sm text-text-muted hover:text-white">
+        <Link href="/admin/customers" className="text-sm text-text-muted hover:text-foreground">
           &larr; All Customers
         </Link>
-        <h1 className="text-2xl font-bold text-white">Customer Detail</h1>
+        <h1 className="text-2xl font-bold text-foreground">Customer Detail</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile */}
         <div className="lg:col-span-1 space-y-6">
           <div className="glass-card p-5">
-            <h2 className="text-lg font-semibold text-white mb-3">Profile</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Profile</h2>
             <div className="space-y-3 text-sm">
               <div>
                 <p className="text-text-muted">Phone</p>
@@ -81,13 +81,13 @@ export function CustomerDetailClient({ profile, vehicles, initialRecords, token 
 
           {/* Vehicles */}
           <div className="glass-card p-5">
-            <h2 className="text-lg font-semibold text-white mb-3">Vehicles</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Vehicles</h2>
             {vehicles.length === 0 ? (
               <p className="text-sm text-text-muted">No vehicles on file.</p>
             ) : (
               <div className="space-y-4">
                 {vehicles.map(v => (
-                  <div key={v.id} className="border border-white/5 rounded-lg p-3 text-sm">
+                  <div key={v.id} className="border border-border-subtle rounded-lg p-3 text-sm">
                     <p className="font-medium">
                       {v.year} {v.make} {v.model}
                       {v.isPrimary && (
@@ -110,7 +110,7 @@ export function CustomerDetailClient({ profile, vehicles, initialRecords, token 
         {/* Service History */}
         <div className="lg:col-span-2">
           <div className="glass-card p-5">
-            <h2 className="text-lg font-semibold text-white mb-4">Service History</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-4">Service History</h2>
             {records.length === 0 ? (
               <p className="text-sm text-text-muted">No service records yet.</p>
             ) : (
@@ -121,7 +121,7 @@ export function CustomerDetailClient({ profile, vehicles, initialRecords, token 
                     <div key={record.id} className="border border-border-subtle rounded-lg">
                       <button
                         onClick={() => setExpandedRecord(isExpanded ? null : record.id)}
-                        className="w-full flex items-center justify-between p-4 text-left hover:bg-white/5"
+                        className="w-full flex items-center justify-between p-4 text-left hover:bg-surface-hover"
                       >
                         <div className="text-sm">
                           <p className="font-medium">
@@ -138,7 +138,7 @@ export function CustomerDetailClient({ profile, vehicles, initialRecords, token 
                         <div className="border-t border-border-subtle p-4 space-y-6">
                           {/* Notes */}
                           <div>
-                            <h3 className="text-sm font-semibold text-white mb-3">Notes</h3>
+                            <h3 className="text-sm font-semibold text-foreground mb-3">Notes</h3>
                             {record.notes && record.notes.length > 0 ? (
                               <div className="space-y-2 mb-4">
                                 {record.notes.map(n => <NoteCard key={n.id} note={n} />)}
@@ -155,11 +155,11 @@ export function CustomerDetailClient({ profile, vehicles, initialRecords, token 
 
                           {/* Products */}
                           <div>
-                            <h3 className="text-sm font-semibold text-white mb-3">Products Used</h3>
+                            <h3 className="text-sm font-semibold text-foreground mb-3">Products Used</h3>
                             {record.products && record.products.length > 0 ? (
                               <div className="space-y-2 mb-4">
                                 {record.products.map(p => (
-                                  <div key={p.id} className="border border-white/5 rounded-lg p-3 text-sm">
+                                  <div key={p.id} className="border border-border-subtle rounded-lg p-3 text-sm">
                                     <p className="font-medium">{p.productName}</p>
                                     {p.notes && <p className="text-text-muted mt-0.5">{p.notes}</p>}
                                   </div>

@@ -304,15 +304,15 @@ export function ServicesClient({ token }: { token: string }) {
           <p className="text-sm text-text-muted">
             {filteredServices.length} of {services.length} services
           </p>
-          <div className="flex gap-1 bg-white/5 rounded-md p-0.5">
+          <div className="flex gap-1 bg-surface-input rounded-md p-0.5">
             {(['all', 'active', 'disabled'] as StatusFilter[]).map(f => (
               <button
                 key={f}
                 onClick={() => setStatusFilter(f)}
                 className={`px-3 py-1 rounded text-xs font-medium capitalize transition-colors ${
                   statusFilter === f
-                    ? 'bg-white/15 text-white'
-                    : 'text-text-muted hover:text-white'
+                    ? 'bg-surface-hover text-foreground'
+                    : 'text-text-muted hover:text-foreground'
                 }`}
               >
                 {f}
@@ -331,7 +331,7 @@ export function ServicesClient({ token }: { token: string }) {
       {/* Service Form */}
       {showForm && (
         <div className="glass-card p-5 mb-6">
-          <h2 className="text-lg font-semibold text-white mb-4">
+          <h2 className="text-lg font-semibold text-foreground mb-4">
             {editingId ? 'Edit Service' : 'Add Service'}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -341,7 +341,7 @@ export function ServicesClient({ token }: { token: string }) {
                 <select
                   value={form.categoryId}
                   onChange={e => updateForm('categoryId', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                   required
                 >
                   <option value="">Select category</option>
@@ -356,7 +356,7 @@ export function ServicesClient({ token }: { token: string }) {
                   type="text"
                   value={form.name}
                   onChange={e => updateForm('name', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                   required
                 />
               </div>
@@ -366,7 +366,7 @@ export function ServicesClient({ token }: { token: string }) {
                   type="text"
                   value={form.slug}
                   onChange={e => updateForm('slug', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                   required
                 />
               </div>
@@ -376,7 +376,7 @@ export function ServicesClient({ token }: { token: string }) {
                   type="text"
                   value={form.shortDesc}
                   onChange={e => updateForm('shortDesc', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                 />
               </div>
               <div>
@@ -387,7 +387,7 @@ export function ServicesClient({ token }: { token: string }) {
                   min="0"
                   value={form.basePriceDollars}
                   onChange={e => updateForm('basePriceDollars', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                   required
                 />
               </div>
@@ -398,7 +398,7 @@ export function ServicesClient({ token }: { token: string }) {
                   min="0"
                   value={form.durationMinutes}
                   onChange={e => updateForm('durationMinutes', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                   required
                 />
               </div>
@@ -408,7 +408,7 @@ export function ServicesClient({ token }: { token: string }) {
                   type="number"
                   value={form.sortOrder}
                   onChange={e => updateForm('sortOrder', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                 />
               </div>
               <div className="flex items-end">
@@ -430,7 +430,7 @@ export function ServicesClient({ token }: { token: string }) {
                 value={form.description}
                 onChange={e => updateForm('description', e.target.value)}
                 rows={3}
-                className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white"
+                className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-2 text-sm text-foreground"
               />
             </div>
             {formError && <p className="text-sm text-red-400">{formError}</p>}
@@ -445,7 +445,7 @@ export function ServicesClient({ token }: { token: string }) {
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-4 py-2 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-white/5"
+                className="px-4 py-2 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-surface-hover"
               >
                 Cancel
               </button>
@@ -457,7 +457,7 @@ export function ServicesClient({ token }: { token: string }) {
       {/* Services grouped by category */}
       {grouped.map(({ category, services: catServices }) => (
         <div key={category.id} className="mb-8">
-          <h2 className="text-lg font-semibold text-white mb-3">{category.name}</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-3">{category.name}</h2>
           {catServices.length === 0 ? (
             <p className="text-sm text-text-muted">No services in this category.</p>
           ) : (
@@ -467,9 +467,9 @@ export function ServicesClient({ token }: { token: string }) {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-white">{svc.name}</h3>
+                        <h3 className="font-medium text-foreground">{svc.name}</h3>
                         {!svc.isActive && (
-                          <span className="text-xs bg-white/10 text-text-muted px-1.5 py-0.5 rounded">Inactive</span>
+                          <span className="text-xs bg-surface-raised text-text-muted px-1.5 py-0.5 rounded">Inactive</span>
                         )}
                       </div>
                       {svc.shortDesc && <p className="text-sm text-text-muted mt-0.5">{svc.shortDesc}</p>}
@@ -480,7 +480,7 @@ export function ServicesClient({ token }: { token: string }) {
 
                       {/* Options */}
                       {svc.options && svc.options.length > 0 && (
-                        <div className="mt-3 pl-4 border-l-2 border-white/10">
+                        <div className="mt-3 pl-4 border-l-2 border-border-subtle">
                           <p className="text-xs font-medium text-text-muted mb-1">Options</p>
                           {svc.options.map((opt: DetailingServiceOption) => (
                             <div key={opt.id} className="flex items-center gap-3 text-sm text-text-secondary py-0.5">
@@ -494,14 +494,14 @@ export function ServicesClient({ token }: { token: string }) {
 
                       {/* Add Option Form */}
                       {showOptionFor === svc.id && (
-                        <form onSubmit={(e) => handleAddOption(svc.id, e)} className="mt-3 p-3 bg-white/5 rounded-md space-y-3">
+                        <form onSubmit={(e) => handleAddOption(svc.id, e)} className="mt-3 p-3 bg-surface-input rounded-md space-y-3">
                           <div className="grid grid-cols-2 gap-3">
                             <input
                               type="text"
                               value={optionForm.name}
                               onChange={e => setOptionForm(prev => ({ ...prev, name: e.target.value }))}
                               placeholder="Option name"
-                              className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                              className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                               required
                             />
                             <input
@@ -511,7 +511,7 @@ export function ServicesClient({ token }: { token: string }) {
                               value={optionForm.priceDollars}
                               onChange={e => setOptionForm(prev => ({ ...prev, priceDollars: e.target.value }))}
                               placeholder="Price (AUD)"
-                              className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                              className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                               required
                             />
                           </div>
@@ -520,7 +520,7 @@ export function ServicesClient({ token }: { token: string }) {
                             value={optionForm.description}
                             onChange={e => setOptionForm(prev => ({ ...prev, description: e.target.value }))}
                             placeholder="Description"
-                            className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                            className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                           />
                           <div className="flex gap-3 items-center">
                             <input
@@ -528,7 +528,7 @@ export function ServicesClient({ token }: { token: string }) {
                               value={optionForm.sortOrder}
                               onChange={e => setOptionForm(prev => ({ ...prev, sortOrder: e.target.value }))}
                               placeholder="Sort"
-                              className="w-20 bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                              className="w-20 bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                             />
                             <label className="flex items-center gap-1.5 text-sm text-text-secondary">
                               <input
@@ -552,7 +552,7 @@ export function ServicesClient({ token }: { token: string }) {
                             <button
                               type="button"
                               onClick={() => { setShowOptionFor(null); setOptionForm(EMPTY_OPTION); setOptionError(''); }}
-                              className="px-3 py-1.5 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-white/5"
+                              className="px-3 py-1.5 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-surface-hover"
                             >
                               Cancel
                             </button>
@@ -574,7 +574,7 @@ export function ServicesClient({ token }: { token: string }) {
                       )}
 
                       {showTiersFor === svc.id && (
-                        <div className="mt-3 p-3 bg-white/5 rounded-md space-y-3">
+                        <div className="mt-3 p-3 bg-surface-input rounded-md space-y-3">
                           <p className="text-xs font-medium text-text-muted">Price per Vehicle Category (AUD)</p>
                           {vehicleCategories.length === 0 ? (
                             <p className="text-sm text-text-muted">No vehicle categories. Create some first.</p>
@@ -590,7 +590,7 @@ export function ServicesClient({ token }: { token: string }) {
                                     value={tierPrices[vc.id] ?? ''}
                                     onChange={e => setTierPrices(prev => ({ ...prev, [vc.id]: e.target.value }))}
                                     placeholder="Leave blank for base price"
-                                    className="flex-1 bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                                    className="flex-1 bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                                   />
                                 </div>
                               ))}
@@ -607,7 +607,7 @@ export function ServicesClient({ token }: { token: string }) {
                             </button>
                             <button
                               onClick={() => setShowTiersFor(null)}
-                              className="px-3 py-1.5 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-white/5"
+                              className="px-3 py-1.5 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-surface-hover"
                             >
                               Cancel
                             </button>
@@ -624,20 +624,20 @@ export function ServicesClient({ token }: { token: string }) {
                         className={`text-xs px-2 py-1 rounded border disabled:opacity-50 ${
                           svc.isActive
                             ? 'text-green-400 border-green-400/30 hover:bg-green-400/10'
-                            : 'text-text-muted border-border-subtle hover:bg-white/5'
+                            : 'text-text-muted border-border-subtle hover:bg-surface-hover'
                         }`}
                       >
                         {togglingId === svc.id ? '...' : svc.isActive ? 'Enabled' : 'Disabled'}
                       </button>
                       <button
                         onClick={() => openTiers(svc)}
-                        className="text-xs text-text-muted hover:text-white px-2 py-1 border border-border-subtle rounded"
+                        className="text-xs text-text-muted hover:text-foreground px-2 py-1 border border-border-subtle rounded"
                       >
                         Tiers
                       </button>
                       <button
                         onClick={() => { setShowOptionFor(svc.id); setOptionForm(EMPTY_OPTION); setOptionError(''); }}
-                        className="text-xs text-text-muted hover:text-white px-2 py-1 border border-border-subtle rounded"
+                        className="text-xs text-text-muted hover:text-foreground px-2 py-1 border border-border-subtle rounded"
                       >
                         + Option
                       </button>
@@ -665,13 +665,13 @@ export function ServicesClient({ token }: { token: string }) {
 
       {uncategorized.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-white mb-3">Uncategorized</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-3">Uncategorized</h2>
           <div className="space-y-3">
             {uncategorized.map(svc => (
               <div key={svc.id} className="glass-card p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-medium text-white">{svc.name}</h3>
+                    <h3 className="font-medium text-foreground">{svc.name}</h3>
                     <p className="text-sm text-text-muted">{formatPrice(svc.basePrice)} - {svc.durationMinutes} mins</p>
                   </div>
                   <div className="flex gap-2">
@@ -681,7 +681,7 @@ export function ServicesClient({ token }: { token: string }) {
                       className={`text-xs px-2 py-1 rounded border disabled:opacity-50 ${
                         svc.isActive
                           ? 'text-green-400 border-green-400/30 hover:bg-green-400/10'
-                          : 'text-text-muted border-border-subtle hover:bg-white/5'
+                          : 'text-text-muted border-border-subtle hover:bg-surface-hover'
                       }`}
                     >
                       {togglingId === svc.id ? '...' : svc.isActive ? 'Enabled' : 'Disabled'}

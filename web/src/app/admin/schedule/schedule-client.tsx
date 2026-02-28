@@ -122,13 +122,13 @@ export function ScheduleClient({ token }: { token: string }) {
     <div className="space-y-8">
       {/* Business Hours */}
       <div>
-        <h2 className="text-lg font-semibold text-white mb-4">Business Hours</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Business Hours</h2>
         <div className="space-y-3">
           {days.map((day, index) => (
             <div key={day.id || day.dayOfWeek} className="glass-card p-4">
               <div className="flex flex-wrap items-center gap-4">
                 <div className="w-28">
-                  <p className="font-medium text-sm text-white">{DAY_NAMES[day.dayOfWeek]}</p>
+                  <p className="font-medium text-sm text-foreground">{DAY_NAMES[day.dayOfWeek]}</p>
                 </div>
 
                 <label className="flex items-center gap-1.5 text-sm text-text-secondary">
@@ -148,7 +148,7 @@ export function ScheduleClient({ token }: { token: string }) {
                     value={day.openTime}
                     onChange={e => updateDay(index, 'openTime', e.target.value)}
                     disabled={!day.isOpen}
-                    className="bg-white/5 border border-border-subtle rounded-md px-2 py-1 text-sm text-white disabled:opacity-50"
+                    className="bg-surface-input border border-border-subtle rounded-md px-2 py-1 text-sm text-foreground disabled:opacity-50"
                   />
                 </div>
 
@@ -159,7 +159,7 @@ export function ScheduleClient({ token }: { token: string }) {
                     value={day.closeTime}
                     onChange={e => updateDay(index, 'closeTime', e.target.value)}
                     disabled={!day.isOpen}
-                    className="bg-white/5 border border-border-subtle rounded-md px-2 py-1 text-sm text-white disabled:opacity-50"
+                    className="bg-surface-input border border-border-subtle rounded-md px-2 py-1 text-sm text-foreground disabled:opacity-50"
                   />
                 </div>
 
@@ -171,7 +171,7 @@ export function ScheduleClient({ token }: { token: string }) {
                     value={day.bufferMinutes}
                     onChange={e => updateDay(index, 'bufferMinutes', parseInt(e.target.value || '0', 10))}
                     disabled={!day.isOpen}
-                    className="w-20 bg-white/5 border border-border-subtle rounded-md px-2 py-1 text-sm text-white disabled:opacity-50"
+                    className="w-20 bg-surface-input border border-border-subtle rounded-md px-2 py-1 text-sm text-foreground disabled:opacity-50"
                   />
                 </div>
 
@@ -191,13 +191,13 @@ export function ScheduleClient({ token }: { token: string }) {
 
       {/* Blackout Dates */}
       <div>
-        <h2 className="text-lg font-semibold text-white mb-4">Blackout Dates</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Blackout Dates</h2>
 
         {/* Existing blackouts */}
         {blackouts.length > 0 && (
           <div className="glass-card mb-4 overflow-hidden">
             <table className="w-full text-left">
-              <thead className="bg-white/5 border-b border-border-subtle">
+              <thead className="bg-surface-input border-b border-border-subtle">
                 <tr>
                   <th className="py-2 px-4 text-xs font-medium text-text-muted uppercase">Date</th>
                   <th className="py-2 px-4 text-xs font-medium text-text-muted uppercase">Reason</th>
@@ -206,7 +206,7 @@ export function ScheduleClient({ token }: { token: string }) {
               </thead>
               <tbody>
                 {blackouts.map(b => (
-                  <tr key={b.id} className="border-b border-white/5">
+                  <tr key={b.id} className="border-b border-border-subtle">
                     <td className="py-2 px-4 text-sm">{b.date}</td>
                     <td className="py-2 px-4 text-sm text-text-secondary">{b.reason || '-'}</td>
                     <td className="py-2 px-4 text-sm">
@@ -226,7 +226,7 @@ export function ScheduleClient({ token }: { token: string }) {
         )}
 
         <div className="glass-card p-5">
-          <h3 className="text-sm font-semibold text-white mb-3">Add Blackout Date</h3>
+          <h3 className="text-sm font-semibold text-foreground mb-3">Add Blackout Date</h3>
           <form onSubmit={handleAddBlackout} className="flex flex-wrap items-end gap-3">
             <div>
               <label className="block text-xs font-medium text-text-muted mb-1">Date</label>
@@ -234,7 +234,7 @@ export function ScheduleClient({ token }: { token: string }) {
                 type="date"
                 value={blackoutDate}
                 onChange={e => setBlackoutDate(e.target.value)}
-                className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                 required
               />
             </div>
@@ -245,7 +245,7 @@ export function ScheduleClient({ token }: { token: string }) {
                 value={blackoutReason}
                 onChange={e => setBlackoutReason(e.target.value)}
                 placeholder="e.g. Public holiday"
-                className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
               />
             </div>
             <button

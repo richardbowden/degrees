@@ -81,7 +81,7 @@ export function CustomersClient({ token }: { token: string }) {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search by phone, suburb, address..."
-          className="w-full max-w-md bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white"
+          className="w-full max-w-md bg-surface-input border border-border-subtle rounded-md px-3 py-2 text-sm text-foreground"
         />
       </div>
 
@@ -90,7 +90,7 @@ export function CustomersClient({ token }: { token: string }) {
       ) : (
         <div className="glass-card overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-white/5 border-b border-border-subtle">
+            <thead className="bg-surface-input border-b border-border-subtle">
               <tr>
                 <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Phone</th>
                 <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Address</th>
@@ -101,7 +101,7 @@ export function CustomersClient({ token }: { token: string }) {
             </thead>
             <tbody>
               {filtered.map(c => (
-                <tr key={c.id} className="border-b border-white/5 hover:bg-white/5">
+                <tr key={c.id} className="border-b border-border-subtle hover:bg-surface-hover">
                   <td className="py-3 px-4 text-sm">{c.phone || 'N/A'}</td>
                   <td className="py-3 px-4 text-sm text-text-secondary">{c.address || 'N/A'}</td>
                   <td className="py-3 px-4 text-sm text-text-secondary">{c.suburb || 'N/A'}</td>
@@ -123,7 +123,7 @@ export function CustomersClient({ token }: { token: string }) {
           <button
             onClick={loadMore}
             disabled={loadingMore}
-            className="bg-white/5 border border-border-subtle text-text-secondary px-4 py-2 rounded-md text-sm hover:bg-white/10 disabled:opacity-50"
+            className="bg-surface-input border border-border-subtle text-text-secondary px-4 py-2 rounded-md text-sm hover:bg-surface-hover disabled:opacity-50"
           >
             {loadingMore ? 'Loading...' : 'Load More'}
           </button>

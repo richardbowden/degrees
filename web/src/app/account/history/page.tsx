@@ -22,7 +22,7 @@ export default async function HistoryPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-white mb-6">Service History</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-6">Service History</h1>
 
       {sorted.length === 0 ? (
         <div className="text-center py-12">
@@ -36,11 +36,11 @@ export default async function HistoryPage() {
               <Link
                 key={record.id}
                 href={`/account/history/${record.id}`}
-                className="block border border-border-subtle rounded-lg p-4 hover:bg-white/5"
+                className="block border border-border-subtle rounded-lg p-4 hover:bg-surface-hover"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-white">
+                    <p className="font-medium text-foreground">
                       {formatDate(record.completedDate)}
                     </p>
                     {booking?.vehicle && (

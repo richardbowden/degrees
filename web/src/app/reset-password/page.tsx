@@ -61,7 +61,7 @@ export default function ResetPasswordPage({ searchParams }: Props) {
             type="password"
             required
             autoComplete="new-password"
-            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 
@@ -75,7 +75,7 @@ export default function ResetPasswordPage({ searchParams }: Props) {
             type="password"
             required
             autoComplete="new-password"
-            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 

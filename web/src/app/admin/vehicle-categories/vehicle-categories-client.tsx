@@ -134,7 +134,7 @@ export function VehicleCategoriesClient({ token }: { token: string }) {
 
       {showForm && (
         <div className="glass-card p-5 mb-6">
-          <h2 className="text-lg font-semibold text-white mb-4">
+          <h2 className="text-lg font-semibold text-foreground mb-4">
             {editingId ? 'Edit Vehicle Category' : 'Add Vehicle Category'}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -145,7 +145,7 @@ export function VehicleCategoriesClient({ token }: { token: string }) {
                   type="text"
                   value={form.name}
                   onChange={e => updateForm('name', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                   placeholder="e.g. Sedan / Hatchback"
                   required
                 />
@@ -156,7 +156,7 @@ export function VehicleCategoriesClient({ token }: { token: string }) {
                   type="text"
                   value={form.slug}
                   onChange={e => updateForm('slug', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                   required
                 />
               </div>
@@ -166,7 +166,7 @@ export function VehicleCategoriesClient({ token }: { token: string }) {
                   type="text"
                   value={form.description}
                   onChange={e => updateForm('description', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                 />
               </div>
               <div>
@@ -175,7 +175,7 @@ export function VehicleCategoriesClient({ token }: { token: string }) {
                   type="number"
                   value={form.sortOrder}
                   onChange={e => updateForm('sortOrder', e.target.value)}
-                  className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                  className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                 />
               </div>
             </div>
@@ -191,7 +191,7 @@ export function VehicleCategoriesClient({ token }: { token: string }) {
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-4 py-2 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-white/5"
+                className="px-4 py-2 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-surface-hover"
               >
                 Cancel
               </button>
@@ -205,7 +205,7 @@ export function VehicleCategoriesClient({ token }: { token: string }) {
           <div key={cat.id} className="glass-card p-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-medium text-white">{cat.name}</h3>
+                <h3 className="font-medium text-foreground">{cat.name}</h3>
                 <p className="text-sm text-text-muted">
                   {cat.slug}{cat.description ? ` — ${cat.description}` : ''}
                 </p>

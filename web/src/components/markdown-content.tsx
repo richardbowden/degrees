@@ -4,13 +4,13 @@ import type { Components } from 'react-markdown';
 
 const components: Components = {
   h2: ({ children }) => (
-    <h2 className="text-xl font-bold text-white mt-8 mb-3 flex items-center gap-2">
+    <h2 className="text-xl font-bold text-foreground mt-8 mb-3 flex items-center gap-2">
       <span className="w-1 h-6 bg-brand-500 rounded-full inline-block" />
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-lg font-semibold text-white mt-6 mb-2">{children}</h3>
+    <h3 className="text-lg font-semibold text-foreground mt-6 mb-2">{children}</h3>
   ),
   p: ({ children }) => (
     <p className="text-text-secondary leading-relaxed mb-4">{children}</p>
@@ -27,7 +27,7 @@ const components: Components = {
     </li>
   ),
   strong: ({ children }) => (
-    <strong className="text-white font-semibold">{children}</strong>
+    <strong className="text-foreground font-semibold">{children}</strong>
   ),
   table: ({ children }) => (
     <div className="overflow-x-auto mb-4 rounded-lg border border-border-subtle">
@@ -35,7 +35,7 @@ const components: Components = {
     </div>
   ),
   thead: ({ children }) => (
-    <thead className="bg-white/5 text-text-secondary">{children}</thead>
+    <thead className="bg-surface-input text-text-secondary">{children}</thead>
   ),
   th: ({ children }) => (
     <th className="px-4 py-2 text-left font-medium border-b border-border-subtle">{children}</th>

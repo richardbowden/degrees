@@ -29,11 +29,11 @@ export default function AddVehiclePage() {
     <div>
       <Link
         href="/account/vehicles"
-        className="text-sm text-text-muted hover:text-white mb-4 inline-block"
+        className="text-sm text-text-muted hover:text-foreground mb-4 inline-block"
       >
         &larr; Back to Vehicles
       </Link>
-      <h1 className="text-2xl font-bold text-white mb-6">Add Vehicle</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-6">Add Vehicle</h1>
 
       {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
 

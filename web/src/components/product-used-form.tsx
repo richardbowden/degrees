@@ -45,7 +45,7 @@ export function ProductUsedForm({ recordId, token, onAdded }: ProductUsedFormPro
           value={productName}
           onChange={e => setProductName(e.target.value)}
           placeholder="Product name (e.g. Bowden's Auto Body Gel)"
-          className="flex-1 bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+          className="flex-1 bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
         />
       </div>
       <input
@@ -53,7 +53,7 @@ export function ProductUsedForm({ recordId, token, onAdded }: ProductUsedFormPro
         value={notes}
         onChange={e => setNotes(e.target.value)}
         placeholder="Usage notes (optional)"
-        className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+        className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
       />
       {error && <p className="text-sm text-red-400">{error}</p>}
       <button

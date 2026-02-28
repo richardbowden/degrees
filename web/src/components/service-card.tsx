@@ -19,7 +19,7 @@ export function ServiceCard({ service }: { service: DetailingService }) {
       {sections.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {sections.map(s => (
-            <span key={s} className="px-2 py-0.5 text-xs rounded-full bg-white/5 border border-border-subtle text-text-muted">
+            <span key={s} className="px-2 py-0.5 text-xs rounded-full bg-surface-input border border-border-subtle text-text-muted">
               {s}
             </span>
           ))}

@@ -152,10 +152,10 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
   return (
     <div>
       <div className="flex items-center gap-4 mb-6">
-        <Link href="/admin/bookings" className="text-sm text-text-muted hover:text-white">
+        <Link href="/admin/bookings" className="text-sm text-text-muted hover:text-foreground">
           &larr; All Bookings
         </Link>
-        <h1 className="text-2xl font-bold text-white">Booking Detail</h1>
+        <h1 className="text-2xl font-bold text-foreground">Booking Detail</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -164,7 +164,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
           {/* Schedule & Status */}
           <div className="glass-card p-5">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-white">Schedule</h2>
+              <h2 className="text-lg font-semibold text-foreground">Schedule</h2>
               <div className="flex gap-2">
                 <StatusBadge status={booking.status} />
                 <StatusBadge status={booking.paymentStatus} />
@@ -189,7 +189,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
               </div>
             </div>
             {booking.notes && (
-              <div className="mt-4 pt-4 border-t border-white/5">
+              <div className="mt-4 pt-4 border-t border-border-subtle">
                 <p className="text-text-muted text-sm">Notes</p>
                 <p className="text-sm mt-1 whitespace-pre-wrap">{booking.notes}</p>
               </div>
@@ -198,7 +198,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
 
           {/* Customer */}
           <div className="glass-card p-5">
-            <h2 className="text-lg font-semibold text-white mb-3">Customer</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Customer</h2>
             {booking.customer ? (
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
@@ -225,7 +225,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
 
           {/* Vehicle */}
           <div className="glass-card p-5">
-            <h2 className="text-lg font-semibold text-white mb-3">Vehicle</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Vehicle</h2>
             {booking.vehicle ? (
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
@@ -248,7 +248,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
 
           {/* Services */}
           <div className="glass-card p-5">
-            <h2 className="text-lg font-semibold text-white mb-3">Services</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Services</h2>
             {booking.services && booking.services.length > 0 ? (
               <div className="space-y-3">
                 {booking.services.map((s, i) => (
@@ -271,7 +271,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
           {/* Service Record (shown after booking is completed) */}
           {booking.status === 'completed' && (
             <div className="glass-card p-5">
-              <h2 className="text-lg font-semibold text-white mb-3">Service Record</h2>
+              <h2 className="text-lg font-semibold text-foreground mb-3">Service Record</h2>
               {recordError && <p className="text-sm text-red-400 mb-3">{recordError}</p>}
 
               {!serviceRecord ? (
@@ -295,13 +295,13 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                       <h3 className="text-sm font-medium text-text-secondary mb-2">Notes</h3>
                       <div className="space-y-2">
                         {serviceRecord.notes.map(note => (
-                          <div key={note.id} className="border border-white/5 rounded p-3 text-sm">
+                          <div key={note.id} className="border border-border-subtle rounded p-3 text-sm">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="font-medium text-white capitalize">{note.noteType}</span>
+                              <span className="font-medium text-foreground capitalize">{note.noteType}</span>
                               {note.isVisibleToCustomer ? (
                                 <span className="text-xs bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded">Customer visible</span>
                               ) : (
-                                <span className="text-xs bg-white/10 text-text-muted px-1.5 py-0.5 rounded">Internal</span>
+                                <span className="text-xs bg-surface-raised text-text-muted px-1.5 py-0.5 rounded">Internal</span>
                               )}
                             </div>
                             <p className="text-text-secondary whitespace-pre-wrap">{note.content}</p>
@@ -312,14 +312,14 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                   )}
 
                   {/* Add note form */}
-                  <div className="border-t border-white/5 pt-4">
+                  <div className="border-t border-border-subtle pt-4">
                     <h3 className="text-sm font-medium text-text-secondary mb-2">Add Note</h3>
                     <div className="space-y-2">
                       <div className="flex gap-2">
                         <select
                           value={noteType}
                           onChange={e => setNoteType(e.target.value)}
-                          className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                          className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                         >
                           <option value="general">General</option>
                           <option value="condition">Condition</option>
@@ -340,7 +340,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                         onChange={e => setNoteContent(e.target.value)}
                         rows={2}
                         placeholder="Enter note..."
-                        className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white"
+                        className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-2 text-sm text-foreground"
                       />
                       <button
                         onClick={handleAddNote}
@@ -354,12 +354,12 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
 
                   {/* Products list */}
                   {serviceRecord.products && serviceRecord.products.length > 0 && (
-                    <div className="border-t border-white/5 pt-4">
+                    <div className="border-t border-border-subtle pt-4">
                       <h3 className="text-sm font-medium text-text-secondary mb-2">Products Used</h3>
                       <div className="space-y-2">
                         {serviceRecord.products.map(product => (
-                          <div key={product.id} className="flex items-center justify-between text-sm border border-white/5 rounded p-3">
-                            <span className="font-medium text-white">{product.productName}</span>
+                          <div key={product.id} className="flex items-center justify-between text-sm border border-border-subtle rounded p-3">
+                            <span className="font-medium text-foreground">{product.productName}</span>
                             {product.notes && <span className="text-text-muted">{product.notes}</span>}
                           </div>
                         ))}
@@ -368,7 +368,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                   )}
 
                   {/* Add product form */}
-                  <div className="border-t border-white/5 pt-4">
+                  <div className="border-t border-border-subtle pt-4">
                     <h3 className="text-sm font-medium text-text-secondary mb-2">Log Product Used</h3>
                     <div className="space-y-2">
                       <div className="grid grid-cols-2 gap-2">
@@ -377,14 +377,14 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                           value={productName}
                           onChange={e => setProductName(e.target.value)}
                           placeholder="Product name (e.g. Bowden's Nanolicious)"
-                          className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                          className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                         />
                         <input
                           type="text"
                           value={productNotes}
                           onChange={e => setProductNotes(e.target.value)}
                           placeholder="Notes (optional)"
-                          className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                          className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
                         />
                       </div>
                       <button
@@ -406,7 +406,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
         <div className="space-y-6">
           {/* Pricing */}
           <div className="glass-card p-5">
-            <h2 className="text-lg font-semibold text-white mb-3">Pricing</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Pricing</h2>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-text-muted">Subtotal</span>
@@ -416,7 +416,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                 <span className="text-text-muted">Deposit</span>
                 <span>{formatPrice(booking.depositAmount)}</span>
               </div>
-              <div className="flex justify-between font-semibold text-base pt-2 border-t border-white/5">
+              <div className="flex justify-between font-semibold text-base pt-2 border-t border-border-subtle">
                 <span>Total</span>
                 <span>{formatPrice(booking.totalAmount)}</span>
               </div>
@@ -425,12 +425,12 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
 
           {/* Status Update */}
           <div className="glass-card p-5">
-            <h2 className="text-lg font-semibold text-white mb-3">Update Status</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Update Status</h2>
             <div className="space-y-3">
               <select
                 value={newStatus}
                 onChange={e => setNewStatus(e.target.value)}
-                className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+                className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
               >
                 {BOOKING_STATUSES.map(s => (
                   <option key={s} value={s}>{s.replace('_', ' ')}</option>
@@ -450,7 +450,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
           {/* Complete Booking */}
           {booking.status !== 'completed' && booking.status !== 'cancelled' && (
             <div className="glass-card p-5">
-              <h2 className="text-lg font-semibold text-white mb-3">Complete Booking</h2>
+              <h2 className="text-lg font-semibold text-foreground mb-3">Complete Booking</h2>
               {!showComplete ? (
                 <button
                   onClick={() => setShowComplete(true)}
@@ -465,7 +465,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                     onChange={e => setCompleteNotes(e.target.value)}
                     rows={3}
                     placeholder="Completion notes (optional)"
-                    className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white"
+                    className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-2 text-sm text-foreground"
                   />
                   {completeError && <p className="text-sm text-red-400">{completeError}</p>}
                   <div className="flex gap-2">
@@ -478,7 +478,7 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                     </button>
                     <button
                       onClick={() => setShowComplete(false)}
-                      className="px-4 py-2 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-white/5"
+                      className="px-4 py-2 border border-border-subtle rounded-md text-sm text-text-secondary hover:bg-surface-hover"
                     >
                       Cancel
                     </button>

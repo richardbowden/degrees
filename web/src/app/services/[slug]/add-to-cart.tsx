@@ -56,7 +56,7 @@ export function AddToCart({ service }: { service: DetailingService }) {
           <button
             type="button"
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="px-3 py-1 text-text-secondary hover:bg-white/5"
+            className="px-3 py-1 text-text-secondary hover:bg-surface-hover"
           >
             -
           </button>
@@ -64,7 +64,7 @@ export function AddToCart({ service }: { service: DetailingService }) {
           <button
             type="button"
             onClick={() => setQuantity(quantity + 1)}
-            className="px-3 py-1 text-text-secondary hover:bg-white/5"
+            className="px-3 py-1 text-text-secondary hover:bg-surface-hover"
           >
             +
           </button>

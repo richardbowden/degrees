@@ -24,17 +24,17 @@ export default async function AccountDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-white mb-6">
+      <h1 className="text-2xl font-bold text-foreground mb-6">
         Welcome back, {user.firstName}
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">Next Booking</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Next Booking</h2>
           {upcomingBooking ? (
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="font-medium text-white">
+                <span className="font-medium text-foreground">
                   {formatDate(upcomingBooking.scheduledDate)}
                 </span>
                 <span className="text-text-muted">
@@ -53,7 +53,7 @@ export default async function AccountDashboard() {
                   {upcomingBooking.services.map(s => s.serviceName).join(', ')}
                 </p>
               )}
-              <p className="text-sm font-medium text-white mb-3">
+              <p className="text-sm font-medium text-foreground mb-3">
                 Total: {formatPrice(upcomingBooking.totalAmount)}
               </p>
               <Link
@@ -77,35 +77,35 @@ export default async function AccountDashboard() {
         </div>
 
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">Quick Links</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Quick Links</h2>
           <div className="space-y-3">
             <Link
               href="/account/bookings"
-              className="block text-sm font-medium text-text-secondary hover:text-white"
+              className="block text-sm font-medium text-text-secondary hover:text-foreground"
             >
               View All Bookings
             </Link>
             <Link
               href="/account/profile"
-              className="block text-sm font-medium text-text-secondary hover:text-white"
+              className="block text-sm font-medium text-text-secondary hover:text-foreground"
             >
               Edit Profile
             </Link>
             <Link
               href="/account/vehicles"
-              className="block text-sm font-medium text-text-secondary hover:text-white"
+              className="block text-sm font-medium text-text-secondary hover:text-foreground"
             >
               My Vehicles
             </Link>
             <Link
               href="/account/history"
-              className="block text-sm font-medium text-text-secondary hover:text-white"
+              className="block text-sm font-medium text-text-secondary hover:text-foreground"
             >
               Service History
             </Link>
             <Link
               href="/services"
-              className="block text-sm font-medium text-text-secondary hover:text-white"
+              className="block text-sm font-medium text-text-secondary hover:text-foreground"
             >
               Browse Services
             </Link>

@@ -28,13 +28,13 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-white mb-1">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-1">Dashboard</h1>
       <p className="text-sm text-text-muted mb-6">Today&apos;s bookings &mdash; {today}</p>
 
       {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
       <div className="glass-card mb-6 p-5">
-        <p className="text-3xl font-bold text-white">{bookings.length}</p>
+        <p className="text-3xl font-bold text-foreground">{bookings.length}</p>
         <p className="text-sm text-text-muted mt-1">
           {bookings.length === 1 ? 'booking' : 'bookings'} today
         </p>
@@ -43,7 +43,7 @@ export default async function AdminDashboard() {
       {bookings.length > 0 ? (
         <div className="glass-card overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-white/5 border-b border-border-subtle">
+            <thead className="bg-surface-input border-b border-border-subtle">
               <tr>
                 <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Time</th>
                 <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Customer</th>

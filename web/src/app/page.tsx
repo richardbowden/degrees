@@ -19,7 +19,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center justify-center px-4 text-center">
         <div className="max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-border-subtle text-sm text-text-secondary mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-input border border-border-subtle text-sm text-text-secondary mb-8">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-brand-400">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
@@ -36,7 +36,7 @@ export default async function HomePage() {
             <a href="/services" className="btn-brand text-lg px-8 py-4">
               Book Now
             </a>
-            <a href="#about" className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border-subtle text-white font-semibold hover:bg-white/5 transition-colors text-lg">
+            <a href="#about" className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border-subtle text-foreground font-semibold hover:bg-surface-hover transition-colors text-lg">
               Learn More
             </a>
           </div>
@@ -53,7 +53,7 @@ export default async function HomePage() {
 
         {/* The feeling */}
         <div className="glass-card p-8 md:p-12 mb-8">
-          <p className="text-xl md:text-2xl text-white leading-relaxed mb-6 font-light">
+          <p className="text-xl md:text-2xl text-foreground leading-relaxed mb-6 font-light">
             There&apos;s nothing quite like getting into your vehicle after a proper detailing session. <span className="text-brand-400 font-normal">That new car sensation, the pride you feel, the shine that makes you smile.</span>
           </p>
           <p className="text-text-secondary leading-relaxed text-lg mb-6">
@@ -105,7 +105,7 @@ export default async function HomePage() {
             {categories.length > 0 && (
               <div className="flex flex-wrap gap-2 justify-center mb-8">
                 {categories.map(cat => (
-                  <span key={cat} className="px-4 py-1.5 rounded-full bg-white/5 border border-border-subtle text-sm text-text-secondary">
+                  <span key={cat} className="px-4 py-1.5 rounded-full bg-surface-input border border-border-subtle text-sm text-text-secondary">
                     {cat}
                   </span>
                 ))}
@@ -133,13 +133,13 @@ export default async function HomePage() {
             Ready to give your car the treatment it deserves? Book online or get in touch directly.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center text-text-secondary">
-            <a href="tel:0448263659" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a href="tel:0448263659" className="flex items-center gap-2 hover:text-foreground transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-brand-400">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
               </svg>
               0448 263 659
             </a>
-            <a href="mailto:detailing@40degrees.au" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a href="mailto:detailing@40degrees.au" className="flex items-center gap-2 hover:text-foreground transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-brand-400">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
               </svg>

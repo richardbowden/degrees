@@ -45,7 +45,7 @@ export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
     onSubmit({ make, model, year, colour, rego, paintType, conditionNotes, isPrimary, vehicleCategoryId });
   }
 
-  const inputClass = 'w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500';
+  const inputClass = 'w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500';
   const labelClass = 'block text-sm font-medium text-text-secondary mb-1';
 
   return (
@@ -121,7 +121,7 @@ export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
         <button
           type="button"
           onClick={onCancel}
-          className="border border-border-subtle px-4 py-2 rounded text-sm text-text-secondary hover:bg-white/5"
+          className="border border-border-subtle px-4 py-2 rounded text-sm text-text-secondary hover:bg-surface-hover"
         >
           Cancel
         </button>

@@ -43,7 +43,7 @@ export function AddNoteForm({ recordId, token, onAdded }: AddNoteFormProps) {
         <select
           value={noteType}
           onChange={e => setNoteType(e.target.value)}
-          className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+          className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
         >
           <option value="observation">Observation</option>
           <option value="recommendation">Recommendation</option>
@@ -65,7 +65,7 @@ export function AddNoteForm({ recordId, token, onAdded }: AddNoteFormProps) {
         onChange={e => setContent(e.target.value)}
         rows={3}
         placeholder="Add a note..."
-        className="w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white"
+        className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-2 text-sm text-foreground"
       />
       {error && <p className="text-sm text-red-400">{error}</p>}
       <button

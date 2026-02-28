@@ -35,7 +35,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
       <aside className="w-64 bg-surface-raised border-r border-border-subtle p-6">
         <div className="mb-8">
           <p className="text-sm text-text-muted">Signed in as</p>
-          <p className="font-medium text-white truncate">{user.firstName} {user.surname}</p>
+          <p className="font-medium text-foreground truncate">{user.firstName} {user.surname}</p>
           <p className="text-sm text-text-muted truncate">{user.email}</p>
         </div>
         <nav className="space-y-1">
@@ -43,7 +43,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
             <Link
               key={item.href}
               href={item.href}
-              className="block px-3 py-2 rounded-md text-sm font-medium text-text-secondary hover:bg-white/5 hover:text-white"
+              className="block px-3 py-2 rounded-md text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-foreground"
             >
               {item.label}
             </Link>
@@ -53,7 +53,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
           <form action={logout}>
             <button
               type="submit"
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-400 hover:bg-white/5"
+              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-400 hover:bg-surface-hover"
             >
               Log Out
             </button>

@@ -29,7 +29,7 @@ export function OptionPicker({ options, selectedIds, onChange }: OptionPickerPro
           className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
             selectedIds.includes(option.id)
               ? 'border-brand-500 bg-brand-500/10'
-              : 'border-border-subtle hover:bg-white/5'
+              : 'border-border-subtle hover:bg-surface-hover'
           }`}
         >
           <input

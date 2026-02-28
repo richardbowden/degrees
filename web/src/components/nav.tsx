@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { CartIcon } from '@/components/cart-icon';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { logout } from '@/app/account/actions';
 
 export async function Nav() {
@@ -14,29 +15,30 @@ export async function Nav() {
           40 Degrees
         </Link>
         <div className="flex items-center gap-6">
-          <Link href="/services" className="text-text-secondary hover:text-white transition-colors">
+          <Link href="/services" className="text-text-secondary hover:text-foreground transition-colors">
             Services
           </Link>
           <CartIcon />
           {isLoggedIn ? (
             <>
-              <Link href="/account" className="text-text-secondary hover:text-white transition-colors">
+              <Link href="/account" className="text-text-secondary hover:text-foreground transition-colors">
                 Account
               </Link>
               <form action={logout}>
                 <button
                   type="submit"
-                  className="text-text-secondary hover:text-white transition-colors"
+                  className="text-text-secondary hover:text-foreground transition-colors"
                 >
                   Log Out
                 </button>
               </form>
             </>
           ) : (
-            <Link href="/login" className="text-text-secondary hover:text-white transition-colors">
+            <Link href="/login" className="text-text-secondary hover:text-foreground transition-colors">
               Login
             </Link>
           )}
+          <ThemeToggle />
         </div>
       </div>
     </nav>

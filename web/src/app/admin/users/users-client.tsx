@@ -69,7 +69,7 @@ export function UsersClient({ token }: { token: string }) {
       {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
       <div className="glass-card overflow-hidden">
         <table className="w-full text-left">
-          <thead className="bg-white/5 border-b border-border-subtle">
+          <thead className="bg-surface-input border-b border-border-subtle">
             <tr>
               <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Name</th>
               <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Email</th>
@@ -82,7 +82,7 @@ export function UsersClient({ token }: { token: string }) {
           <tbody className="divide-y divide-border-subtle">
             {users.map(user => (
               <tr key={user.id}>
-                <td className="py-3 px-4 text-sm font-medium text-white">
+                <td className="py-3 px-4 text-sm font-medium text-foreground">
                   {user.firstName} {user.surname}
                 </td>
                 <td className="py-3 px-4 text-sm text-text-secondary">{user.email}</td>
@@ -108,7 +108,7 @@ export function UsersClient({ token }: { token: string }) {
                     <button
                       onClick={() => toggleSysop(user)}
                       disabled={actionLoading === `sysop-${user.id}`}
-                      className="text-xs text-text-muted hover:text-white disabled:opacity-50"
+                      className="text-xs text-text-muted hover:text-foreground disabled:opacity-50"
                     >
                       {actionLoading === `sysop-${user.id}`
                         ? '...'

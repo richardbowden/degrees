@@ -34,7 +34,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-64 bg-surface-raised text-white p-6 flex-shrink-0">
+      <aside className="w-64 bg-surface-raised text-foreground p-6 flex-shrink-0">
         <div className="mb-8">
           <h1 className="text-lg font-bold">40 Degrees</h1>
           <p className="text-xs text-text-muted mt-1">Admin Panel</p>
@@ -44,14 +44,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link
               key={item.href}
               href={item.href}
-              className="block px-3 py-2 rounded-md text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-colors"
+              className="block px-3 py-2 rounded-md text-sm font-medium text-text-secondary hover:text-foreground hover:bg-surface-hover transition-colors"
             >
               {item.label}
             </Link>
           ))}
         </nav>
         <div className="mt-auto pt-8">
-          <Link href="/" className="text-xs text-text-muted hover:text-white">
+          <Link href="/" className="text-xs text-text-muted hover:text-foreground">
             Back to site
           </Link>
         </div>

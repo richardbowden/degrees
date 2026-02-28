@@ -107,7 +107,7 @@ export default function CartPage() {
                   type="button"
                   onClick={() => updateQuantity(item.id, Number(item.quantity) - 1)}
                   disabled={actionLoading === item.id || Number(item.quantity) <= 1}
-                  className="w-7 h-7 border border-border-subtle rounded text-sm hover:bg-white/5 disabled:opacity-50"
+                  className="w-7 h-7 border border-border-subtle rounded text-sm hover:bg-surface-hover disabled:opacity-50"
                 >
                   -
                 </button>
@@ -116,7 +116,7 @@ export default function CartPage() {
                   type="button"
                   onClick={() => updateQuantity(item.id, Number(item.quantity) + 1)}
                   disabled={actionLoading === item.id}
-                  className="w-7 h-7 border border-border-subtle rounded text-sm hover:bg-white/5 disabled:opacity-50"
+                  className="w-7 h-7 border border-border-subtle rounded text-sm hover:bg-surface-hover disabled:opacity-50"
                 >
                   +
                 </button>

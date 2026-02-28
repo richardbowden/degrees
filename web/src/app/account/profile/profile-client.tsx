@@ -39,12 +39,12 @@ export function ProfileClient({ initialProfile }: ProfileClientProps) {
     }
   }
 
-  const inputClass = 'w-full bg-white/5 border border-border-subtle rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500';
+  const inputClass = 'w-full bg-surface-input border border-border-subtle rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500';
 
   return (
     <div className="space-y-10">
       <section>
-        <h2 className="text-lg font-semibold text-white mb-4">Contact Details</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Contact Details</h2>
         <form onSubmit={saveProfile} className="max-w-lg space-y-4">
           {profileMessage && <p className="text-sm text-green-400">{profileMessage}</p>}
           {profileError && <p className="text-sm text-red-400">{profileError}</p>}

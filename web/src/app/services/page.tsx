@@ -79,7 +79,7 @@ export default async function ServicesPage({ searchParams }: Props) {
       )}
 
       <div className="mt-16 glass-card p-8">
-        <h3 className="text-lg font-semibold text-white mb-4">Important Notes</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-4">Important Notes</h3>
         <ul className="space-y-3 text-sm text-text-secondary">
           <li className="flex items-start gap-2">
             <span className="text-brand-400 mt-0.5 shrink-0">&bull;</span>

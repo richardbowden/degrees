@@ -36,7 +36,7 @@ export default async function VehicleDetailPage({ params }: VehicleDetailPagePro
     <div>
       <Link
         href="/account/vehicles"
-        className="text-sm text-text-muted hover:text-white mb-4 inline-block"
+        className="text-sm text-text-muted hover:text-foreground mb-4 inline-block"
       >
         &larr; Back to Vehicles
       </Link>
@@ -44,11 +44,11 @@ export default async function VehicleDetailPage({ params }: VehicleDetailPagePro
       <div className="border border-border-subtle rounded-lg p-6 mb-8">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-2xl font-bold text-foreground">
               {vehicle.year} {vehicle.make} {vehicle.model}
             </h1>
             {vehicle.isPrimary && (
-              <span className="inline-block mt-1 text-xs bg-white/10 text-text-secondary px-2 py-0.5 rounded-full">
+              <span className="inline-block mt-1 text-xs bg-surface-raised text-text-secondary px-2 py-0.5 rounded-full">
                 Primary
               </span>
             )}
@@ -57,18 +57,18 @@ export default async function VehicleDetailPage({ params }: VehicleDetailPagePro
         <dl className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
           <div>
             <dt className="text-text-muted">Colour</dt>
-            <dd className="text-white">{vehicle.colour}</dd>
+            <dd className="text-foreground">{vehicle.colour}</dd>
           </div>
           {vehicle.rego && (
             <div>
               <dt className="text-text-muted">Registration</dt>
-              <dd className="text-white">{vehicle.rego}</dd>
+              <dd className="text-foreground">{vehicle.rego}</dd>
             </div>
           )}
           {vehicle.paintType && (
             <div>
               <dt className="text-text-muted">Paint Type</dt>
-              <dd className="text-white">{vehicle.paintType}</dd>
+              <dd className="text-foreground">{vehicle.paintType}</dd>
             </div>
           )}
         </dl>
@@ -85,18 +85,18 @@ export default async function VehicleDetailPage({ params }: VehicleDetailPagePro
 
       {upcomingBookings.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-lg font-semibold text-white mb-4">Upcoming Bookings</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Upcoming Bookings</h2>
           <div className="space-y-3">
             {upcomingBookings.map(booking => (
               <Link
                 key={booking.id}
                 href={`/account/bookings/${booking.id}`}
-                className="block border border-border-subtle rounded-lg p-4 hover:bg-white/5"
+                className="block border border-border-subtle rounded-lg p-4 hover:bg-surface-hover"
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-3">
-                      <span className="font-medium text-white">
+                      <span className="font-medium text-foreground">
                         {formatDate(booking.scheduledDate)}
                       </span>
                       <span className="text-text-muted text-sm">
@@ -119,7 +119,7 @@ export default async function VehicleDetailPage({ params }: VehicleDetailPagePro
       )}
 
       <section>
-        <h2 className="text-lg font-semibold text-white mb-4">Detailing History</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Detailing History</h2>
         {completedHistory.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-text-muted mb-3">No detailing history yet.</p>
@@ -138,11 +138,11 @@ export default async function VehicleDetailPage({ params }: VehicleDetailPagePro
                 <Link
                   key={record.id}
                   href={`/account/history/${record.id}`}
-                  className="block border border-border-subtle rounded-lg p-4 hover:bg-white/5"
+                  className="block border border-border-subtle rounded-lg p-4 hover:bg-surface-hover"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium text-white">
+                      <p className="font-medium text-foreground">
                         {formatDate(record.completedDate)}
                       </p>
                       {booking?.services && booking.services.length > 0 && (

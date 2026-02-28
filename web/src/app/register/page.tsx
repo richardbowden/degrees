@@ -36,7 +36,7 @@ export default function RegisterPage() {
               type="text"
               required
               autoComplete="given-name"
-              className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
           <div>
@@ -49,7 +49,7 @@ export default function RegisterPage() {
               type="text"
               required
               autoComplete="family-name"
-              className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function RegisterPage() {
             type="email"
             required
             autoComplete="email"
-            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 
@@ -78,7 +78,7 @@ export default function RegisterPage() {
             type="password"
             required
             autoComplete="new-password"
-            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 
@@ -92,7 +92,7 @@ export default function RegisterPage() {
             type="password"
             required
             autoComplete="new-password"
-            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </div>
 

@@ -64,7 +64,7 @@ export function BookingsClient({ token }: { token: string }) {
             type="date"
             value={dateFrom}
             onChange={e => setDateFrom(e.target.value)}
-            className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+            className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
           />
         </div>
         <div>
@@ -73,7 +73,7 @@ export function BookingsClient({ token }: { token: string }) {
             type="date"
             value={dateTo}
             onChange={e => setDateTo(e.target.value)}
-            className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+            className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
           />
         </div>
         <div>
@@ -81,7 +81,7 @@ export function BookingsClient({ token }: { token: string }) {
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="bg-white/5 border border-border-subtle rounded-md px-3 py-1.5 text-sm text-white"
+            className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
           >
             {STATUSES.map(s => (
               <option key={s} value={s}>{s === 'all' ? 'All Statuses' : s.replace('_', ' ')}</option>
@@ -99,7 +99,7 @@ export function BookingsClient({ token }: { token: string }) {
       ) : (
         <div className="glass-card overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-white/5 border-b border-border-subtle">
+            <thead className="bg-surface-input border-b border-border-subtle">
               <tr>
                 <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Date</th>
                 <th className="py-3 px-4 text-xs font-medium text-text-muted uppercase">Time</th>
@@ -114,7 +114,7 @@ export function BookingsClient({ token }: { token: string }) {
             </thead>
             <tbody>
               {filtered.map(b => (
-                <tr key={b.id} className="border-b border-white/5 hover:bg-white/5">
+                <tr key={b.id} className="border-b border-border-subtle hover:bg-surface-hover">
                   <td className="py-3 px-4 text-sm">{formatDate(b.scheduledDate)}</td>
                   <td className="py-3 px-4 text-sm">{formatTime(b.scheduledTime)}</td>
                   <td className="py-3 px-4 text-sm font-medium">

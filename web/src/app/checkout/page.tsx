@@ -160,7 +160,7 @@ export default function CheckoutPage() {
               onClick={() => i <= stepIndex && setStep(s.key)}
               disabled={i > stepIndex}
               className={`flex items-center gap-2 text-sm font-medium ${
-                i <= stepIndex ? 'text-white' : 'text-text-muted'
+                i <= stepIndex ? 'text-foreground' : 'text-text-muted'
               }`}
             >
               <span
@@ -169,7 +169,7 @@ export default function CheckoutPage() {
                     ? 'bg-green-500 text-white'
                     : i === stepIndex
                       ? 'bg-brand-500 text-white'
-                      : 'bg-white/10 text-text-muted'
+                      : 'bg-surface-raised text-text-muted'
                 }`}
               >
                 {i < stepIndex ? '\u2713' : s.number}
@@ -247,7 +247,7 @@ export default function CheckoutPage() {
             onChange={e => setNotes(e.target.value)}
             rows={4}
             placeholder="Parking instructions, specific concerns, etc."
-            className="w-full bg-white/5 border border-border-subtle rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500 mb-6"
+            className="w-full bg-surface-input border border-border-subtle rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500 mb-6"
           />
           <button
             type="button"

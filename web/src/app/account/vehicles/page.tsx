@@ -12,7 +12,7 @@ export default async function VehiclesPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-white">Vehicles</h1>
+        <h1 className="text-2xl font-bold text-foreground">Vehicles</h1>
         <Link
           href="/account/vehicles/add"
           className="btn-brand px-4 py-2 text-sm font-medium rounded-md"
@@ -40,11 +40,11 @@ export default async function VehiclesPage() {
             <Link
               key={vehicle.id}
               href={`/account/vehicles/${vehicle.id}`}
-              className="block border border-border-subtle rounded-lg p-6 hover:bg-white/5 transition-colors"
+              className="block border border-border-subtle rounded-lg p-6 hover:bg-surface-hover transition-colors"
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-white">
+                  <h2 className="text-lg font-semibold text-foreground">
                     {vehicle.year} {vehicle.make} {vehicle.model}
                   </h2>
                   <p className="text-sm text-text-muted mt-1">
@@ -54,7 +54,7 @@ export default async function VehiclesPage() {
                   </p>
                 </div>
                 {vehicle.isPrimary && (
-                  <span className="text-xs bg-white/10 text-text-secondary px-2 py-0.5 rounded-full shrink-0">
+                  <span className="text-xs bg-surface-raised text-text-secondary px-2 py-0.5 rounded-full shrink-0">
                     Primary
                   </span>
                 )}

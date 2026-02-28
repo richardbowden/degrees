@@ -18,7 +18,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   } catch {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <a href="/services" className="text-sm text-text-muted hover:text-white mb-4 inline-block">
+        <a href="/services" className="text-sm text-text-muted hover:text-foreground mb-4 inline-block">
           &larr; Back to services
         </a>
         <p className="text-text-muted mt-4">Service not found or unavailable.</p>
@@ -28,7 +28,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <a href="/services" className="text-sm text-text-muted hover:text-white mb-4 inline-block">
+      <a href="/services" className="text-sm text-text-muted hover:text-foreground mb-4 inline-block">
         &larr; Back to services
       </a>
 

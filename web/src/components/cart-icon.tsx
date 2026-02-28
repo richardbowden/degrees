@@ -18,7 +18,7 @@ export function CartIcon() {
   }, []);
 
   return (
-    <Link href="/cart" className="relative text-text-secondary hover:text-white transition-colors" aria-label="Cart">
+    <Link href="/cart" className="relative text-text-secondary hover:text-foreground transition-colors" aria-label="Cart">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

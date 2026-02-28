@@ -5,7 +5,7 @@ import { StatusBadge } from '@/components/status-badge';
 
 export function AdminBookingRow({ booking }: { booking: Booking }) {
   return (
-    <tr className="border-b border-white/5 hover:bg-white/5">
+    <tr className="border-b border-border-subtle hover:bg-surface-hover">
       <td className="py-3 px-4 text-sm">{formatTime(booking.scheduledTime)}</td>
       <td className="py-3 px-4 text-sm font-medium">
         <Link href={`/admin/bookings/${booking.id}`} className="text-brand-400 hover:text-brand-500">

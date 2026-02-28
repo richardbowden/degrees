@@ -23,17 +23,17 @@ export default async function HistoryDetailPage({ params }: { params: Promise<{ 
         &larr; Back to History
       </Link>
 
-      <h1 className="text-2xl font-bold text-white mb-6">Service Record</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-6">Service Record</h1>
 
       <div className="space-y-6">
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-white mb-2">Completed</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">Completed</h2>
           <p className="text-sm text-text-secondary">{formatDate(record.completedDate)}</p>
         </div>
 
         {visibleNotes.length > 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-white mb-4">Notes</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-4">Notes</h2>
             <div className="space-y-3">
               {visibleNotes.map(note => (
                 <NoteCard key={note.id} note={note} />
@@ -44,10 +44,10 @@ export default async function HistoryDetailPage({ params }: { params: Promise<{ 
 
         {record.products && record.products.length > 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-white mb-4">Products Used</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-4">Products Used</h2>
             <div className="border border-border-subtle rounded-lg overflow-hidden">
               <table className="w-full text-sm">
-                <thead className="bg-white/5">
+                <thead className="bg-surface-input">
                   <tr>
                     <th className="text-left px-4 py-3 font-medium text-text-secondary">Product</th>
                     <th className="text-left px-4 py-3 font-medium text-text-secondary">Notes</th>
@@ -56,7 +56,7 @@ export default async function HistoryDetailPage({ params }: { params: Promise<{ 
                 <tbody className="divide-y divide-border-subtle">
                   {record.products.map(product => (
                     <tr key={product.id}>
-                      <td className="px-4 py-3 text-white font-medium">{product.productName}</td>
+                      <td className="px-4 py-3 text-foreground font-medium">{product.productName}</td>
                       <td className="px-4 py-3 text-text-secondary">{product.notes || '-'}</td>
                     </tr>
                   ))}
