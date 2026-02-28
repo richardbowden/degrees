@@ -23,6 +23,10 @@ export default async function ServicesPage({ searchParams }: Props) {
     /* both failed, show empty */
   }
 
+  const categoriesWithServices = categories.filter(cat =>
+    allServices.some(s => s.categoryId === cat.id)
+  );
+
   const selectedCategory = params.category ?? null;
   const services = selectedCategory
     ? allServices.filter(s => {
@@ -40,7 +44,7 @@ export default async function ServicesPage({ searchParams }: Props) {
         </p>
       </div>
 
-      {categories.length > 0 && (
+      {categoriesWithServices.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-10 justify-center">
           <a
             href="/services"
@@ -52,7 +56,7 @@ export default async function ServicesPage({ searchParams }: Props) {
           >
             All
           </a>
-          {categories.map(cat => (
+          {categoriesWithServices.map(cat => (
             <a
               key={cat.id}
               href={`/services?category=${cat.slug}`}
