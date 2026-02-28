@@ -234,6 +234,13 @@ service CatalogueService {
     };
   }
 
+  // List all services including inactive (admin)
+  rpc AdminListServices(ListCatalogueServicesRequest) returns (ListCatalogueServicesResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/services"
+    };
+  }
+
   // Create a new service (admin)
   rpc CreateService(CreateServiceRequest) returns (CreateServiceResponse) {
     option (google.api.http) = {

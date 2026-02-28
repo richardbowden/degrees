@@ -23,6 +23,7 @@ const (
 	CatalogueService_GetService_FullMethodName            = "/degrees.v1.CatalogueService/GetService"
 	CatalogueService_ListCategories_FullMethodName        = "/degrees.v1.CatalogueService/ListCategories"
 	CatalogueService_ListVehicleCategories_FullMethodName = "/degrees.v1.CatalogueService/ListVehicleCategories"
+	CatalogueService_AdminListServices_FullMethodName     = "/degrees.v1.CatalogueService/AdminListServices"
 	CatalogueService_CreateService_FullMethodName         = "/degrees.v1.CatalogueService/CreateService"
 	CatalogueService_UpdateService_FullMethodName         = "/degrees.v1.CatalogueService/UpdateService"
 	CatalogueService_DeleteService_FullMethodName         = "/degrees.v1.CatalogueService/DeleteService"
@@ -45,6 +46,8 @@ type CatalogueServiceClient interface {
 	ListCategories(ctx context.Context, in *ListCategoriesRequest, opts ...grpc.CallOption) (*ListCategoriesResponse, error)
 	// List all vehicle categories (public)
 	ListVehicleCategories(ctx context.Context, in *ListVehicleCategoriesRequest, opts ...grpc.CallOption) (*ListVehicleCategoriesResponse, error)
+	// List all services including inactive (admin)
+	AdminListServices(ctx context.Context, in *ListCatalogueServicesRequest, opts ...grpc.CallOption) (*ListCatalogueServicesResponse, error)
 	// Create a new service (admin)
 	CreateService(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error)
 	// Update a service (admin)
@@ -105,6 +108,16 @@ func (c *catalogueServiceClient) ListVehicleCategories(ctx context.Context, in *
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListVehicleCategoriesResponse)
 	err := c.cc.Invoke(ctx, CatalogueService_ListVehicleCategories_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *catalogueServiceClient) AdminListServices(ctx context.Context, in *ListCatalogueServicesRequest, opts ...grpc.CallOption) (*ListCatalogueServicesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListCatalogueServicesResponse)
+	err := c.cc.Invoke(ctx, CatalogueService_AdminListServices_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -203,6 +216,8 @@ type CatalogueServiceServer interface {
 	ListCategories(context.Context, *ListCategoriesRequest) (*ListCategoriesResponse, error)
 	// List all vehicle categories (public)
 	ListVehicleCategories(context.Context, *ListVehicleCategoriesRequest) (*ListVehicleCategoriesResponse, error)
+	// List all services including inactive (admin)
+	AdminListServices(context.Context, *ListCatalogueServicesRequest) (*ListCatalogueServicesResponse, error)
 	// Create a new service (admin)
 	CreateService(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error)
 	// Update a service (admin)
@@ -239,6 +254,9 @@ func (UnimplementedCatalogueServiceServer) ListCategories(context.Context, *List
 }
 func (UnimplementedCatalogueServiceServer) ListVehicleCategories(context.Context, *ListVehicleCategoriesRequest) (*ListVehicleCategoriesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListVehicleCategories not implemented")
+}
+func (UnimplementedCatalogueServiceServer) AdminListServices(context.Context, *ListCatalogueServicesRequest) (*ListCatalogueServicesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AdminListServices not implemented")
 }
 func (UnimplementedCatalogueServiceServer) CreateService(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateService not implemented")
@@ -352,6 +370,24 @@ func _CatalogueService_ListVehicleCategories_Handler(srv interface{}, ctx contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CatalogueServiceServer).ListVehicleCategories(ctx, req.(*ListVehicleCategoriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CatalogueService_AdminListServices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCatalogueServicesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CatalogueServiceServer).AdminListServices(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CatalogueService_AdminListServices_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CatalogueServiceServer).AdminListServices(ctx, req.(*ListCatalogueServicesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -522,6 +558,10 @@ var CatalogueService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListVehicleCategories",
 			Handler:    _CatalogueService_ListVehicleCategories_Handler,
+		},
+		{
+			MethodName: "AdminListServices",
+			Handler:    _CatalogueService_AdminListServices_Handler,
 		},
 		{
 			MethodName: "CreateService",

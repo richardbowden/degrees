@@ -429,6 +429,83 @@ func (q *Queries) GetVehicleCategoryByID(ctx context.Context, arg GetVehicleCate
 	return i, err
 }
 
+const listAllServiceOptions = `-- name: ListAllServiceOptions :many
+SELECT id, service_id, name, description, price, is_active, sort_order, created_at FROM service_options
+WHERE service_id = $1
+ORDER BY sort_order, name
+`
+
+type ListAllServiceOptionsParams struct {
+	ServiceID int64
+}
+
+func (q *Queries) ListAllServiceOptions(ctx context.Context, arg ListAllServiceOptionsParams) ([]ServiceOption, error) {
+	rows, err := q.db.Query(ctx, listAllServiceOptions, arg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ServiceOption
+	for rows.Next() {
+		var i ServiceOption
+		if err := rows.Scan(
+			&i.ID,
+			&i.ServiceID,
+			&i.Name,
+			&i.Description,
+			&i.Price,
+			&i.IsActive,
+			&i.SortOrder,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listAllServices = `-- name: ListAllServices :many
+SELECT id, category_id, name, slug, description, short_desc, base_price, duration_minutes, is_active, sort_order, created_at, updated_at FROM services
+ORDER BY sort_order, name
+`
+
+func (q *Queries) ListAllServices(ctx context.Context) ([]Service, error) {
+	rows, err := q.db.Query(ctx, listAllServices)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Service
+	for rows.Next() {
+		var i Service
+		if err := rows.Scan(
+			&i.ID,
+			&i.CategoryID,
+			&i.Name,
+			&i.Slug,
+			&i.Description,
+			&i.ShortDesc,
+			&i.BasePrice,
+			&i.DurationMinutes,
+			&i.IsActive,
+			&i.SortOrder,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listCategories = `-- name: ListCategories :many
 SELECT id, name, slug, description, sort_order, created_at, updated_at FROM service_categories
 ORDER BY sort_order, name

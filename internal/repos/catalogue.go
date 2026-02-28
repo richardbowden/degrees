@@ -51,6 +51,10 @@ func (r *Catalogue) ListServices(ctx context.Context) ([]dbpg.Service, error) {
 	return r.store.ListServices(ctx)
 }
 
+func (r *Catalogue) ListAllServices(ctx context.Context) ([]dbpg.Service, error) {
+	return r.store.ListAllServices(ctx)
+}
+
 func (r *Catalogue) ListServicesByCategory(ctx context.Context, categoryID int64) ([]dbpg.Service, error) {
 	return r.store.ListServicesByCategory(ctx, dbpg.ListServicesByCategoryParams{CategoryID: categoryID})
 }
@@ -105,6 +109,10 @@ func (r *Catalogue) DeleteService(ctx context.Context, id int64) (dbpg.Service, 
 
 func (r *Catalogue) ListServiceOptions(ctx context.Context, serviceID int64) ([]dbpg.ServiceOption, error) {
 	return r.store.ListServiceOptions(ctx, dbpg.ListServiceOptionsParams{ServiceID: serviceID})
+}
+
+func (r *Catalogue) ListAllServiceOptions(ctx context.Context, serviceID int64) ([]dbpg.ServiceOption, error) {
+	return r.store.ListAllServiceOptions(ctx, dbpg.ListAllServiceOptionsParams{ServiceID: serviceID})
 }
 
 func (r *Catalogue) CreateServiceOption(ctx context.Context, params dbpg.CreateServiceOptionParams) (dbpg.ServiceOption, error) {

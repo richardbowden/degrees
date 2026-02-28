@@ -531,6 +531,27 @@
       }
     },
     "/api/v1/admin/services": {
+      "get": {
+        "summary": "List all services including inactive (admin)",
+        "operationId": "CatalogueService_AdminListServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCatalogueServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "CatalogueService"
+        ]
+      },
       "post": {
         "summary": "Create a new service (admin)",
         "operationId": "CatalogueService_CreateService",

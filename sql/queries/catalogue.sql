@@ -22,6 +22,10 @@ SELECT * FROM services
 WHERE is_active = true
 ORDER BY sort_order, name;
 
+-- name: ListAllServices :many
+SELECT * FROM services
+ORDER BY sort_order, name;
+
 -- name: ListServicesByCategory :many
 SELECT * FROM services
 WHERE category_id = $1 AND is_active = true
@@ -61,6 +65,11 @@ RETURNING *;
 -- name: ListServiceOptions :many
 SELECT * FROM service_options
 WHERE service_id = $1 AND is_active = true
+ORDER BY sort_order, name;
+
+-- name: ListAllServiceOptions :many
+SELECT * FROM service_options
+WHERE service_id = $1
 ORDER BY sort_order, name;
 
 -- name: CreateServiceOption :one

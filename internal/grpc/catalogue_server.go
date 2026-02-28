@@ -37,6 +37,27 @@ func (s *CatalogueServiceServer) ListCategories(ctx context.Context, req *pb.Lis
 	return &pb.ListCategoriesResponse{Categories: pbCats}, nil
 }
 
+func (s *CatalogueServiceServer) AdminListServices(ctx context.Context, req *pb.ListCatalogueServicesRequest) (*pb.ListCatalogueServicesResponse, error) {
+	userID, ok := GetUserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+
+	svcs, err := s.catalogueSvc.ListAllServices(ctx, userID)
+	if err != nil {
+		return nil, ToGRPCError(err)
+	}
+
+	pbSvcs := make([]*pb.DetailingService, len(svcs))
+	for i, swt := range svcs {
+		pbSvc := dbServiceToPB(swt.Service)
+		pbSvc.PriceTiers = dbPriceTiersToPB(swt.Tiers)
+		pbSvcs[i] = pbSvc
+	}
+
+	return &pb.ListCatalogueServicesResponse{Services: pbSvcs}, nil
+}
+
 func (s *CatalogueServiceServer) ListServices(ctx context.Context, req *pb.ListCatalogueServicesRequest) (*pb.ListCatalogueServicesResponse, error) {
 	svcs, err := s.catalogueSvc.ListServices(ctx)
 	if err != nil {

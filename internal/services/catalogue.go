@@ -14,6 +14,7 @@ type CatalogueRepository interface {
 	CreateCategory(ctx context.Context, params dbpg.CreateCategoryParams) (dbpg.ServiceCategory, error)
 	UpdateCategory(ctx context.Context, params dbpg.UpdateCategoryParams) (dbpg.ServiceCategory, error)
 	ListServices(ctx context.Context) ([]dbpg.Service, error)
+	ListAllServices(ctx context.Context) ([]dbpg.Service, error)
 	ListServicesByCategory(ctx context.Context, categoryID int64) ([]dbpg.Service, error)
 	GetServiceBySlug(ctx context.Context, slug string) (dbpg.GetServiceBySlugRow, error)
 	GetServiceByID(ctx context.Context, id int64) (dbpg.Service, error)
@@ -21,6 +22,7 @@ type CatalogueRepository interface {
 	UpdateService(ctx context.Context, params dbpg.UpdateServiceParams) (dbpg.Service, error)
 	DeleteService(ctx context.Context, id int64) (dbpg.Service, error)
 	ListServiceOptions(ctx context.Context, serviceID int64) ([]dbpg.ServiceOption, error)
+	ListAllServiceOptions(ctx context.Context, serviceID int64) ([]dbpg.ServiceOption, error)
 	CreateServiceOption(ctx context.Context, params dbpg.CreateServiceOptionParams) (dbpg.ServiceOption, error)
 	UpdateServiceOption(ctx context.Context, params dbpg.UpdateServiceOptionParams) (dbpg.ServiceOption, error)
 	DeleteServiceOption(ctx context.Context, id int64) (dbpg.ServiceOption, error)
@@ -60,6 +62,32 @@ func (s *CatalogueService) ListCategories(ctx context.Context) ([]dbpg.ServiceCa
 		return nil, problems.New(problems.Database, "failed to list categories", err)
 	}
 	return cats, nil
+}
+
+// ListAllServices returns all services (active and inactive) with their price tiers (admin only).
+func (s *CatalogueService) ListAllServices(ctx context.Context, userID int64) ([]ServiceWithTiers, error) {
+	isAdmin, err := s.authz.IsSystemAdmin(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	if !isAdmin {
+		return nil, problems.New(problems.Unauthorized, "admin access required")
+	}
+
+	svcs, err := s.repo.ListAllServices(ctx)
+	if err != nil {
+		return nil, problems.New(problems.Database, "failed to list services", err)
+	}
+
+	result := make([]ServiceWithTiers, len(svcs))
+	for i, svc := range svcs {
+		tiers, err := s.repo.ListPriceTiersByService(ctx, svc.ID)
+		if err != nil {
+			return nil, problems.New(problems.Database, "failed to list price tiers", err)
+		}
+		result[i] = ServiceWithTiers{Service: svc, Tiers: tiers}
+	}
+	return result, nil
 }
 
 // ListServices returns all active services with their price tiers (public).

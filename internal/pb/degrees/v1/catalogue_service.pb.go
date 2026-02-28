@@ -2028,13 +2028,14 @@ const file_degrees_v1_catalogue_service_proto_rawDesc = "" +
 	"\x05tiers\x18\x02 \x03(\v2\x1a.degrees.v1.PriceTierInputR\x05tiers\"]\n" +
 	"\x1cSetServicePriceTiersResponse\x12=\n" +
 	"\vprice_tiers\x18\x01 \x03(\v2\x1c.degrees.v1.ServicePriceTierR\n" +
-	"priceTiers2\xbc\r\n" +
+	"priceTiers2\xc7\x0e\n" +
 	"\x10CatalogueService\x12~\n" +
 	"\fListServices\x12(.degrees.v1.ListCatalogueServicesRequest\x1a).degrees.v1.ListCatalogueServicesResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/api/v1/catalogue\x12\x7f\n" +
 	"\n" +
 	"GetService\x12&.degrees.v1.GetCatalogueServiceRequest\x1a'.degrees.v1.GetCatalogueServiceResponse\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/api/v1/catalogue/{slug}\x12}\n" +
 	"\x0eListCategories\x12!.degrees.v1.ListCategoriesRequest\x1a\".degrees.v1.ListCategoriesResponse\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/api/v1/catalogue/categories\x12\x9a\x01\n" +
-	"\x15ListVehicleCategories\x12(.degrees.v1.ListVehicleCategoriesRequest\x1a).degrees.v1.ListVehicleCategoriesResponse\",\x82\xd3\xe4\x93\x02&\x12$/api/v1/catalogue/vehicle-categories\x12w\n" +
+	"\x15ListVehicleCategories\x12(.degrees.v1.ListVehicleCategoriesRequest\x1a).degrees.v1.ListVehicleCategoriesResponse\",\x82\xd3\xe4\x93\x02&\x12$/api/v1/catalogue/vehicle-categories\x12\x88\x01\n" +
+	"\x11AdminListServices\x12(.degrees.v1.ListCatalogueServicesRequest\x1a).degrees.v1.ListCatalogueServicesResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/admin/services\x12w\n" +
 	"\rCreateService\x12 .degrees.v1.CreateServiceRequest\x1a!.degrees.v1.CreateServiceResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/admin/services\x12|\n" +
 	"\rUpdateService\x12 .degrees.v1.UpdateServiceRequest\x1a!.degrees.v1.UpdateServiceResponse\"&\x82\xd3\xe4\x93\x02 :\x01*\x1a\x1b/api/v1/admin/services/{id}\x12y\n" +
 	"\rDeleteService\x12 .degrees.v1.DeleteServiceRequest\x1a!.degrees.v1.DeleteServiceResponse\"#\x82\xd3\xe4\x93\x02\x1d*\x1b/api/v1/admin/services/{id}\x12\x95\x01\n" +
@@ -2118,28 +2119,30 @@ var file_degrees_v1_catalogue_service_proto_depIdxs = []int32{
 	9,  // 21: degrees.v1.CatalogueService.GetService:input_type -> degrees.v1.GetCatalogueServiceRequest
 	5,  // 22: degrees.v1.CatalogueService.ListCategories:input_type -> degrees.v1.ListCategoriesRequest
 	19, // 23: degrees.v1.CatalogueService.ListVehicleCategories:input_type -> degrees.v1.ListVehicleCategoriesRequest
-	11, // 24: degrees.v1.CatalogueService.CreateService:input_type -> degrees.v1.CreateServiceRequest
-	13, // 25: degrees.v1.CatalogueService.UpdateService:input_type -> degrees.v1.UpdateServiceRequest
-	15, // 26: degrees.v1.CatalogueService.DeleteService:input_type -> degrees.v1.DeleteServiceRequest
-	17, // 27: degrees.v1.CatalogueService.AddServiceOption:input_type -> degrees.v1.AddServiceOptionRequest
-	21, // 28: degrees.v1.CatalogueService.CreateVehicleCategory:input_type -> degrees.v1.CreateVehicleCategoryRequest
-	23, // 29: degrees.v1.CatalogueService.UpdateVehicleCategory:input_type -> degrees.v1.UpdateVehicleCategoryRequest
-	25, // 30: degrees.v1.CatalogueService.DeleteVehicleCategory:input_type -> degrees.v1.DeleteVehicleCategoryRequest
-	28, // 31: degrees.v1.CatalogueService.SetServicePriceTiers:input_type -> degrees.v1.SetServicePriceTiersRequest
-	8,  // 32: degrees.v1.CatalogueService.ListServices:output_type -> degrees.v1.ListCatalogueServicesResponse
-	10, // 33: degrees.v1.CatalogueService.GetService:output_type -> degrees.v1.GetCatalogueServiceResponse
-	6,  // 34: degrees.v1.CatalogueService.ListCategories:output_type -> degrees.v1.ListCategoriesResponse
-	20, // 35: degrees.v1.CatalogueService.ListVehicleCategories:output_type -> degrees.v1.ListVehicleCategoriesResponse
-	12, // 36: degrees.v1.CatalogueService.CreateService:output_type -> degrees.v1.CreateServiceResponse
-	14, // 37: degrees.v1.CatalogueService.UpdateService:output_type -> degrees.v1.UpdateServiceResponse
-	16, // 38: degrees.v1.CatalogueService.DeleteService:output_type -> degrees.v1.DeleteServiceResponse
-	18, // 39: degrees.v1.CatalogueService.AddServiceOption:output_type -> degrees.v1.AddServiceOptionResponse
-	22, // 40: degrees.v1.CatalogueService.CreateVehicleCategory:output_type -> degrees.v1.CreateVehicleCategoryResponse
-	24, // 41: degrees.v1.CatalogueService.UpdateVehicleCategory:output_type -> degrees.v1.UpdateVehicleCategoryResponse
-	26, // 42: degrees.v1.CatalogueService.DeleteVehicleCategory:output_type -> degrees.v1.DeleteVehicleCategoryResponse
-	29, // 43: degrees.v1.CatalogueService.SetServicePriceTiers:output_type -> degrees.v1.SetServicePriceTiersResponse
-	32, // [32:44] is the sub-list for method output_type
-	20, // [20:32] is the sub-list for method input_type
+	7,  // 24: degrees.v1.CatalogueService.AdminListServices:input_type -> degrees.v1.ListCatalogueServicesRequest
+	11, // 25: degrees.v1.CatalogueService.CreateService:input_type -> degrees.v1.CreateServiceRequest
+	13, // 26: degrees.v1.CatalogueService.UpdateService:input_type -> degrees.v1.UpdateServiceRequest
+	15, // 27: degrees.v1.CatalogueService.DeleteService:input_type -> degrees.v1.DeleteServiceRequest
+	17, // 28: degrees.v1.CatalogueService.AddServiceOption:input_type -> degrees.v1.AddServiceOptionRequest
+	21, // 29: degrees.v1.CatalogueService.CreateVehicleCategory:input_type -> degrees.v1.CreateVehicleCategoryRequest
+	23, // 30: degrees.v1.CatalogueService.UpdateVehicleCategory:input_type -> degrees.v1.UpdateVehicleCategoryRequest
+	25, // 31: degrees.v1.CatalogueService.DeleteVehicleCategory:input_type -> degrees.v1.DeleteVehicleCategoryRequest
+	28, // 32: degrees.v1.CatalogueService.SetServicePriceTiers:input_type -> degrees.v1.SetServicePriceTiersRequest
+	8,  // 33: degrees.v1.CatalogueService.ListServices:output_type -> degrees.v1.ListCatalogueServicesResponse
+	10, // 34: degrees.v1.CatalogueService.GetService:output_type -> degrees.v1.GetCatalogueServiceResponse
+	6,  // 35: degrees.v1.CatalogueService.ListCategories:output_type -> degrees.v1.ListCategoriesResponse
+	20, // 36: degrees.v1.CatalogueService.ListVehicleCategories:output_type -> degrees.v1.ListVehicleCategoriesResponse
+	8,  // 37: degrees.v1.CatalogueService.AdminListServices:output_type -> degrees.v1.ListCatalogueServicesResponse
+	12, // 38: degrees.v1.CatalogueService.CreateService:output_type -> degrees.v1.CreateServiceResponse
+	14, // 39: degrees.v1.CatalogueService.UpdateService:output_type -> degrees.v1.UpdateServiceResponse
+	16, // 40: degrees.v1.CatalogueService.DeleteService:output_type -> degrees.v1.DeleteServiceResponse
+	18, // 41: degrees.v1.CatalogueService.AddServiceOption:output_type -> degrees.v1.AddServiceOptionResponse
+	22, // 42: degrees.v1.CatalogueService.CreateVehicleCategory:output_type -> degrees.v1.CreateVehicleCategoryResponse
+	24, // 43: degrees.v1.CatalogueService.UpdateVehicleCategory:output_type -> degrees.v1.UpdateVehicleCategoryResponse
+	26, // 44: degrees.v1.CatalogueService.DeleteVehicleCategory:output_type -> degrees.v1.DeleteVehicleCategoryResponse
+	29, // 45: degrees.v1.CatalogueService.SetServicePriceTiers:output_type -> degrees.v1.SetServicePriceTiersResponse
+	33, // [33:46] is the sub-list for method output_type
+	20, // [20:33] is the sub-list for method input_type
 	20, // [20:20] is the sub-list for extension type_name
 	20, // [20:20] is the sub-list for extension extendee
 	0,  // [0:20] is the sub-list for field type_name

@@ -49,10 +49,13 @@ const EMPTY_OPTION: OptionForm = {
   sortOrder: '0',
 };
 
+type StatusFilter = 'all' | 'active' | 'disabled';
+
 export function ServicesClient({ token }: { token: string }) {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
   const [services, setServices] = useState<DetailingService[]>([]);
   const [vehicleCategories, setVehicleCategories] = useState<VehicleCategory[]>([]);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -78,13 +81,43 @@ export function ServicesClient({ token }: { token: string }) {
   // Delete state
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
+  // Toggle active state
+  const [togglingId, setTogglingId] = useState<string | null>(null);
+
+  async function handleToggleActive(svc: DetailingService) {
+    setTogglingId(svc.id);
+    try {
+      await api(`/admin/services/${svc.id}`, {
+        method: 'PUT',
+        body: {
+          id: svc.id,
+          categoryId: svc.categoryId,
+          name: svc.name,
+          slug: svc.slug,
+          description: svc.description,
+          shortDesc: svc.shortDesc,
+          basePrice: svc.basePrice,
+          durationMinutes: svc.durationMinutes,
+          isActive: !svc.isActive,
+          sortOrder: svc.sortOrder,
+        },
+        token,
+      });
+      await fetchData();
+    } catch {
+      alert('Failed to update service');
+    } finally {
+      setTogglingId(null);
+    }
+  }
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
       const [catRes, svcRes] = await Promise.all([
         api<{ categories: ServiceCategory[] }>('/catalogue/categories', { token }),
-        api<{ services: DetailingService[] }>('/catalogue', { token }),
+        api<{ services: DetailingService[] }>('/admin/services', { token }),
       ]);
       setCategories(catRes.categories ?? []);
       setServices(svcRes.services ?? []);
@@ -247,12 +280,19 @@ export function ServicesClient({ token }: { token: string }) {
     }
   }
 
+  // Filter services by status
+  const filteredServices = services.filter(s => {
+    if (statusFilter === 'active') return s.isActive;
+    if (statusFilter === 'disabled') return !s.isActive;
+    return true;
+  });
+
   // Group services by category
   const grouped = categories.map(cat => ({
     category: cat,
-    services: services.filter(s => s.categoryId === cat.id),
+    services: filteredServices.filter(s => s.categoryId === cat.id),
   }));
-  const uncategorized = services.filter(s => !categories.some(c => c.id === s.categoryId));
+  const uncategorized = filteredServices.filter(s => !categories.some(c => c.id === s.categoryId));
 
   if (loading) return <p className="text-sm text-text-muted">Loading services...</p>;
   if (error && services.length === 0) return <p className="text-red-400 text-sm">{error}</p>;
@@ -260,7 +300,26 @@ export function ServicesClient({ token }: { token: string }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <p className="text-sm text-text-muted">{services.length} services across {categories.length} categories</p>
+        <div className="flex items-center gap-4">
+          <p className="text-sm text-text-muted">
+            {filteredServices.length} of {services.length} services
+          </p>
+          <div className="flex gap-1 bg-white/5 rounded-md p-0.5">
+            {(['all', 'active', 'disabled'] as StatusFilter[]).map(f => (
+              <button
+                key={f}
+                onClick={() => setStatusFilter(f)}
+                className={`px-3 py-1 rounded text-xs font-medium capitalize transition-colors ${
+                  statusFilter === f
+                    ? 'bg-white/15 text-white'
+                    : 'text-text-muted hover:text-white'
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        </div>
         <button
           onClick={openAddForm}
           className="btn-brand px-4 py-2 rounded-md text-sm font-medium"
@@ -560,6 +619,17 @@ export function ServicesClient({ token }: { token: string }) {
                     {/* Actions */}
                     <div className="flex gap-2 ml-4 flex-shrink-0">
                       <button
+                        onClick={() => handleToggleActive(svc)}
+                        disabled={togglingId === svc.id}
+                        className={`text-xs px-2 py-1 rounded border disabled:opacity-50 ${
+                          svc.isActive
+                            ? 'text-green-400 border-green-400/30 hover:bg-green-400/10'
+                            : 'text-text-muted border-border-subtle hover:bg-white/5'
+                        }`}
+                      >
+                        {togglingId === svc.id ? '...' : svc.isActive ? 'Enabled' : 'Disabled'}
+                      </button>
+                      <button
                         onClick={() => openTiers(svc)}
                         className="text-xs text-text-muted hover:text-white px-2 py-1 border border-border-subtle rounded"
                       >
@@ -605,6 +675,17 @@ export function ServicesClient({ token }: { token: string }) {
                     <p className="text-sm text-text-muted">{formatPrice(svc.basePrice)} - {svc.durationMinutes} mins</p>
                   </div>
                   <div className="flex gap-2">
+                    <button
+                      onClick={() => handleToggleActive(svc)}
+                      disabled={togglingId === svc.id}
+                      className={`text-xs px-2 py-1 rounded border disabled:opacity-50 ${
+                        svc.isActive
+                          ? 'text-green-400 border-green-400/30 hover:bg-green-400/10'
+                          : 'text-text-muted border-border-subtle hover:bg-white/5'
+                      }`}
+                    >
+                      {togglingId === svc.id ? '...' : svc.isActive ? 'Enabled' : 'Disabled'}
+                    </button>
                     <button onClick={() => openEditForm(svc)} className="text-xs text-brand-400 hover:text-brand-500 px-2 py-1 border border-border-subtle rounded">Edit</button>
                     <button onClick={() => handleDelete(svc.id)} disabled={deletingId === svc.id} className="text-xs text-red-400 hover:text-red-500 px-2 py-1 border border-border-subtle rounded disabled:opacity-50">
                       {deletingId === svc.id ? '...' : 'Delete'}
