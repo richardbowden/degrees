@@ -24,6 +24,7 @@ var (
 )
 
 var cwd string
+var hasBuildThisRun bool = false
 
 func init() {
 	cwd, _ = os.Getwd()
@@ -95,12 +96,18 @@ func Debug() error {
 	start := time.Now()
 	fmt.Printf("\nbuild-mode: debug\n")
 
-	err := sh.RunV("go", "build", "-race", "-v", "-gcflags=all=-N", "-o", buildDebugBinPath, "./cmd/server")
-	elapsed := time.Since(start)
+	if !hasBuildThisRun{
+		err := sh.RunV("go", "build", "-race", "-v", "-gcflags=all=-N", "-o", buildDebugBinPath, "./cmd/server")
+		elapsed := time.Since(start)
+		hasBuildThisRun = true
+		fmt.Printf("\npath: %s\n", buildDebugBinPath)
+		fmt.Printf("took %s\n\n", elapsed)
+		return err
+	}
 
-	fmt.Printf("\npath: %s\n", buildDebugBinPath)
-	fmt.Printf("took %s\n\n", elapsed)
-	return err
+	fmt.Printf("\npath(already build this run): %s\n", buildDebugBinPath)
+	fmt.Printf("")
+	return nil
 }
 
 func Release() error {
