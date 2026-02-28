@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, use } from 'react';
+import { useActionState, use, useEffect } from 'react';
 import Link from 'next/link';
 import { loginAction } from './actions';
 
@@ -12,6 +12,13 @@ export default function LoginPage({ searchParams }: Props) {
   const params = use(searchParams);
   const redirectTo = params.redirect ?? '';
   const [state, formAction, pending] = useActionState(loginAction, null);
+
+  // Hard navigation after success so the root layout re-renders (Nav updates).
+  useEffect(() => {
+    if (state?.redirectTo) {
+      window.location.href = state.redirectTo;
+    }
+  }, [state]);
 
   return (
     <div className="max-w-md mx-auto px-4 py-16">

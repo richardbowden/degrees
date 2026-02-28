@@ -1,7 +1,6 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { api } from '@/lib/api';
 
 export async function logout() {
@@ -17,5 +16,6 @@ export async function logout() {
   }
 
   cookieStore.delete('session_token');
-  redirect('/');
+  // No redirect here — the LogoutButton client component does a hard navigation
+  // so the root layout re-renders and the Nav reflects the logged-out state.
 }

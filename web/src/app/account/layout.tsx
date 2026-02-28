@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import type { User, CustomerProfile } from '@/lib/types';
-import { logout } from './actions';
+import { LogoutButton } from '@/components/logout-button';
 
 const navItems = [
   { href: '/account', label: 'Dashboard' },
@@ -50,14 +50,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
           ))}
         </nav>
         <div className="mt-8 pt-8 border-t border-border-subtle">
-          <form action={logout}>
-            <button
-              type="submit"
-              className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-400 hover:bg-surface-hover"
-            >
-              Log Out
-            </button>
-          </form>
+          <LogoutButton className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-400 hover:bg-surface-hover" />
         </div>
       </aside>
       <div className="flex-1 p-8">

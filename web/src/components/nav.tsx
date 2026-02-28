@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { CartIcon } from '@/components/cart-icon';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { logout } from '@/app/account/actions';
+import { LogoutButton } from '@/components/logout-button';
 
 export async function Nav() {
   const cookieStore = await cookies();
@@ -24,14 +24,7 @@ export async function Nav() {
               <Link href="/account" className="text-text-secondary hover:text-foreground transition-colors">
                 Account
               </Link>
-              <form action={logout}>
-                <button
-                  type="submit"
-                  className="text-text-secondary hover:text-foreground transition-colors"
-                >
-                  Log Out
-                </button>
-              </form>
+              <LogoutButton className="text-text-secondary hover:text-foreground transition-colors" />
             </>
           ) : (
             <Link href="/login" className="text-text-secondary hover:text-foreground transition-colors">
