@@ -46,6 +46,7 @@ func run(args []string) {
 		Flags: []cli.Flag{
 			&cli.GenericFlag{Name: LoggingLevelFlag, Value: &EnumFlag{Enum: []string{"TRACE", "DEBUG", "ERROR", "INFO"}, Default: "INFO"}, Aliases: []string{"l"}, EnvVars: []string{"DEGREES_LOG_LEVEL"}},
 			&cli.BoolFlag{Name: HumanLogsFlag, Value: false, EnvVars: []string{"DEGREES_HUMAN_LOGS"}},
+			&cli.StringFlag{Name: DatabaseURLFlag, Usage: "Full postgres connection URL; overrides individual DB flags", EnvVars: []string{"DATABASE_URL"}},
 			&cli.StringFlag{Name: DBHostFlag, Value: "127.0.0.1", EnvVars: []string{"DEGREES_DB_HOST"}},
 			&cli.IntFlag{Name: DBPortFlag, Value: 5432, EnvVars: []string{"DEGREES_DB_PORT"}},
 			&cli.StringFlag{Name: DBUserFlag, Value: "degrees", EnvVars: []string{"DEGREES_DB_USER"}},
