@@ -93,26 +93,31 @@ export interface AvailableSlot {
   availableDurationMins: number;
 }
 
+export interface BookingServiceOptionItem {
+  id: string;
+  serviceOptionId: string;
+  optionName: string;
+  priceAtBooking: number;
+}
+
 export interface BookingServiceItem {
+  id: string;
   serviceId: string;
   serviceName: string;
-  price: number;
-  options: string[];
+  serviceSlug: string;
+  priceAtBooking: number;
+  options: BookingServiceOptionItem[];
 }
 
 export interface BookingCustomerInfo {
-  id: string;
-  name: string;
-  email: string;
+  userId: string;
   phone: string;
+  name: string;
 }
 
 export interface BookingVehicleInfo {
-  id: string;
   make: string;
   model: string;
-  year: number;
-  colour: string;
   rego: string;
 }
 
@@ -146,6 +151,18 @@ export interface CustomerProfile {
   notes: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface VehicleFormData {
+  make: string;
+  model: string;
+  year: number;
+  colour: string;
+  rego: string;
+  paintType: string;
+  conditionNotes: string;
+  isPrimary: boolean;
+  vehicleCategoryId: string;
 }
 
 export interface Vehicle {
@@ -182,6 +199,15 @@ export interface ProductUsed {
   createdAt: string;
 }
 
+export interface ServicePhoto {
+  id: string;
+  serviceRecordId: string;
+  photoType: string;
+  url: string;
+  caption: string;
+  createdAt: string;
+}
+
 export interface ServiceRecord {
   id: string;
   bookingId: string;
@@ -190,6 +216,7 @@ export interface ServiceRecord {
   completedDate: string;
   notes: ServiceNote[];
   products: ProductUsed[];
+  photos: ServicePhoto[];
   createdAt: string;
   updatedAt: string;
 }

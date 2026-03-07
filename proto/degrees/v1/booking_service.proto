@@ -34,6 +34,7 @@ message Booking {
 message BookingCustomerInfo {
   int64 user_id = 1;
   string phone = 2;
+  string name = 3;
 }
 
 message BookingVehicleInfo {

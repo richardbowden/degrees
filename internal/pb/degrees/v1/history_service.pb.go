@@ -967,6 +967,118 @@ func (x *AddProductUsedResponse) GetProduct() *ProductUsed {
 	return nil
 }
 
+type AddServicePhotoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	PhotoType     string                 `protobuf:"bytes,2,opt,name=photo_type,json=photoType,proto3" json:"photo_type,omitempty"`
+	Url           string                 `protobuf:"bytes,3,opt,name=url,proto3" json:"url,omitempty"`
+	Caption       string                 `protobuf:"bytes,4,opt,name=caption,proto3" json:"caption,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddServicePhotoRequest) Reset() {
+	*x = AddServicePhotoRequest{}
+	mi := &file_degrees_v1_history_service_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddServicePhotoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddServicePhotoRequest) ProtoMessage() {}
+
+func (x *AddServicePhotoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_history_service_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddServicePhotoRequest.ProtoReflect.Descriptor instead.
+func (*AddServicePhotoRequest) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_history_service_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *AddServicePhotoRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *AddServicePhotoRequest) GetPhotoType() string {
+	if x != nil {
+		return x.PhotoType
+	}
+	return ""
+}
+
+func (x *AddServicePhotoRequest) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *AddServicePhotoRequest) GetCaption() string {
+	if x != nil {
+		return x.Caption
+	}
+	return ""
+}
+
+type AddServicePhotoResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Photo         *ServicePhoto          `protobuf:"bytes,1,opt,name=photo,proto3" json:"photo,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddServicePhotoResponse) Reset() {
+	*x = AddServicePhotoResponse{}
+	mi := &file_degrees_v1_history_service_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddServicePhotoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddServicePhotoResponse) ProtoMessage() {}
+
+func (x *AddServicePhotoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_degrees_v1_history_service_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddServicePhotoResponse.ProtoReflect.Descriptor instead.
+func (*AddServicePhotoResponse) Descriptor() ([]byte, []int) {
+	return file_degrees_v1_history_service_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *AddServicePhotoResponse) GetPhoto() *ServicePhoto {
+	if x != nil {
+		return x.Photo
+	}
+	return nil
+}
+
 var File_degrees_v1_history_service_proto protoreflect.FileDescriptor
 
 const file_degrees_v1_history_service_proto_rawDesc = "" +
@@ -1047,14 +1159,23 @@ const file_degrees_v1_history_service_proto_rawDesc = "" +
 	"\fproduct_name\x18\x02 \x01(\tR\vproductName\x12\x14\n" +
 	"\x05notes\x18\x03 \x01(\tR\x05notes\"K\n" +
 	"\x16AddProductUsedResponse\x121\n" +
-	"\aproduct\x18\x01 \x01(\v2\x17.degrees.v1.ProductUsedR\aproduct2\xb5\x06\n" +
+	"\aproduct\x18\x01 \x01(\v2\x17.degrees.v1.ProductUsedR\aproduct\"s\n" +
+	"\x16AddServicePhotoRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
+	"\n" +
+	"photo_type\x18\x02 \x01(\tR\tphotoType\x12\x10\n" +
+	"\x03url\x18\x03 \x01(\tR\x03url\x12\x18\n" +
+	"\acaption\x18\x04 \x01(\tR\acaption\"I\n" +
+	"\x17AddServicePhotoResponse\x12.\n" +
+	"\x05photo\x18\x01 \x01(\v2\x18.degrees.v1.ServicePhotoR\x05photo2\xc0\a\n" +
 	"\x0eHistoryService\x12p\n" +
 	"\rListMyHistory\x12 .degrees.v1.ListMyHistoryRequest\x1a!.degrees.v1.ListMyHistoryResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/api/v1/me/history\x12~\n" +
 	"\x10GetServiceRecord\x12#.degrees.v1.GetServiceRecordRequest\x1a$.degrees.v1.GetServiceRecordResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/me/history/{id}\x12\x94\x01\n" +
 	"\x13ListCustomerHistory\x12&.degrees.v1.ListCustomerHistoryRequest\x1a'.degrees.v1.ListCustomerHistoryResponse\",\x82\xd3\xe4\x93\x02&\x12$/api/v1/admin/customers/{id}/history\x12\x88\x01\n" +
 	"\x13CreateServiceRecord\x12&.degrees.v1.CreateServiceRecordRequest\x1a'.degrees.v1.CreateServiceRecordResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/api/v1/admin/records\x12\x84\x01\n" +
 	"\x0eAddServiceNote\x12!.degrees.v1.AddServiceNoteRequest\x1a\".degrees.v1.AddServiceNoteResponse\"+\x82\xd3\xe4\x93\x02%:\x01*\" /api/v1/admin/records/{id}/notes\x12\x87\x01\n" +
-	"\x0eAddProductUsed\x12!.degrees.v1.AddProductUsedRequest\x1a\".degrees.v1.AddProductUsedResponse\".\x82\xd3\xe4\x93\x02(:\x01*\"#/api/v1/admin/records/{id}/productsB\xb1\x01\n" +
+	"\x0eAddProductUsed\x12!.degrees.v1.AddProductUsedRequest\x1a\".degrees.v1.AddProductUsedResponse\".\x82\xd3\xe4\x93\x02(:\x01*\"#/api/v1/admin/records/{id}/products\x12\x88\x01\n" +
+	"\x0fAddServicePhoto\x12\".degrees.v1.AddServicePhotoRequest\x1a#.degrees.v1.AddServicePhotoResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/api/v1/admin/records/{id}/photosB\xb1\x01\n" +
 	"\x0ecom.degrees.v1B\x13HistoryServiceProtoP\x01ZAgithub.com/richardbowden/degrees/internal/pb/degrees/v1;degreesv1\xa2\x02\x03DXX\xaa\x02\n" +
 	"Degrees.V1\xca\x02\n" +
 	"Degrees\\V1\xe2\x02\x16Degrees\\V1\\GPBMetadata\xea\x02\vDegrees::V1b\x06proto3"
@@ -1071,7 +1192,7 @@ func file_degrees_v1_history_service_proto_rawDescGZIP() []byte {
 	return file_degrees_v1_history_service_proto_rawDescData
 }
 
-var file_degrees_v1_history_service_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_degrees_v1_history_service_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_degrees_v1_history_service_proto_goTypes = []any{
 	(*ServiceRecord)(nil),               // 0: degrees.v1.ServiceRecord
 	(*ServiceNote)(nil),                 // 1: degrees.v1.ServiceNote
@@ -1089,41 +1210,46 @@ var file_degrees_v1_history_service_proto_goTypes = []any{
 	(*AddServiceNoteResponse)(nil),      // 13: degrees.v1.AddServiceNoteResponse
 	(*AddProductUsedRequest)(nil),       // 14: degrees.v1.AddProductUsedRequest
 	(*AddProductUsedResponse)(nil),      // 15: degrees.v1.AddProductUsedResponse
-	(*timestamppb.Timestamp)(nil),       // 16: google.protobuf.Timestamp
+	(*AddServicePhotoRequest)(nil),      // 16: degrees.v1.AddServicePhotoRequest
+	(*AddServicePhotoResponse)(nil),     // 17: degrees.v1.AddServicePhotoResponse
+	(*timestamppb.Timestamp)(nil),       // 18: google.protobuf.Timestamp
 }
 var file_degrees_v1_history_service_proto_depIdxs = []int32{
-	16, // 0: degrees.v1.ServiceRecord.completed_date:type_name -> google.protobuf.Timestamp
+	18, // 0: degrees.v1.ServiceRecord.completed_date:type_name -> google.protobuf.Timestamp
 	1,  // 1: degrees.v1.ServiceRecord.notes:type_name -> degrees.v1.ServiceNote
 	2,  // 2: degrees.v1.ServiceRecord.products:type_name -> degrees.v1.ProductUsed
 	3,  // 3: degrees.v1.ServiceRecord.photos:type_name -> degrees.v1.ServicePhoto
-	16, // 4: degrees.v1.ServiceRecord.created_at:type_name -> google.protobuf.Timestamp
-	16, // 5: degrees.v1.ServiceRecord.updated_at:type_name -> google.protobuf.Timestamp
-	16, // 6: degrees.v1.ServiceNote.created_at:type_name -> google.protobuf.Timestamp
-	16, // 7: degrees.v1.ServicePhoto.created_at:type_name -> google.protobuf.Timestamp
+	18, // 4: degrees.v1.ServiceRecord.created_at:type_name -> google.protobuf.Timestamp
+	18, // 5: degrees.v1.ServiceRecord.updated_at:type_name -> google.protobuf.Timestamp
+	18, // 6: degrees.v1.ServiceNote.created_at:type_name -> google.protobuf.Timestamp
+	18, // 7: degrees.v1.ServicePhoto.created_at:type_name -> google.protobuf.Timestamp
 	0,  // 8: degrees.v1.ListMyHistoryResponse.records:type_name -> degrees.v1.ServiceRecord
 	0,  // 9: degrees.v1.GetServiceRecordResponse.record:type_name -> degrees.v1.ServiceRecord
 	0,  // 10: degrees.v1.ListCustomerHistoryResponse.records:type_name -> degrees.v1.ServiceRecord
-	16, // 11: degrees.v1.CreateServiceRecordRequest.completed_date:type_name -> google.protobuf.Timestamp
+	18, // 11: degrees.v1.CreateServiceRecordRequest.completed_date:type_name -> google.protobuf.Timestamp
 	0,  // 12: degrees.v1.CreateServiceRecordResponse.record:type_name -> degrees.v1.ServiceRecord
 	1,  // 13: degrees.v1.AddServiceNoteResponse.note:type_name -> degrees.v1.ServiceNote
 	2,  // 14: degrees.v1.AddProductUsedResponse.product:type_name -> degrees.v1.ProductUsed
-	4,  // 15: degrees.v1.HistoryService.ListMyHistory:input_type -> degrees.v1.ListMyHistoryRequest
-	6,  // 16: degrees.v1.HistoryService.GetServiceRecord:input_type -> degrees.v1.GetServiceRecordRequest
-	8,  // 17: degrees.v1.HistoryService.ListCustomerHistory:input_type -> degrees.v1.ListCustomerHistoryRequest
-	10, // 18: degrees.v1.HistoryService.CreateServiceRecord:input_type -> degrees.v1.CreateServiceRecordRequest
-	12, // 19: degrees.v1.HistoryService.AddServiceNote:input_type -> degrees.v1.AddServiceNoteRequest
-	14, // 20: degrees.v1.HistoryService.AddProductUsed:input_type -> degrees.v1.AddProductUsedRequest
-	5,  // 21: degrees.v1.HistoryService.ListMyHistory:output_type -> degrees.v1.ListMyHistoryResponse
-	7,  // 22: degrees.v1.HistoryService.GetServiceRecord:output_type -> degrees.v1.GetServiceRecordResponse
-	9,  // 23: degrees.v1.HistoryService.ListCustomerHistory:output_type -> degrees.v1.ListCustomerHistoryResponse
-	11, // 24: degrees.v1.HistoryService.CreateServiceRecord:output_type -> degrees.v1.CreateServiceRecordResponse
-	13, // 25: degrees.v1.HistoryService.AddServiceNote:output_type -> degrees.v1.AddServiceNoteResponse
-	15, // 26: degrees.v1.HistoryService.AddProductUsed:output_type -> degrees.v1.AddProductUsedResponse
-	21, // [21:27] is the sub-list for method output_type
-	15, // [15:21] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	3,  // 15: degrees.v1.AddServicePhotoResponse.photo:type_name -> degrees.v1.ServicePhoto
+	4,  // 16: degrees.v1.HistoryService.ListMyHistory:input_type -> degrees.v1.ListMyHistoryRequest
+	6,  // 17: degrees.v1.HistoryService.GetServiceRecord:input_type -> degrees.v1.GetServiceRecordRequest
+	8,  // 18: degrees.v1.HistoryService.ListCustomerHistory:input_type -> degrees.v1.ListCustomerHistoryRequest
+	10, // 19: degrees.v1.HistoryService.CreateServiceRecord:input_type -> degrees.v1.CreateServiceRecordRequest
+	12, // 20: degrees.v1.HistoryService.AddServiceNote:input_type -> degrees.v1.AddServiceNoteRequest
+	14, // 21: degrees.v1.HistoryService.AddProductUsed:input_type -> degrees.v1.AddProductUsedRequest
+	16, // 22: degrees.v1.HistoryService.AddServicePhoto:input_type -> degrees.v1.AddServicePhotoRequest
+	5,  // 23: degrees.v1.HistoryService.ListMyHistory:output_type -> degrees.v1.ListMyHistoryResponse
+	7,  // 24: degrees.v1.HistoryService.GetServiceRecord:output_type -> degrees.v1.GetServiceRecordResponse
+	9,  // 25: degrees.v1.HistoryService.ListCustomerHistory:output_type -> degrees.v1.ListCustomerHistoryResponse
+	11, // 26: degrees.v1.HistoryService.CreateServiceRecord:output_type -> degrees.v1.CreateServiceRecordResponse
+	13, // 27: degrees.v1.HistoryService.AddServiceNote:output_type -> degrees.v1.AddServiceNoteResponse
+	15, // 28: degrees.v1.HistoryService.AddProductUsed:output_type -> degrees.v1.AddProductUsedResponse
+	17, // 29: degrees.v1.HistoryService.AddServicePhoto:output_type -> degrees.v1.AddServicePhotoResponse
+	23, // [23:30] is the sub-list for method output_type
+	16, // [16:23] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_degrees_v1_history_service_proto_init() }
@@ -1137,7 +1263,7 @@ func file_degrees_v1_history_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_degrees_v1_history_service_proto_rawDesc), len(file_degrees_v1_history_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

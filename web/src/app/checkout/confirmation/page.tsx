@@ -15,7 +15,7 @@ export default async function ConfirmationPage({ searchParams }: Props) {
       </div>
       <h1 className="text-2xl font-bold mb-2">Booking Confirmed</h1>
       <p className="text-text-secondary mb-2">
-        Your booking has been confirmed and your deposit received.
+        Your booking is confirmed. We&apos;ll collect the deposit when we arrive.
       </p>
       {bookingId && (
         <p className="text-sm text-text-muted mb-8">Booking ID: {bookingId}</p>

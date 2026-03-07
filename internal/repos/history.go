@@ -114,6 +114,19 @@ func (r *History) ListServiceProductsUsed(ctx context.Context, serviceRecordID i
 	return products, nil
 }
 
+func (r *History) CreateServicePhoto(ctx context.Context, serviceRecordID int64, photoType, url, caption string) (services.ServicePhoto, error) {
+	dbPhoto, err := r.store.CreateServicePhoto(ctx, dbpg.CreateServicePhotoParams{
+		ServiceRecordID: serviceRecordID,
+		PhotoType:       photoType,
+		Url:             url,
+		Caption:         dbpg.StringToPGString(caption),
+	})
+	if err != nil {
+		return services.ServicePhoto{}, err
+	}
+	return dbPhotoToService(dbPhoto), nil
+}
+
 func (r *History) ListServicePhotos(ctx context.Context, serviceRecordID int64) ([]services.ServicePhoto, error) {
 	dbPhotos, err := r.store.ListServicePhotos(ctx, dbpg.ListServicePhotosParams{
 		ServiceRecordID: serviceRecordID,

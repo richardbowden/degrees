@@ -18,12 +18,14 @@ type BookingRepository interface {
 	GetBookingByID(ctx context.Context, id int64) (dbpg.GetBookingByIDRow, error)
 	ListBookingsByCustomer(ctx context.Context, customerID int64) ([]dbpg.Booking, error)
 	ListBookingsByDateRange(ctx context.Context, params dbpg.ListBookingsByDateRangeParams) ([]dbpg.Booking, error)
+	ListAllBookingsAdmin(ctx context.Context, params dbpg.ListAllBookingsAdminParams) ([]dbpg.ListAllBookingsAdminRow, error)
 	ListBookingsForDate(ctx context.Context, params dbpg.ListBookingsForDateParams) ([]dbpg.Booking, error)
 	UpdateBookingStatus(ctx context.Context, params dbpg.UpdateBookingStatusParams) (dbpg.Booking, error)
 	UpdateBookingPaymentStatus(ctx context.Context, params dbpg.UpdateBookingPaymentStatusParams) (dbpg.Booking, error)
 	ListBookingServices(ctx context.Context, bookingID int64) ([]dbpg.ListBookingServicesRow, error)
 	ListBookingServiceOptions(ctx context.Context, bookingServiceID int64) ([]dbpg.ListBookingServiceOptionsRow, error)
 	GetCartByUserID(ctx context.Context, userID int64) (dbpg.CartSession, error)
+	GetCartBySessionToken(ctx context.Context, token string) (dbpg.CartSession, error)
 	ListCartItems(ctx context.Context, cartSessionID int64) ([]dbpg.ListCartItemsRow, error)
 	ClearCart(ctx context.Context, cartSessionID int64) error
 	GetCustomerProfileByUserID(ctx context.Context, userID int64) (dbpg.CustomerProfile, error)
@@ -43,11 +45,12 @@ func NewBookingService(repo BookingRepository) *BookingService {
 }
 
 type CreateBookingFromCartParams struct {
-	UserID        int64
-	VehicleID     int64
-	ScheduledDate string // YYYY-MM-DD
-	ScheduledTime string // HH:MM
-	Notes         string
+	UserID           int64
+	VehicleID        int64
+	ScheduledDate    string // YYYY-MM-DD
+	ScheduledTime    string // HH:MM
+	Notes            string
+	CartSessionToken string // fallback: look up cart by session token if user cart not found
 }
 
 func (s *BookingService) CreateBookingFromCart(ctx context.Context, params CreateBookingFromCartParams) (*dbpg.Booking, error) {
@@ -78,8 +81,11 @@ func (s *BookingService) CreateBookingFromCart(ctx context.Context, params Creat
 		return nil, problems.New(problems.InvalidRequest, "invalid time format, expected HH:MM")
 	}
 
-	// Get user's cart
+	// Get user's cart — first by user ID, then fall back to session token.
 	cart, err := s.repo.GetCartByUserID(ctx, params.UserID)
+	if errors.Is(err, ErrNoRecord) && params.CartSessionToken != "" {
+		cart, err = s.repo.GetCartBySessionToken(ctx, params.CartSessionToken)
+	}
 	if err != nil {
 		if errors.Is(err, ErrNoRecord) {
 			return nil, problems.New(problems.NotExist, "no active cart found")
@@ -138,7 +144,7 @@ func (s *BookingService) CreateBookingFromCart(ctx context.Context, params Creat
 		ScheduledDate:         pgDate,
 		ScheduledTime:         pgTime,
 		EstimatedDurationMins: totalDuration,
-		Status:                dbpg.BookingStatusPendingPayment,
+		Status:                dbpg.BookingStatusConfirmed,
 		PaymentStatus:         dbpg.PaymentStatusPending,
 		Subtotal:              subtotal,
 		DepositAmount:         depositAmount,
@@ -224,7 +230,13 @@ func (s *BookingService) ListMyBookings(ctx context.Context, userID int64) ([]db
 	return bookings, nil
 }
 
-func (s *BookingService) ListAllBookings(ctx context.Context, dateFrom, dateTo string) ([]dbpg.Booking, error) {
+func (s *BookingService) ListAllBookings(ctx context.Context, dateFrom, dateTo string) ([]dbpg.ListAllBookingsAdminRow, error) {
+	if dateFrom == "" {
+		dateFrom = "2020-01-01"
+	}
+	if dateTo == "" {
+		dateTo = "2099-12-31"
+	}
 	fromDate, err := time.Parse("2006-01-02", dateFrom)
 	if err != nil {
 		return nil, problems.New(problems.InvalidRequest, "invalid date_from format, expected YYYY-MM-DD")
@@ -234,7 +246,7 @@ func (s *BookingService) ListAllBookings(ctx context.Context, dateFrom, dateTo s
 		return nil, problems.New(problems.InvalidRequest, "invalid date_to format, expected YYYY-MM-DD")
 	}
 
-	bookings, err := s.repo.ListBookingsByDateRange(ctx, dbpg.ListBookingsByDateRangeParams{
+	bookings, err := s.repo.ListAllBookingsAdmin(ctx, dbpg.ListAllBookingsAdminParams{
 		ScheduledDate:   pgtype.Date{Time: fromDate, Valid: true},
 		ScheduledDate_2: pgtype.Date{Time: toDate, Valid: true},
 	})

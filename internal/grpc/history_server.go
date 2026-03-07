@@ -175,6 +175,36 @@ func (s *HistoryServiceServer) AddProductUsed(ctx context.Context, req *pb.AddPr
 	}, nil
 }
 
+func (s *HistoryServiceServer) AddServicePhoto(ctx context.Context, req *pb.AddServicePhotoRequest) (*pb.AddServicePhotoResponse, error) {
+	userID, ok := GetUserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+
+	if req.Id == 0 {
+		return nil, status.Error(codes.InvalidArgument, "service record id is required")
+	}
+	if req.Url == "" {
+		return nil, status.Error(codes.InvalidArgument, "url is required")
+	}
+
+	photo, err := s.historySvc.AddServicePhoto(ctx, userID, req.Id, req.PhotoType, req.Url, req.Caption)
+	if err != nil {
+		return nil, ToGRPCError(err)
+	}
+
+	return &pb.AddServicePhotoResponse{
+		Photo: &pb.ServicePhoto{
+			Id:              photo.ID,
+			ServiceRecordId: photo.ServiceRecordID,
+			PhotoType:       photo.PhotoType,
+			Url:             photo.URL,
+			Caption:         photo.Caption,
+			CreatedAt:       timestamppb.New(photo.CreatedAt),
+		},
+	}, nil
+}
+
 func serviceRecordDetailToPB(d *services.ServiceRecordDetail) *pb.ServiceRecord {
 	notes := make([]*pb.ServiceNote, len(d.Notes))
 	for i, n := range d.Notes {

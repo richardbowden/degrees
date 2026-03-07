@@ -65,6 +65,27 @@ export default async function HistoryDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
         )}
+
+        {record.photos && record.photos.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold text-foreground mb-4">Photos</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {record.photos.map(photo => (
+                <div key={photo.id} className="glass-card overflow-hidden">
+                  <img
+                    src={photo.url}
+                    alt={photo.caption || photo.photoType}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-3">
+                    <span className="text-xs font-medium text-brand-400 uppercase">{photo.photoType}</span>
+                    {photo.caption && <p className="text-sm text-text-secondary mt-1">{photo.caption}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

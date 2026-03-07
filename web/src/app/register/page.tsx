@@ -10,10 +10,16 @@ export default function RegisterPage() {
   if (state?.success) {
     return (
       <div className="max-w-md mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold mb-4">Account Created</h1>
-        <p className="text-text-secondary mb-6">{state.success}</p>
-        <Link href="/login" className="text-brand-400 font-medium hover:underline">
-          Go to login
+        <div className="w-16 h-16 bg-brand-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <span className="text-brand-400 text-3xl">✉</span>
+        </div>
+        <h1 className="text-2xl font-bold mb-3">Check Your Email</h1>
+        <p className="text-text-secondary mb-2">{state.success}</p>
+        <p className="text-sm text-text-muted mb-8">
+          Click the link in the email to verify your account, then sign in.
+        </p>
+        <Link href="/login" className="text-brand-400 font-medium hover:underline text-sm">
+          Already verified? Sign in
         </Link>
       </div>
     );

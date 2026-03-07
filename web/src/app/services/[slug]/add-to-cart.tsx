@@ -11,16 +11,27 @@ export function AddToCart({ service }: { service: DetailingService }) {
   const router = useRouter();
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(1);
+  const [selectedTierId, setSelectedTierId] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const hasTiers = (service.priceTiers ?? []).length > 0;
+  const selectedTier = hasTiers
+    ? (service.priceTiers ?? []).find(t => t.vehicleCategoryId === selectedTierId) ?? null
+    : null;
+
+  const basePrice = selectedTier ? Number(selectedTier.price) : Number(service.basePrice);
   const optionsTotal = (service.options ?? [])
     .filter(o => selectedOptions.includes(o.id))
     .reduce((sum, o) => sum + Number(o.price), 0);
-  const total = (Number(service.basePrice) + optionsTotal) * quantity;
+  const total = (basePrice + optionsTotal) * quantity;
 
   async function handleAdd() {
+    if (hasTiers && !selectedTierId) {
+      setError('Please select your vehicle size to continue.');
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -44,6 +55,33 @@ export function AddToCart({ service }: { service: DetailingService }) {
 
   return (
     <div className="space-y-6">
+      {hasTiers && (
+        <div>
+          <label className="block text-sm font-medium text-text-secondary mb-2">
+            Vehicle Size <span className="text-red-400">*</span>
+          </label>
+          <div className="space-y-2">
+            {(service.priceTiers ?? []).map(tier => (
+              <button
+                key={tier.vehicleCategoryId}
+                type="button"
+                onClick={() => { setSelectedTierId(tier.vehicleCategoryId); setError(null); }}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded border text-sm transition-colors ${
+                  selectedTierId === tier.vehicleCategoryId
+                    ? 'border-brand-500 bg-brand-500/10 text-foreground'
+                    : 'border-border-subtle hover:border-brand-500/50 text-text-secondary hover:text-foreground'
+                }`}
+              >
+                <span className="font-medium">{tier.categoryName}</span>
+                <span className={`font-bold ${selectedTierId === tier.vehicleCategoryId ? 'text-brand-400' : ''}`}>
+                  {formatPrice(tier.price)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <OptionPicker
         options={service.options ?? []}
         selectedIds={selectedOptions}
@@ -74,7 +112,12 @@ export function AddToCart({ service }: { service: DetailingService }) {
       <div className="border-t border-border-subtle pt-4">
         <div className="flex items-center justify-between mb-4">
           <span className="text-lg font-semibold">Total</span>
-          <span className="text-lg font-bold text-brand-400">{formatPrice(total)}</span>
+          <div className="text-right">
+            <span className="text-lg font-bold text-brand-400">{formatPrice(total)}</span>
+            {hasTiers && !selectedTier && (
+              <p className="text-xs text-text-muted">Select size above</p>
+            )}
+          </div>
         </div>
 
         {error && (

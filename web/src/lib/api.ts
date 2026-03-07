@@ -47,7 +47,12 @@ export async function api<T = unknown>(path: string, opts?: {
     const body = await res.json().catch(() => ({ status: res.status, title: 'Error', detail: res.statusText }));
     // Handle both RFC 7807 (detail) and gRPC-gateway (message) error formats
     const detail = body.detail || body.message || res.statusText;
-    throw { status: body.status ?? res.status, title: body.title || 'Error', detail, errors: body.errors } as ApiError;
+    const err = { status: body.status ?? res.status, title: body.title || 'Error', detail, errors: body.errors } as ApiError;
+    // On the client, redirect to login on auth failures rather than surfacing the error
+    if (!isServer && (err.status === 401 || err.status === 403)) {
+      window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+    }
+    throw err;
   }
 
   if (res.status === 204) return undefined as T;

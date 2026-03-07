@@ -1,79 +1,125 @@
-'use client';
-
-import { useState, use } from 'react';
-import { useRouter } from 'next/navigation';
-import { api, ApiError } from '@/lib/api';
-import { formatPrice } from '@/lib/format';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { api } from '@/lib/api';
+import { formatPrice, formatDate, formatTime } from '@/lib/format';
+import type { Booking } from '@/lib/types';
 
 interface Props {
   searchParams: Promise<{ booking_id?: string }>;
 }
 
-export default function DepositPage({ searchParams }: Props) {
-  const params = use(searchParams);
-  const router = useRouter();
+export default async function DepositPage({ searchParams }: Props) {
+  const params = await searchParams;
   const bookingId = params.booking_id ?? '';
-  const [loading, setLoading] = useState(false);
-  const [depositAmount, setDepositAmount] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  async function handlePayDeposit() {
-    if (!bookingId) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await api<{ clientSecret: string; depositAmount: number }>('/checkout/deposit', {
-        method: 'POST',
-        body: { bookingId: bookingId },
-      });
-      setDepositAmount(data.depositAmount);
-      // Stripe integration TBD - for now redirect to confirmation
-      router.push(`/checkout/confirmation?booking_id=${bookingId}`);
-    } catch (err: unknown) {
-      const apiErr = err as ApiError;
-      setError(apiErr.detail || 'Failed to process deposit');
-      setLoading(false);
-    }
-  }
 
   if (!bookingId) {
-    return (
-      <div className="max-w-md mx-auto px-4 py-16 text-center">
-        <p className="text-text-muted">No booking ID provided.</p>
-      </div>
-    );
+    redirect('/account/bookings');
   }
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get('session_token')?.value;
+  if (!token) {
+    redirect('/login');
+  }
+
+  let booking: Booking | null = null;
+  try {
+    const res = await api<{ booking: Booking }>(`/me/bookings/${bookingId}`, { token });
+    booking = res.booking;
+  } catch {
+    // If we can't fetch booking details, still show a basic confirmation
+  }
+
+  const depositAmount = booking ? Number(booking.depositAmount) : 0;
+  const totalAmount = booking ? Number(booking.totalAmount) : 0;
 
   return (
     <div className="max-w-md mx-auto px-4 py-16">
-      <h1 className="text-2xl font-bold mb-4">Pay Deposit</h1>
-      <p className="text-text-secondary mb-6">
-        A 30% deposit is required to confirm your booking.
-      </p>
-
-      <div className="glass-card p-6 mb-6">
-        <p className="text-sm text-text-muted">Booking</p>
-        <p className="font-mono text-sm mb-4">{bookingId}</p>
-        {depositAmount !== null && (
-          <div>
-            <p className="text-sm text-text-muted">Deposit Amount</p>
-            <p className="text-xl font-bold text-brand-400">{formatPrice(depositAmount)}</p>
-          </div>
-        )}
+      <div className="w-16 h-16 bg-brand-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+        <span className="text-brand-400 text-2xl">&#10003;</span>
       </div>
 
-      {error && (
-        <p className="text-red-400 text-sm mb-4">{error}</p>
+      <h1 className="text-2xl font-bold text-center mb-2">Booking Confirmed!</h1>
+      <p className="text-text-secondary text-center mb-8">
+        We&apos;ll see you on the day. Payment is collected when we arrive.
+      </p>
+
+      {booking && (
+        <div className="border border-border-subtle rounded-lg divide-y divide-border-subtle mb-8">
+          {/* Services */}
+          {(booking.services ?? []).length > 0 && (
+            <div className="p-4">
+              <p className="text-xs text-text-muted uppercase tracking-wide mb-2">Services</p>
+              <div className="space-y-1">
+                {booking.services.map((svc, i) => (
+                  <div key={i} className="flex justify-between text-sm">
+                    <span className="text-foreground">{svc.serviceName}</span>
+                    <span className="text-text-secondary">{formatPrice(svc.priceAtBooking)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Date & Time */}
+          {(booking.scheduledDate || booking.scheduledTime) && (
+            <div className="p-4 grid grid-cols-2 gap-4">
+              {booking.scheduledDate && (
+                <div>
+                  <p className="text-xs text-text-muted uppercase tracking-wide mb-1">Date</p>
+                  <p className="text-sm text-foreground">{formatDate(booking.scheduledDate)}</p>
+                </div>
+              )}
+              {booking.scheduledTime && (
+                <div>
+                  <p className="text-xs text-text-muted uppercase tracking-wide mb-1">Time</p>
+                  <p className="text-sm text-foreground">{formatTime(booking.scheduledTime)}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Vehicle */}
+          {booking.vehicle && (booking.vehicle.make || booking.vehicle.model) && (
+            <div className="p-4">
+              <p className="text-xs text-text-muted uppercase tracking-wide mb-1">Vehicle</p>
+              <p className="text-sm text-foreground">
+                {[booking.vehicle.make, booking.vehicle.model, booking.vehicle.rego && `(${booking.vehicle.rego})`]
+                  .filter(Boolean)
+                  .join(' ')}
+              </p>
+            </div>
+          )}
+
+          {/* Payment */}
+          <div className="p-4 space-y-1">
+            <div className="flex justify-between text-sm">
+              <span className="text-text-secondary">Total</span>
+              <span>{formatPrice(totalAmount)}</span>
+            </div>
+            <div className="flex justify-between text-sm font-medium text-brand-400">
+              <span>Deposit due on arrival (30%)</span>
+              <span>{formatPrice(depositAmount)}</span>
+            </div>
+          </div>
+        </div>
       )}
 
-      <button
-        type="button"
-        onClick={handlePayDeposit}
-        disabled={loading}
-        className="w-full btn-brand py-3"
-      >
-        {loading ? 'Processing...' : 'Pay Deposit'}
-      </button>
+      {!booking && (
+        <div className="border border-border-subtle rounded p-4 mb-8 text-sm text-text-secondary text-center">
+          <p className="font-mono">{bookingId}</p>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-3">
+        <Link href="/account/bookings" className="block w-full btn-brand text-center py-3">
+          View My Bookings
+        </Link>
+        <Link href="/services" className="text-center text-sm text-text-secondary hover:underline">
+          Browse more services
+        </Link>
+      </div>
     </div>
   );
 }

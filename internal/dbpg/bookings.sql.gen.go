@@ -193,6 +193,92 @@ func (q *Queries) GetBookingByID(ctx context.Context, arg GetBookingByIDParams) 
 	return i, err
 }
 
+const listAllBookingsAdmin = `-- name: ListAllBookingsAdmin :many
+SELECT b.id, b.customer_id, b.vehicle_id, b.scheduled_date, b.scheduled_time, b.estimated_duration_mins, b.status, b.payment_status, b.subtotal, b.deposit_amount, b.total_amount, b.stripe_payment_intent_id, b.stripe_deposit_intent_id, b.notes, b.created_at, b.updated_at,
+       trim(u.first_name || ' ' || COALESCE(u.surname, '')) AS customer_name,
+       cp.phone AS customer_phone,
+       v.make AS vehicle_make,
+       v.model AS vehicle_model,
+       v.rego AS vehicle_rego
+FROM bookings b
+JOIN customer_profiles cp ON cp.id = b.customer_id
+JOIN users u ON u.id = cp.user_id
+LEFT JOIN vehicles v ON v.id = b.vehicle_id
+WHERE b.scheduled_date >= $1 AND b.scheduled_date <= $2
+ORDER BY b.scheduled_date DESC, b.scheduled_time DESC
+`
+
+type ListAllBookingsAdminParams struct {
+	ScheduledDate   pgtype.Date
+	ScheduledDate_2 pgtype.Date
+}
+
+type ListAllBookingsAdminRow struct {
+	ID                    int64
+	CustomerID            int64
+	VehicleID             pgtype.Int8
+	ScheduledDate         pgtype.Date
+	ScheduledTime         pgtype.Time
+	EstimatedDurationMins int32
+	Status                BookingStatus
+	PaymentStatus         PaymentStatus
+	Subtotal              int64
+	DepositAmount         int64
+	TotalAmount           int64
+	StripePaymentIntentID pgtype.Text
+	StripeDepositIntentID pgtype.Text
+	Notes                 pgtype.Text
+	CreatedAt             pgtype.Timestamptz
+	UpdatedAt             pgtype.Timestamptz
+	CustomerName          string
+	CustomerPhone         pgtype.Text
+	VehicleMake           pgtype.Text
+	VehicleModel          pgtype.Text
+	VehicleRego           pgtype.Text
+}
+
+func (q *Queries) ListAllBookingsAdmin(ctx context.Context, arg ListAllBookingsAdminParams) ([]ListAllBookingsAdminRow, error) {
+	rows, err := q.db.Query(ctx, listAllBookingsAdmin, arg.ScheduledDate, arg.ScheduledDate_2)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListAllBookingsAdminRow
+	for rows.Next() {
+		var i ListAllBookingsAdminRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.CustomerID,
+			&i.VehicleID,
+			&i.ScheduledDate,
+			&i.ScheduledTime,
+			&i.EstimatedDurationMins,
+			&i.Status,
+			&i.PaymentStatus,
+			&i.Subtotal,
+			&i.DepositAmount,
+			&i.TotalAmount,
+			&i.StripePaymentIntentID,
+			&i.StripeDepositIntentID,
+			&i.Notes,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CustomerName,
+			&i.CustomerPhone,
+			&i.VehicleMake,
+			&i.VehicleModel,
+			&i.VehicleRego,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listBookingServiceOptions = `-- name: ListBookingServiceOptions :many
 SELECT bso.id, bso.booking_service_id, bso.service_option_id,
        bso.price_at_booking,

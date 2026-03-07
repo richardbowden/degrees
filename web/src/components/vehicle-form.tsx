@@ -2,24 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
-import { Vehicle, VehicleCategory } from '@/lib/types';
+import { Vehicle, VehicleCategory, VehicleFormData } from '@/lib/types';
+
+export type { VehicleFormData };
 
 interface VehicleFormProps {
   vehicle?: Vehicle;
   onSubmit: (data: VehicleFormData) => void;
   onCancel: () => void;
-}
-
-export interface VehicleFormData {
-  make: string;
-  model: string;
-  year: number;
-  colour: string;
-  rego: string;
-  paintType: string;
-  conditionNotes: string;
-  isPrimary: boolean;
-  vehicleCategoryId: string;
 }
 
 export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
@@ -33,15 +23,23 @@ export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
   const [isPrimary, setIsPrimary] = useState(vehicle?.isPrimary ?? false);
   const [vehicleCategoryId, setVehicleCategoryId] = useState(vehicle?.vehicleCategoryId ?? '');
   const [vehicleCategories, setVehicleCategories] = useState<VehicleCategory[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     api<{ vehicleCategories: VehicleCategory[] }>('/catalogue/vehicle-categories')
       .then(res => setVehicleCategories(res.vehicleCategories ?? []))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setCategoriesLoading(false));
   }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!vehicleCategoryId) {
+      setFormError('Please select a vehicle size — this is needed for accurate pricing.');
+      return;
+    }
+    setFormError(null);
     onSubmit({ make, model, year, colour, rego, paintType, conditionNotes, isPrimary, vehicleCategoryId });
   }
 
@@ -75,13 +73,14 @@ export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
           <label className={labelClass}>Paint Type</label>
           <input type="text" value={paintType} onChange={e => setPaintType(e.target.value)} className={inputClass} placeholder="Metallic" />
         </div>
-        {vehicleCategories.length > 0 && (
-          <div>
-            <label className={labelClass}>Vehicle Size</label>
+        <div>
+          <label className={labelClass}>Vehicle Size <span className="text-red-400">*</span></label>
+          {categoriesLoading ? (
+            <p className="text-sm text-text-muted py-2">Loading sizes...</p>
+          ) : (
             <select
-              required
               value={vehicleCategoryId}
-              onChange={e => setVehicleCategoryId(e.target.value)}
+              onChange={e => { setVehicleCategoryId(e.target.value); setFormError(null); }}
               className={inputClass}
             >
               <option value="">Select size...</option>
@@ -89,8 +88,8 @@ export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
                 <option key={vc.id} value={vc.id}>{vc.name}</option>
               ))}
             </select>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div>
         <label className={labelClass}>Condition Notes</label>
@@ -111,6 +110,9 @@ export function VehicleForm({ vehicle, onSubmit, onCancel }: VehicleFormProps) {
         />
         Primary vehicle
       </label>
+      {formError && (
+        <p className="text-red-400 text-sm">{formError}</p>
+      )}
       <div className="flex gap-3">
         <button
           type="submit"

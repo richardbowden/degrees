@@ -6,6 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
@@ -40,12 +41,20 @@ func (s *BookingServiceServer) CreateBookingFromCart(ctx context.Context, req *p
 		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
 	}
 
+	var cartSessionToken string
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		if tokens := md.Get("x-cart-session"); len(tokens) > 0 {
+			cartSessionToken = tokens[0]
+		}
+	}
+
 	booking, err := s.bookingSvc.CreateBookingFromCart(ctx, services.CreateBookingFromCartParams{
-		UserID:        userID,
-		VehicleID:     req.VehicleId,
-		ScheduledDate: req.ScheduledDate,
-		ScheduledTime: req.ScheduledTime,
-		Notes:         req.Notes,
+		UserID:           userID,
+		VehicleID:        req.VehicleId,
+		ScheduledDate:    req.ScheduledDate,
+		ScheduledTime:    req.ScheduledTime,
+		Notes:            req.Notes,
+		CartSessionToken: cartSessionToken,
 	})
 	if err != nil {
 		return nil, ToGRPCError(err)
@@ -151,10 +160,6 @@ func (s *BookingServiceServer) CancelBooking(ctx context.Context, req *pb.Cancel
 }
 
 func (s *BookingServiceServer) ListAllBookings(ctx context.Context, req *pb.ListAllBookingsRequest) (*pb.ListAllBookingsResponse, error) {
-	if req.DateFrom == "" || req.DateTo == "" {
-		return nil, status.Error(codes.InvalidArgument, "date_from and date_to are required")
-	}
-
 	bookings, err := s.bookingSvc.ListAllBookings(ctx, req.DateFrom, req.DateTo)
 	if err != nil {
 		return nil, ToGRPCError(err)
@@ -162,12 +167,43 @@ func (s *BookingServiceServer) ListAllBookings(ctx context.Context, req *pb.List
 
 	pbBookings := make([]*pb.Booking, len(bookings))
 	for i, b := range bookings {
-		pbBookings[i] = dbBookingToProto(&b)
+		pbBookings[i] = adminBookingRowToProto(&b)
 	}
 
 	return &pb.ListAllBookingsResponse{
 		Bookings: pbBookings,
 	}, nil
+}
+
+func adminBookingRowToProto(b *dbpg.ListAllBookingsAdminRow) *pb.Booking {
+	pbBooking := &pb.Booking{
+		Id:                    b.ID,
+		CustomerId:            b.CustomerID,
+		VehicleId:             b.VehicleID.Int64,
+		ScheduledDate:         formatPGDate(b.ScheduledDate),
+		ScheduledTime:         formatPGTime(b.ScheduledTime),
+		EstimatedDurationMins: b.EstimatedDurationMins,
+		Status:                string(b.Status),
+		PaymentStatus:         string(b.PaymentStatus),
+		Subtotal:              b.Subtotal,
+		DepositAmount:         b.DepositAmount,
+		TotalAmount:           b.TotalAmount,
+		Notes:                 b.Notes.String,
+		CreatedAt:             timestampFromPG(b.CreatedAt),
+		UpdatedAt:             timestampFromPG(b.UpdatedAt),
+		Customer: &pb.BookingCustomerInfo{
+			Name:  b.CustomerName,
+			Phone: b.CustomerPhone.String,
+		},
+	}
+	if b.VehicleMake.Valid || b.VehicleModel.Valid || b.VehicleRego.Valid {
+		pbBooking.Vehicle = &pb.BookingVehicleInfo{
+			Make:  b.VehicleMake.String,
+			Model: b.VehicleModel.String,
+			Rego:  b.VehicleRego.String,
+		}
+	}
+	return pbBooking
 }
 
 func (s *BookingServiceServer) GetBooking(ctx context.Context, req *pb.GetBookingRequest) (*pb.GetBookingResponse, error) {

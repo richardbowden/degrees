@@ -98,24 +98,20 @@ func (s *CartServiceServer) ClearCart(ctx context.Context, req *pb.ClearCartRequ
 }
 
 // extractCartIdentity gets the user ID from context (if authenticated)
-// or the cart session token from metadata headers.
+// and the cart session token from metadata headers (if present).
+// Both are returned so the service layer can merge a guest cart into a user cart.
 func (s *CartServiceServer) extractCartIdentity(ctx context.Context) (int64, string) {
-	// Try authenticated user first
-	userID, ok := GetUserIDFromContext(ctx)
-	if ok && userID > 0 {
-		return userID, ""
-	}
+	userID, _ := GetUserIDFromContext(ctx)
 
-	// Fall back to session token from metadata
 	md, ok := metadata.FromIncomingContext(ctx)
 	if ok {
 		tokens := md.Get("x-cart-session")
 		if len(tokens) > 0 {
-			return 0, tokens[0]
+			return userID, tokens[0]
 		}
 	}
 
-	return 0, ""
+	return userID, ""
 }
 
 func cartResultToPB(result *services.CartResult) *pb.Cart {

@@ -29,6 +29,20 @@ SELECT * FROM bookings
 WHERE scheduled_date >= $1 AND scheduled_date <= $2
 ORDER BY scheduled_date, scheduled_time;
 
+-- name: ListAllBookingsAdmin :many
+SELECT b.*,
+       trim(u.first_name || ' ' || COALESCE(u.surname, '')) AS customer_name,
+       cp.phone AS customer_phone,
+       v.make AS vehicle_make,
+       v.model AS vehicle_model,
+       v.rego AS vehicle_rego
+FROM bookings b
+JOIN customer_profiles cp ON cp.id = b.customer_id
+JOIN users u ON u.id = cp.user_id
+LEFT JOIN vehicles v ON v.id = b.vehicle_id
+WHERE b.scheduled_date >= $1 AND b.scheduled_date <= $2
+ORDER BY b.scheduled_date DESC, b.scheduled_time DESC;
+
 -- name: ListBookingsForDate :many
 SELECT * FROM bookings
 WHERE scheduled_date = $1

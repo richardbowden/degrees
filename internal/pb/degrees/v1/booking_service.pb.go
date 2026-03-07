@@ -199,6 +199,7 @@ type BookingCustomerInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Phone         string                 `protobuf:"bytes,2,opt,name=phone,proto3" json:"phone,omitempty"`
+	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -243,6 +244,13 @@ func (x *BookingCustomerInfo) GetUserId() int64 {
 func (x *BookingCustomerInfo) GetPhone() string {
 	if x != nil {
 		return x.Phone
+	}
+	return ""
+}
+
+func (x *BookingCustomerInfo) GetName() string {
+	if x != nil {
+		return x.Name
 	}
 	return ""
 }
@@ -1395,10 +1403,11 @@ const file_degrees_v1_booking_service_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x10 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x11 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"D\n" +
+	"updated_at\x18\x11 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"X\n" +
 	"\x13BookingCustomerInfo\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x14\n" +
-	"\x05phone\x18\x02 \x01(\tR\x05phone\"R\n" +
+	"\x05phone\x18\x02 \x01(\tR\x05phone\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\"R\n" +
 	"\x12BookingVehicleInfo\x12\x12\n" +
 	"\x04make\x18\x01 \x01(\tR\x04make\x12\x14\n" +
 	"\x05model\x18\x02 \x01(\tR\x05model\x12\x12\n" +

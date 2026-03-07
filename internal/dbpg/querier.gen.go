@@ -84,6 +84,7 @@ type Querier interface {
 	GetVehicleCategoryByID(ctx context.Context, arg GetVehicleCategoryByIDParams) (VehicleCategory, error)
 	IsDateBlackedOut(ctx context.Context, arg IsDateBlackedOutParams) (bool, error)
 	IsFirstUser(ctx context.Context) (bool, error)
+	ListAllBookingsAdmin(ctx context.Context, arg ListAllBookingsAdminParams) ([]ListAllBookingsAdminRow, error)
 	ListAllServiceOptions(ctx context.Context, arg ListAllServiceOptionsParams) ([]ServiceOption, error)
 	ListAllServices(ctx context.Context) ([]Service, error)
 	// List all settings (for admin interface)

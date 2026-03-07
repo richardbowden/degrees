@@ -76,3 +76,7 @@ func (r *Cart) RemoveCartItem(ctx context.Context, id int64) error {
 func (r *Cart) ClearCart(ctx context.Context, cartSessionID int64) error {
 	return r.store.ClearCart(ctx, dbpg.ClearCartParams{CartSessionID: cartSessionID})
 }
+
+func (r *Cart) ClaimCartSession(ctx context.Context, sessionToken string, userID int64) error {
+	return r.store.ClaimCartSession(ctx, sessionToken, userID)
+}

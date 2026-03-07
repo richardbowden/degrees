@@ -108,6 +108,17 @@ message AddProductUsedResponse {
   ProductUsed product = 1;
 }
 
+message AddServicePhotoRequest {
+  int64 id = 1;
+  string photo_type = 2;
+  string url = 3;
+  string caption = 4;
+}
+
+message AddServicePhotoResponse {
+  ServicePhoto photo = 1;
+}
+
 // ========================================
 // HistoryService
 // ========================================
@@ -154,6 +165,14 @@ service HistoryService {
   rpc AddProductUsed(AddProductUsedRequest) returns (AddProductUsedResponse) {
     option (google.api.http) = {
       post: "/api/v1/admin/records/{id}/products"
+      body: "*"
+    };
+  }
+
+  // Add a photo to a service record (admin)
+  rpc AddServicePhoto(AddServicePhotoRequest) returns (AddServicePhotoResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/records/{id}/photos"
       body: "*"
     };
   }

@@ -21,13 +21,19 @@ export default async function AccountLayout({ children }: { children: React.Reac
     redirect('/login');
   }
 
-  let user: User;
+  let user: User | null = null;
   try {
     const { profile } = await api<{ profile: CustomerProfile }>('/me/profile', { token });
     const res = await api<{ user: User }>(`/user/${profile.userId}`, { token });
     user = res.user;
-  } catch {
-    redirect('/login');
+  } catch (err) {
+    const apiErr = err as { status?: number };
+    // Only redirect to login for auth failures — other errors (500, network) should
+    // not bounce the user to login or they'll be stuck in an infinite loop.
+    if (!apiErr.status || apiErr.status === 401 || apiErr.status === 403) {
+      redirect('/login');
+    }
+    // For other errors, render the layout without user info rather than looping.
   }
 
   return (
@@ -35,8 +41,8 @@ export default async function AccountLayout({ children }: { children: React.Reac
       <aside className="w-64 bg-surface-raised border-r border-border-subtle p-6">
         <div className="mb-8">
           <p className="text-sm text-text-muted">Signed in as</p>
-          <p className="font-medium text-foreground truncate">{user.firstName} {user.surname}</p>
-          <p className="text-sm text-text-muted truncate">{user.email}</p>
+          <p className="font-medium text-foreground truncate">{user ? `${user.firstName} ${user.surname}` : 'My Account'}</p>
+          {user && <p className="text-sm text-text-muted truncate">{user.email}</p>}
         </div>
         <nav className="space-y-1">
           {navItems.map(item => (

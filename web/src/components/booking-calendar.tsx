@@ -33,7 +33,13 @@ export function BookingCalendar({ selectedDate, onSelect }: BookingCalendarProps
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth);
   const firstDay = getFirstDayOfWeek(viewYear, viewMonth);
-  const todayStr = formatDateStr(today.getFullYear(), today.getMonth(), today.getDate());
+
+  // Business rule: minimum 24 hours advance notice. Since the backend compares
+  // the chosen date at midnight against now+24h, tomorrow is never safe to allow
+  // (midnight tomorrow < today's time + 24h). Require the day after tomorrow at minimum.
+  const minDate = new Date(today);
+  minDate.setDate(today.getDate() + 2);
+  const minDateStr = formatDateStr(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
 
   function prevMonth() {
     if (viewMonth === 0) {
@@ -91,7 +97,7 @@ export function BookingCalendar({ selectedDate, onSelect }: BookingCalendarProps
             return <div key={`empty-${i}`} />;
           }
           const dateStr = formatDateStr(viewYear, viewMonth, day);
-          const isPast = dateStr <= todayStr;
+          const isPast = dateStr < minDateStr;
           const isSelected = dateStr === selectedDate;
 
           return (

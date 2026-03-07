@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { api, ApiError } from '@/lib/api';
-import type { Booking, ServiceRecord, ServiceNote, ProductUsed } from '@/lib/types';
+import type { Booking, ServiceRecord, ServiceNote, ProductUsed, ServicePhoto } from '@/lib/types';
 import { formatPrice, formatDate, formatTime } from '@/lib/format';
 import { StatusBadge } from '@/components/status-badge';
 
@@ -34,6 +34,12 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
   const [productName, setProductName] = useState('');
   const [productNotes, setProductNotes] = useState('');
   const [productLoading, setProductLoading] = useState(false);
+
+  // Add photo form
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [photoType, setPhotoType] = useState('before');
+  const [photoCaption, setPhotoCaption] = useState('');
+  const [photoLoading, setPhotoLoading] = useState(false);
 
   async function handleStatusUpdate() {
     if (newStatus === booking.status) return;
@@ -122,6 +128,34 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
     }
   }
 
+  async function handleAddPhoto() {
+    if (!serviceRecord || !photoUrl.trim()) return;
+    setPhotoLoading(true);
+    setRecordError('');
+    try {
+      const res = await api<{ photo: ServicePhoto }>(`/admin/records/${serviceRecord.id}/photos`, {
+        method: 'POST',
+        body: {
+          photoType,
+          url: photoUrl,
+          caption: photoCaption,
+        },
+        token,
+      });
+      setServiceRecord(prev => prev ? {
+        ...prev,
+        photos: [...(prev.photos ?? []), res.photo],
+      } : prev);
+      setPhotoUrl('');
+      setPhotoCaption('');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setRecordError(apiErr.detail || 'Failed to add photo');
+    } finally {
+      setPhotoLoading(false);
+    }
+  }
+
   async function handleAddProduct() {
     if (!serviceRecord || !productName.trim()) return;
     setProductLoading(true);
@@ -202,16 +236,12 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
             {booking.customer ? (
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-text-muted">Name</p>
+                  <p className="text-text-muted">Customer</p>
                   <p className="font-medium">
                     <Link href={`/admin/customers/${booking.customerId}`} className="text-brand-400 hover:text-brand-500">
-                      {booking.customer.name}
+                      View Profile
                     </Link>
                   </p>
-                </div>
-                <div>
-                  <p className="text-text-muted">Email</p>
-                  <p className="font-medium">{booking.customer.email}</p>
                 </div>
                 <div>
                   <p className="text-text-muted">Phone</p>
@@ -226,15 +256,11 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
           {/* Vehicle */}
           <div className="glass-card p-5">
             <h2 className="text-lg font-semibold text-foreground mb-3">Vehicle</h2>
-            {booking.vehicle ? (
+            {booking.vehicle && (booking.vehicle.make || booking.vehicle.rego) ? (
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="text-text-muted">Vehicle</p>
-                  <p className="font-medium">{booking.vehicle.year} {booking.vehicle.make} {booking.vehicle.model}</p>
-                </div>
-                <div>
-                  <p className="text-text-muted">Colour</p>
-                  <p className="font-medium">{booking.vehicle.colour || 'N/A'}</p>
+                  <p className="font-medium">{booking.vehicle.make} {booking.vehicle.model}</p>
                 </div>
                 <div>
                   <p className="text-text-muted">Rego</p>
@@ -256,10 +282,10 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                     <div>
                       <p className="font-medium">{s.serviceName}</p>
                       {s.options && s.options.length > 0 && (
-                        <p className="text-text-muted text-xs mt-0.5">Options: {s.options.join(', ')}</p>
+                        <p className="text-text-muted text-xs mt-0.5">Options: {s.options.map(o => o.optionName).join(', ')}</p>
                       )}
                     </div>
-                    <p className="font-medium">{formatPrice(s.price)}</p>
+                    <p className="font-medium">{formatPrice(s.priceAtBooking)}</p>
                   </div>
                 ))}
               </div>
@@ -393,6 +419,70 @@ export function BookingDetailClient({ booking: initial, token }: { booking: Book
                         className="btn-brand px-4 py-1.5 rounded-md text-sm font-medium disabled:opacity-50"
                       >
                         {productLoading ? 'Adding...' : 'Add Product'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Photos list */}
+                  {serviceRecord.photos && serviceRecord.photos.length > 0 && (
+                    <div className="border-t border-border-subtle pt-4">
+                      <h3 className="text-sm font-medium text-text-secondary mb-2">Photos</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        {serviceRecord.photos.map(photo => (
+                          <div key={photo.id} className="border border-border-subtle rounded p-2 text-sm">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-xs font-medium text-brand-400 uppercase">{photo.photoType}</span>
+                            </div>
+                            <a
+                              href={photo.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-text-secondary hover:text-foreground break-all text-xs"
+                            >
+                              {photo.url}
+                            </a>
+                            {photo.caption && <p className="text-text-muted text-xs mt-1">{photo.caption}</p>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Add photo form */}
+                  <div className="border-t border-border-subtle pt-4">
+                    <h3 className="text-sm font-medium text-text-secondary mb-2">Add Photo</h3>
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <select
+                          value={photoType}
+                          onChange={e => setPhotoType(e.target.value)}
+                          className="bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
+                        >
+                          <option value="before">Before</option>
+                          <option value="after">After</option>
+                          <option value="detail">Detail</option>
+                        </select>
+                        <input
+                          type="text"
+                          value={photoCaption}
+                          onChange={e => setPhotoCaption(e.target.value)}
+                          placeholder="Caption (optional)"
+                          className="flex-1 bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
+                        />
+                      </div>
+                      <input
+                        type="url"
+                        value={photoUrl}
+                        onChange={e => setPhotoUrl(e.target.value)}
+                        placeholder="Photo URL"
+                        className="w-full bg-surface-input border border-border-subtle rounded-md px-3 py-1.5 text-sm text-foreground"
+                      />
+                      <button
+                        onClick={handleAddPhoto}
+                        disabled={photoLoading || !photoUrl.trim()}
+                        className="btn-brand px-4 py-1.5 rounded-md text-sm font-medium disabled:opacity-50"
+                      >
+                        {photoLoading ? 'Adding...' : 'Add Photo'}
                       </button>
                     </div>
                   </div>

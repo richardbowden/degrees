@@ -157,14 +157,21 @@ func (s *SignUp) Register(ctx context.Context, newUser *NewUserRequest) error {
 		},
 	)
 	if err != nil {
-		// Don't fail registration if email sending fails (SMTP might not be configured)
-		// Log the token so admin can manually verify the user
+		// Email sending failed (SMTP not configured or unavailable).
+		// Auto-verify the user so they can still log in — verification is
+		// meaningless if no email was delivered.
 		log.Warn().Err(err).
 			Int64("user_id", user.ID).
 			Str("email", user.EMail).
-			Msg("failed to send verification email - SMTP may not be configured. Token is stored in the database.")
+			Msg("failed to send verification email - auto-verifying user so they can log in")
 
-		// Registration still succeeds, user just needs manual verification
+		_, verifyErr := s.authn.db.UpdateUserSignUpStage(ctx, dbpg.UpdateUserSignUpStageParams{
+			ID:          user.ID,
+			SignUpStage: "verified",
+		})
+		if verifyErr != nil {
+			log.Error().Err(verifyErr).Int64("user_id", user.ID).Msg("failed to auto-verify user after SMTP failure")
+		}
 		return nil
 	}
 

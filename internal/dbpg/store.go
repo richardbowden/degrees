@@ -35,6 +35,7 @@ func (s *TXStore) Rollback(ctx context.Context) error {
 type Storer interface {
 	Querier
 	GetTX(ctx context.Context) (*TXStore, error)
+	ClaimCartSession(ctx context.Context, sessionToken string, userID int64) error
 }
 
 type SchemaMigration struct {
@@ -140,4 +141,14 @@ func (s *Store) GetTX(ctx context.Context) (*TXStore, error) {
 
 func (s *Store) CheckDB(ctx context.Context) error {
 	return s.dbpg.Ping(ctx)
+}
+
+// ClaimCartSession associates a guest cart session with an authenticated user.
+// Used when a guest adds items to cart and then logs in.
+func (s *Store) ClaimCartSession(ctx context.Context, sessionToken string, userID int64) error {
+	_, err := s.dbpg.Exec(ctx,
+		`UPDATE cart_sessions SET user_id = $1 WHERE session_token = $2 AND user_id IS NULL`,
+		userID, sessionToken,
+	)
+	return err
 }

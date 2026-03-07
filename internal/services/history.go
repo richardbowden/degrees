@@ -59,6 +59,7 @@ type HistoryRepository interface {
 	ListServiceNotes(ctx context.Context, serviceRecordID int64) ([]ServiceNote, error)
 	CreateServiceProductUsed(ctx context.Context, serviceRecordID int64, productName, notes string) (ServiceProductUsed, error)
 	ListServiceProductsUsed(ctx context.Context, serviceRecordID int64) ([]ServiceProductUsed, error)
+	CreateServicePhoto(ctx context.Context, serviceRecordID int64, photoType, url, caption string) (ServicePhoto, error)
 	ListServicePhotos(ctx context.Context, serviceRecordID int64) ([]ServicePhoto, error)
 }
 
@@ -239,6 +240,39 @@ func (s *HistoryService) AddProductUsed(ctx context.Context, userID, serviceReco
 		return nil, problems.New(problems.Database, "failed to add product used", err)
 	}
 	return &product, nil
+}
+
+// AddServicePhoto adds a photo to a service record (admin only).
+func (s *HistoryService) AddServicePhoto(ctx context.Context, userID, serviceRecordID int64, photoType, url, caption string) (*ServicePhoto, error) {
+	isAdmin, err := s.authz.IsSystemAdmin(ctx, userID)
+	if err != nil {
+		return nil, problems.New(problems.Internal, "failed to check admin permission", err)
+	}
+	if !isAdmin {
+		return nil, problems.New(problems.Unauthorized, "admin access required")
+	}
+
+	if photoType == "" {
+		return nil, problems.New(problems.Validation, "photo_type is required")
+	}
+	if url == "" {
+		return nil, problems.New(problems.Validation, "url is required")
+	}
+
+	// Verify service record exists
+	_, err = s.repo.GetServiceRecordByID(ctx, serviceRecordID)
+	if err != nil {
+		if errors.Is(err, ErrNoRecord) {
+			return nil, problems.New(problems.NotExist, "service record not found")
+		}
+		return nil, problems.New(problems.Database, "failed to get service record", err)
+	}
+
+	photo, err := s.repo.CreateServicePhoto(ctx, serviceRecordID, photoType, url, caption)
+	if err != nil {
+		return nil, problems.New(problems.Database, "failed to add service photo", err)
+	}
+	return &photo, nil
 }
 
 // loadRecordDetail loads notes, products, and photos for a service record.

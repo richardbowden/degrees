@@ -33,9 +33,10 @@ var publicEndpoints = map[string]bool{
 	"/grpc.reflection.v1.ServerReflection/ServerReflectionInfo":       true,
 
 	// Catalogue public read endpoints
-	"/degrees.v1.CatalogueService/ListCategories": true,
-	"/degrees.v1.CatalogueService/ListServices":   true,
-	"/degrees.v1.CatalogueService/GetService":     true,
+	"/degrees.v1.CatalogueService/ListCategories":       true,
+	"/degrees.v1.CatalogueService/ListServices":         true,
+	"/degrees.v1.CatalogueService/GetService":           true,
+	"/degrees.v1.CatalogueService/ListVehicleCategories": true,
 
 	// Cart endpoints (supports guest sessions via session token)
 	"/degrees.v1.CartService/GetCart":        true,
@@ -51,8 +52,18 @@ var publicEndpoints = map[string]bool{
 // AuthInterceptor creates a gRPC unary interceptor for authentication
 func AuthInterceptor(authSvc *services.AuthN) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-		// Skip auth for public endpoints
+		// Public endpoints: attempt optional auth (set user ID if token present and valid,
+		// but proceed as guest if not — supports both guests and authenticated users).
 		if publicEndpoints[info.FullMethod] {
+			if md, ok := metadata.FromIncomingContext(ctx); ok {
+				if authHeaders := md.Get("authorization"); len(authHeaders) > 0 {
+					if token := extractBearerToken(authHeaders[0]); token != "" {
+						if userID, err := authSvc.ValidateSession(ctx, token); err == nil {
+							ctx = context.WithValue(ctx, UserIDKey, userID)
+						}
+					}
+				}
+			}
 			return handler(ctx, req)
 		}
 

@@ -63,6 +63,10 @@ func (r *Bookings) ListBookingsByDateRange(ctx context.Context, params dbpg.List
 	return r.store.ListBookingsByDateRange(ctx, params)
 }
 
+func (r *Bookings) ListAllBookingsAdmin(ctx context.Context, params dbpg.ListAllBookingsAdminParams) ([]dbpg.ListAllBookingsAdminRow, error) {
+	return r.store.ListAllBookingsAdmin(ctx, params)
+}
+
 func (r *Bookings) ListBookingsForDate(ctx context.Context, params dbpg.ListBookingsForDateParams) ([]dbpg.Booking, error) {
 	return r.store.ListBookingsForDate(ctx, params)
 }
@@ -101,6 +105,17 @@ func (r *Bookings) GetCartByUserID(ctx context.Context, userID int64) (dbpg.Cart
 	cart, err := r.store.GetCartByUserID(ctx, dbpg.GetCartByUserIDParams{
 		UserID: pgtype.Int8{Int64: userID, Valid: true},
 	})
+	if err != nil {
+		if dbpg.IsErrNoRows(err) {
+			return dbpg.CartSession{}, services.ErrNoRecord
+		}
+		return dbpg.CartSession{}, err
+	}
+	return cart, nil
+}
+
+func (r *Bookings) GetCartBySessionToken(ctx context.Context, token string) (dbpg.CartSession, error) {
+	cart, err := r.store.GetCartBySessionToken(ctx, dbpg.GetCartBySessionTokenParams{SessionToken: token})
 	if err != nil {
 		if dbpg.IsErrNoRows(err) {
 			return dbpg.CartSession{}, services.ErrNoRecord

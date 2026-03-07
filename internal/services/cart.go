@@ -22,6 +22,7 @@ type CartRepository interface {
 	UpdateCartItemQuantity(ctx context.Context, params dbpg.UpdateCartItemQuantityParams) (dbpg.CartItem, error)
 	RemoveCartItem(ctx context.Context, id int64) error
 	ClearCart(ctx context.Context, cartSessionID int64) error
+	ClaimCartSession(ctx context.Context, sessionToken string, userID int64) error
 }
 
 type CartService struct {
@@ -42,14 +43,26 @@ type CartResult struct {
 }
 
 // GetOrCreateCart retrieves an existing cart or creates a new one.
-// For authenticated users, it looks up by userID.
-// For guests, it looks up by sessionToken. If neither exists, creates a new guest session.
+// For authenticated users, it looks up by userID. If no user cart exists but a
+// guest sessionToken is provided, the guest cart is claimed for the user (merge).
+// For guests, it looks up by sessionToken. If neither exists, creates a new session.
 func (s *CartService) GetOrCreateCart(ctx context.Context, userID int64, sessionToken string) (*CartResult, error) {
 	var session dbpg.CartSession
 	var err error
 
 	if userID > 0 {
 		session, err = s.repo.GetCartByUserID(ctx, userID)
+		// If no user cart yet, try to claim the guest cart for this user.
+		if (errors.Is(err, ErrNoRecord) || session.ID == 0) && sessionToken != "" {
+			guestSession, guestErr := s.repo.GetCartBySessionToken(ctx, sessionToken)
+			if guestErr == nil && guestSession.ID != 0 {
+				// Claim the guest cart: associate it with the authenticated user.
+				if claimErr := s.repo.ClaimCartSession(ctx, sessionToken, userID); claimErr == nil {
+					session = guestSession
+					err = nil
+				}
+			}
+		}
 	} else if sessionToken != "" {
 		session, err = s.repo.GetCartBySessionToken(ctx, sessionToken)
 	}

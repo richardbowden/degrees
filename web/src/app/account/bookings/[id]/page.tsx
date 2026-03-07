@@ -46,11 +46,11 @@ export default async function BookingDetailPage({ params }: { params: Promise<{ 
               <dt className="text-text-muted">Duration</dt>
               <dd className="text-foreground">{booking.estimatedDurationMins} minutes</dd>
             </div>
-            {booking.vehicle && (
+            {booking.vehicle && (booking.vehicle.make || booking.vehicle.model) && (
               <div className="flex justify-between">
                 <dt className="text-text-muted">Vehicle</dt>
                 <dd className="text-foreground">
-                  {booking.vehicle.year} {booking.vehicle.make} {booking.vehicle.model}
+                  {booking.vehicle.make} {booking.vehicle.model}
                   {booking.vehicle.rego && ` (${booking.vehicle.rego})`}
                 </dd>
               </div>
@@ -92,11 +92,11 @@ export default async function BookingDetailPage({ params }: { params: Promise<{ 
                     <p className="text-foreground font-medium">{service.serviceName}</p>
                     {service.options && service.options.length > 0 && (
                       <p className="text-text-muted text-xs mt-0.5">
-                        Options: {service.options.join(', ')}
+                        Options: {service.options.map(o => o.optionName).join(', ')}
                       </p>
                     )}
                   </div>
-                  <span className="text-foreground">{formatPrice(service.price)}</span>
+                  <span className="text-foreground">{formatPrice(service.priceAtBooking)}</span>
                 </div>
               ))}
             </div>
